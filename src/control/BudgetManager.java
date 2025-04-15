@@ -40,4 +40,9 @@ public class BudgetManager extends Manager {
     public void editBudget(Budget budget, String budgetId) {
 
     }
+
+    public void loadData(List<Budget> budgets) {
+        budgetList.clear();
+        budgetList.addAll(budgets);
+    }
 }

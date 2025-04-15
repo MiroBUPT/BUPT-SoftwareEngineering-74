@@ -11,11 +11,15 @@ public class ApplicationManager {
     }
 
     private List<Manager> managerList = new ArrayList<>();
-    
+
     public void startApp() {
-        
+        AIManager.getInstance();
+        BudgetManager.getInstance();
+        SavingManager.getInstance();
+        TransactionManager.getInstance();
+        UserManager.getInstance();
     }
-    
+
     public void registerManager(Manager manager) {
         managerList.add(manager);
     }
