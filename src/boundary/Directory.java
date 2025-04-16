@@ -19,4 +19,9 @@ class Directory {
 
     private class Image {
     }
+
+    // 返回目录名称
+    public String getName() {
+        return name;
+    }
 }

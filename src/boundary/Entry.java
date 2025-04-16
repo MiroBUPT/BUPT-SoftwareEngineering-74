@@ -10,6 +10,6 @@ class Entry {
     }
 
     public void onClick() {
-        System.out.println("点击条目，关联面板：" + targetPanel.getClass().getName());
+        System.out.println("点击条目:" + name + "切换到面板" + targetPanel.getClass().getName());
     }
 }
