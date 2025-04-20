@@ -29,6 +29,10 @@ public class BudgetManager extends Manager {
         System.out.println("BudgetManager initialized.");
     }
 
+    public List<Budget> getBudgetList() {
+        return budgetList;
+    }
+
     /**
      * Query budgets by the budget's owner.
      * 

@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.Budget;
+import entity.TransactionType;
 import entity.User;
 
 public class SavingManager extends Manager {
@@ -26,6 +28,7 @@ public class SavingManager extends Manager {
     private TransactionManager transactionManager;
     private UserManager userManager;
     private static String userFilePath = "users.csv";
+    private static String budgetFilePath = "budget.csv";
 
     @Override
     public void Init() {
@@ -37,12 +40,13 @@ public class SavingManager extends Manager {
     }
 
     public void saveData() {
-
+        saveUsersToCSV();
+        saveBudgetsToCSV();
     }
 
     public void loadData() {
         loadUsersFromCSV(userFilePath);
-        budgetManager.loadData(null);
+        loadBudgetFromCSV(budgetFilePath);
         transactionManager.loadData(null);
     }
 
@@ -64,6 +68,32 @@ public class SavingManager extends Manager {
                 writer.newLine();
             }
 
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean saveBudgetsToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(budgetFilePath), StandardCharsets.UTF_8))) {
+            var budgetList = budgetManager.getBudgetList();
+            // 写入CSV表头
+            writer.write("budgetId,amount,date,type,owner");
+            writer.newLine();
+
+            // 写入每个用户的数据
+            for (Budget budget : budgetList) {
+                String line = String.format("%s,%s,%s,%s,%s",
+                        escapeCsvField(budget.budgetId),
+                        escapeCsvField(budget.amount),
+                        escapeCsvField(budget.date),
+                        escapeCsvField(String.valueOf(budget.type.ordinal())),
+                        escapeCsvField(budget.owner.userId));
+                writer.write(line);
+                writer.newLine();
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,6 +129,43 @@ public class SavingManager extends Manager {
             }
 
             userManager.loadData(loadedUsers);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Load Budget data from a CSV file.
+     * 
+     * @param filePath file path of the CSV file
+     * @return whether the loading was successful
+     */
+    private boolean loadBudgetFromCSV(String filePath) {
+        List<Budget> loadedBudgets = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+
+            // 跳过表头
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = parseCsvLine(line);
+                if (fields.length >= 5) {
+                    Budget budget = new Budget();
+                    budget.budgetId = unescapeCsvField(fields[0]);
+                    budget.amount = unescapeCsvField(fields[1]);
+                    budget.date = unescapeCsvField(fields[2]);
+                    budget.type = TransactionType.valueOf(unescapeCsvField(fields[3]));
+                    budget.owner = userManager.getUserById(unescapeCsvField(fields[4]));
+                    loadedBudgets.add(budget);
+                }
+            }
+
+            budgetManager.loadData(loadedBudgets);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
