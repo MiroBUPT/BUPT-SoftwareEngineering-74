@@ -16,6 +16,9 @@ public class BudgetManager extends Manager {
         return instance;
     }
 
+    /**
+     * Initialize the BudgetManager instance.
+     */
     @Override
     public void Init() {
         System.out.println("BudgetManager initialized.");
@@ -33,14 +36,32 @@ public class BudgetManager extends Manager {
         return budgetList;
     }
 
+    /**
+     * Add a new budget to the list.
+     * @param budget The budget to be added
+     */
     public void addBudget(Budget budget) {
         budgetList.add(budget);
     }
     
+    /**
+     * Edit a budget by its ID.
+     * @param budget The new budget to be set
+     * @param budgetId The ID of the budget to be edited
+     */
     public void editBudget(Budget budget, String budgetId) {
-
+        for (int i = 0; i < budgetList.size(); i++) {
+            if (budgetList.get(i).budgetId.equals(budgetId)) {
+                budgetList.set(i, budget);
+                return;
+            }
+        }
     }
 
+    /**
+     * Clear all the budgets and load all the budgets from the given list.
+     * @param budgets The list of budgets to be loaded
+     */
     public void loadData(List<Budget> budgets) {
         budgetList.clear();
         budgetList.addAll(budgets);
