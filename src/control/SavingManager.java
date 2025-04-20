@@ -22,6 +22,7 @@ public class SavingManager extends Manager {
     }
 
     public void saveData() {
+        
     }
 
     public void loadData() {
