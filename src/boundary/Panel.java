@@ -1,20 +1,28 @@
 package boundary;
 
-abstract class Panel {
-    private Color border;
-    private Color fill;
 
-    public Panel(Color border, Color fill) {
-        this.border = border;
-        this.fill = fill;
+import javax.swing.*;
+        import java.awt.*;
+        import java.awt.Color;
+
+
+abstract class Panel extends JPanel {
+    private java.awt.Color borderColor;
+    private java.awt.Color fillColor;
+
+    public Panel(java.awt.Color borderColor, java.awt.Color fillColor) {
+        this.borderColor = borderColor;
+        this.fillColor = fillColor;
+        this.setBorder(BorderFactory.createLineBorder(borderColor));
+        this.setBackground(fillColor);
     }
 
-    public Color getBorder() {
-        return border;
+    public java.awt.Color getBorderColor() {
+        return borderColor;
     }
 
-    public Color getFill() {
-        return fill;
+    public java.awt.Color getFillColor() {
+        return fillColor;
     }
 
     public abstract void init(); // 初始化面板

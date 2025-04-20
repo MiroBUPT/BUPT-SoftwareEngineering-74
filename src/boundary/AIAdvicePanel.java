@@ -12,6 +12,6 @@ class AIAdvicePanel extends Panel {
 
     @Override
     public void updateData() {
-        System.out.println("AI建议面板数据更新");
+        System.out.println("AI建议面板数据更新到最新数据");
     }
 }

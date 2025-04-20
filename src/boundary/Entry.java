@@ -1,15 +1,24 @@
 package boundary;
+import javax.swing.*;
 
 class Entry {
     private String name;
-    private Panel targetPanel;
+    private JPanel targetPanel;
 
-    public Entry(String name, Panel targetPanel) {
+    public Entry(String name, JPanel targetPanel) {
         this.name = name;
         this.targetPanel = targetPanel;
     }
 
-    public void onClick() {
-        System.out.println("点击条目:" + name + "切换到面板" + targetPanel.getClass().getName());
+    public String getName() {
+        return name; // 确保返回的名称与菜单树中的节点名称一致
+    }
+
+    public JPanel getTargetPanel() {
+        return targetPanel;
+    }
+
+    public void init() {
+        // 初始化面板（如果有需要）
     }
 }
