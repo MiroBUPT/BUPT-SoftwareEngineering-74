@@ -19,14 +19,14 @@ public class User_test{
 
         // 保存到CSV文件
         String filePath = "users.csv";
-        if (userManager.saveUsersToCSV(filePath)) {
+        if (SavingManager.getInstance().saveUsersToCSV()) {
             System.out.println("用户数据保存成功");
         }
 
-        // 从CSV文件加载
-        if (userManager.loadUsersFromCSV(filePath)) {
-            System.out.println("用户数据加载成功");
-        }
+        // // 从CSV文件加载
+        // if SavingManager.getInstance().loadUsersFromCSV(filePath)) {
+        //     System.out.println("用户数据加载成功");
+        // }
     }
     
 }
