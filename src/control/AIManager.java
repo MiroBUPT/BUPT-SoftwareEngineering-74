@@ -37,89 +37,89 @@ public class AIManager extends Manager {
         System.out.println("AIManager initialized.");
     }
 
-    // 交易类型预测（使用API）
-    public TransactionType predictType(Transaction transaction) {
-        String prompt = String.format("请将以下消费描述分类到[FOOD, TRANSPORT, HOUSING, ENTERTAINMENT, SHOPPING, OTHER]中，只需返回类型名称：%s",
-            transaction.getDescription());
+    // // 交易类型预测（使用API）
+    // public TransactionType predictType(Transaction transaction) {
+    //     String prompt = String.format("请将以下消费描述分类到[FOOD, TRANSPORT, HOUSING, ENTERTAINMENT, SHOPPING, OTHER]中，只需返回类型名称：%s",
+    //         transaction.getDescription());
 
-        String response = callDeepSeekAPI(prompt);
-        try {
-            return TransactionType.valueOf(response.trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return TransactionType.OTHER;
-        }
-    }
+    //     String response = callDeepSeekAPI(prompt);
+    //     try {
+    //         return TransactionType.valueOf(response.trim().toUpperCase());
+    //     } catch (IllegalArgumentException e) {
+    //         return TransactionType.OTHER;
+    //     }
+    // }
 
-    // 生成综合建议（使用API）
-    public String generateAdvice() {
-        String currentUserId = userManager.getCurrentUserId();
-        String userName = userManager.getUserName(currentUserId);
-        System.out.println("当前用户姓名: " + userName);
+    // // 生成综合建议（使用API）
+    // public String generateAdvice() {
+    //     String currentUserId = userManager.getCurrentUserId();
+    //     String userName = userManager.getUserName(currentUserId);
+    //     System.out.println("当前用户姓名: " + userName);
 
-        User user = userManager.getUserById(currentUserId);
-        List<Transaction> transactions = transactionManager.getMonthlyTransactions(LocalDate.now());
+    //     User user = userManager.getUserById(currentUserId);
+    //     List<Transaction> transactions = transactionManager.getMonthlyTransactions(LocalDate.now());
 
-        String prompt = String.format("用户月收入：%.2f，近期消费记录：%s。请生成包含以下内容的建议："
-            + "1. 基于消费习惯的预算分配 2. 合理的储蓄目标 3. 具体节省建议。使用中文Markdown格式。",
-            user.getIncome(), formatTransactions(transactions));
+    //     String prompt = String.format("用户月收入：%.2f，近期消费记录：%s。请生成包含以下内容的建议："
+    //         + "1. 基于消费习惯的预算分配 2. 合理的储蓄目标 3. 具体节省建议。使用中文Markdown格式。",
+    //         user.getIncome(), formatTransactions(transactions));
 
-        return callDeepSeekAPI(prompt);
-    }
+    //     return callDeepSeekAPI(prompt);
+    // }
 
-    // 预算预测（使用API）
-    public Budget predictBudget() {
-        List<Transaction> history = transactionManager.getLastThreeMonthsTransactions();
-        String prompt = String.format("根据以下消费历史生成预算分配建议（JSON格式）：%s\n"
-            + "只需返回{food: number, transport: number, housing: number}格式",
-            formatTransactions(history));
+    // // 预算预测（使用API）
+    // public Budget predictBudget() {
+    //     List<Transaction> history = transactionManager.getLastThreeMonthsTransactions();
+    //     String prompt = String.format("根据以下消费历史生成预算分配建议（JSON格式）：%s\n"
+    //         + "只需返回{food: number, transport: number, housing: number}格式",
+    //         formatTransactions(history));
 
-        String jsonResponse = callDeepSeekAPI(prompt);
-        return parseBudgetResponse(jsonResponse);
-    }
+    //     String jsonResponse = callDeepSeekAPI(prompt);
+    //     return parseBudgetResponse(jsonResponse);
+    // }
 
-    private String callDeepSeekAPI(String prompt) {
-        try {
-            JsonObject requestBody = new JsonObject();
-            requestBody.addProperty("model", "deepseek-chat");
-            requestBody.add("messages", new JsonArray().add(new JsonObject()
-                .addProperty("role", "user")
-                .addProperty("content", prompt)
-            ));
+    // private String callDeepSeekAPI(String prompt) {
+    //     try {
+    //         JsonObject requestBody = new JsonObject();
+    //         requestBody.addProperty("model", "deepseek-chat");
+    //         requestBody.add("messages", new JsonArray().add(new JsonObject()
+    //             .addProperty("role", "user")
+    //             .addProperty("content", prompt)
+    //         ));
 
-            Request request = new Request.Builder()
-                .url(DEEPSEEK_API_URL)
-                .addHeader("Authorization", "Bearer " + API_KEY)
-                .post(RequestBody.create(gson.toJson(requestBody), JSON))
-                .build();
+    //         Request request = new Request.Builder()
+    //             .url(DEEPSEEK_API_URL)
+    //             .addHeader("Authorization", "Bearer " + API_KEY)
+    //             .post(RequestBody.create(gson.toJson(requestBody), JSON))
+    //             .build();
 
-            try (Response response = httpClient.newCall(request).execute()) {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+    //         try (Response response = httpClient.newCall(request).execute()) {
+    //             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                JsonObject responseJson = gson.fromJson(response.body().charStream(), JsonObject.class);
-                return responseJson.getAsJsonArray("choices")
-                    .get(0).getAsJsonObject()
-                    .getAsJsonObject("message")
-                    .get("content").getAsString();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("API调用失败: " + e.getMessage());
-        }
-    }
+    //             JsonObject responseJson = gson.fromJson(response.body().charStream(), JsonObject.class);
+    //             return responseJson.getAsJsonArray("choices")
+    //                 .get(0).getAsJsonObject()
+    //                 .getAsJsonObject("message")
+    //                 .get("content").getAsString();
+    //         }
+    //     } catch (Exception e) {
+    //         throw new RuntimeException("API调用失败: " + e.getMessage());
+    //     }
+    // }
 
-    // 辅助方法
-    private String formatTransactions(List<Transaction> transactions) {
-        return transactions.stream()
-            .map(t -> String.format("[%s: ¥%.2f - %s]",
-                t.getType(), t.getAmount(), t.getDescription()))
-            .collect(Collectors.joining("\n"));
-    }
+    // // 辅助方法
+    // private String formatTransactions(List<Transaction> transactions) {
+    //     return transactions.stream()
+    //         .map(t -> String.format("[%s: ¥%.2f - %s]",
+    //             t.getType(), t.getAmount(), t.getDescription()))
+    //         .collect(Collectors.joining("\n"));
+    // }
 
-    private Budget parseBudgetResponse(String json) {
-        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        return new Budget(
-            jsonObject.get("food").getAsDouble(),
-            jsonObject.get("transport").getAsDouble(),
-            jsonObject.get("housing").getAsDouble()
-        );
-    }
+    // private Budget parseBudgetResponse(String json) {
+    //     JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+    //     return new Budget(
+    //         jsonObject.get("food").getAsDouble(),
+    //         jsonObject.get("transport").getAsDouble(),
+    //         jsonObject.get("housing").getAsDouble()
+    //     );
+    // }
 }
