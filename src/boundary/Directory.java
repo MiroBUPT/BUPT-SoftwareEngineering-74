@@ -24,4 +24,7 @@ class Directory {
     public String getName() {
         return name;
     }
+    public List<Entry> getEntries() {
+        return entries;
+    }
 }
