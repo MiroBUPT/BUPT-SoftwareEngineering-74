@@ -6,9 +6,9 @@ public class Application {
         var appManager = ApplicationManager.getInstance();
         appManager.startApp();
 
-        // 启动 GUI 界面
+        // 启动登录界面
         SwingUtilities.invokeLater(() -> {
-            boundary.GUIView.main(args);
+            boundary.LoginView.main(args);
         });
     }
 }
