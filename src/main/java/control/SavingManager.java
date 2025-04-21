@@ -27,8 +27,8 @@ public class SavingManager extends Manager {
     private BudgetManager budgetManager;
     private TransactionManager transactionManager;
     private UserManager userManager;
-    private static String userFilePath = "users.csv";
-    private static String budgetFilePath = "budget.csv";
+    private static String userFilePath = "src/main/resources/user.csv";
+    private static String budgetFilePath = "src/main/resources/budget.csv";
 
     @Override
     public void Init() {
@@ -80,7 +80,7 @@ public class SavingManager extends Manager {
                 new OutputStreamWriter(new FileOutputStream(budgetFilePath), StandardCharsets.UTF_8))) {
             var budgetList = budgetManager.getBudgetList();
             // 写入CSV表头
-            writer.write("budgetId,amount,date,type,owner");
+            writer.write("budgetId,amount,type,owner,date");
             writer.newLine();
 
             // 写入每个用户的数据
@@ -88,9 +88,9 @@ public class SavingManager extends Manager {
                 String line = String.format("%s,%s,%s,%s,%s",
                         escapeCsvField(budget.budgetId),
                         escapeCsvField(budget.amount),
-                        escapeCsvField(budget.date),
                         escapeCsvField(String.valueOf(budget.type.ordinal())),
-                        escapeCsvField(budget.owner.userId));
+                        escapeCsvField(budget.owner.userId),
+                        escapeCsvField(budget.date));
                 writer.write(line);
                 writer.newLine();
             }
@@ -158,9 +158,9 @@ public class SavingManager extends Manager {
                     Budget budget = new Budget();
                     budget.budgetId = unescapeCsvField(fields[0]);
                     budget.amount = unescapeCsvField(fields[1]);
-                    budget.date = unescapeCsvField(fields[2]);
-                    budget.type = TransactionType.valueOf(unescapeCsvField(fields[3]));
-                    budget.owner = userManager.getUserById(unescapeCsvField(fields[4]));
+                    budget.type = TransactionType.valueOf(unescapeCsvField(fields[2]));
+                    budget.owner = userManager.getUserById(unescapeCsvField(fields[3]));
+                    budget.date = unescapeCsvField(fields[4]);
                     loadedBudgets.add(budget);
                 }
             }

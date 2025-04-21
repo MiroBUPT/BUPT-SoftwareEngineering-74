@@ -47,7 +47,9 @@ public class TransactionManager extends Manager {
 
     public void loadData(List<Transaction> transactions) {
         transactionList.clear();
-        transactionList.addAll(transactions);
+        if (transactions != null) {
+            transactionList.addAll(transactions);
+        }
     }
 
 }
