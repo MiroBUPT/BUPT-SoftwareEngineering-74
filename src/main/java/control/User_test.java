@@ -4,7 +4,7 @@ import entity.User;
 public class User_test{
     public static void main(String[] args){
         // 添加一些测试用户
-        UserManager userManager = UserManager.getInstance();
+        control.UserManager userManager = control.UserManager.getInstance();
         User user1 = new entity.User();
         user1.userId = "001";
         user1.name = "11";
@@ -19,7 +19,7 @@ public class User_test{
 
         // 保存到CSV文件
         String filePath = "users.csv";
-        if (SavingManager.getInstance().saveUsersToCSV()) {
+        if (control.SavingManager.getInstance().saveUsersToCSV()) {
             System.out.println("用户数据保存成功");
         }
 

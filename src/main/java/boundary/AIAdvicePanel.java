@@ -1,4 +1,4 @@
-package boundary;
+package main.java.boundary;
 
 /*public class AIAdvicePanel extends Panel {
     public AIAdvicePanel(Color border, Color fill) {

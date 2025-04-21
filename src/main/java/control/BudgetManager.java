@@ -6,7 +6,7 @@ import java.util.List;
 import entity.Budget;
 import entity.TransactionType;
 
-public class BudgetManager extends Manager {
+public class BudgetManager extends control.Manager {
     private static BudgetManager instance; // Singleton instance
     private List<Budget> budgetList = new ArrayList<>(); // List of budgets
 
