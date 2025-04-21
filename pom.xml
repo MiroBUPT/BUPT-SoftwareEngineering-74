@@ -36,7 +36,8 @@
 
     <!-- 构建插件等配置 -->
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <!-- 删除或修改 sourceDirectory 配置 -->
+        <!-- <sourceDirectory>src</sourceDirectory> -->
         <plugins>
             <!-- Maven 编译器插件 -->
             <plugin>
@@ -50,4 +51,4 @@
             </plugin>
         </plugins>
     </build>
-</project>
+</project>    
