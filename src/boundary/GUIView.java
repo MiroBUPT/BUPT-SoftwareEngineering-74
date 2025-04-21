@@ -38,6 +38,20 @@ public class GUIView {
         });
         titlePanel.add(homeButton, BorderLayout.WEST);
 
+        // 创建圆形用户按钮
+        JButton userButton = new JButton("U");
+        userButton.setPreferredSize(new Dimension(30, 30));
+        // 使用自定义的椭圆形边框
+        userButton.setBorder(new EllipseBorder(java.awt.Color.BLACK, 2));
+        userButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 切换到Profile页面
+                cardLayout.show(contentPanel, "Profile");
+        }
+        });
+        titlePanel.add(userButton, BorderLayout.EAST);
+
         // 初始化目录结构
         IndexView indexView = new IndexView();
         List<Directory> directories = indexView.getDirectories();

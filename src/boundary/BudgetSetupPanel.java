@@ -1,7 +1,6 @@
 package boundary;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,7 +9,7 @@ public class BudgetSetupPanel extends JPanel {
     private JTextField budgetField;
     private JButton saveButton;
 
-    public BudgetSetupPanel(java.awt.Color borderColor, Color fillColor) {
+    public BudgetSetupPanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         // 设置边框颜色和填充颜色
         this.setBorder(BorderFactory.createLineBorder(borderColor));
         this.setBackground(fillColor);

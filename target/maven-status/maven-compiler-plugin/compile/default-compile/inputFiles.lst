@@ -19,7 +19,6 @@
 /Users/sunml/BUPT-SoftwareEngineering-74/src/control/ApplicationManager.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/BudgetSetupPanel.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/entity/Transaction.java
-/Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/Color.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/AIAdvicePanel.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/control/AIManager.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/HomePanel.java
@@ -29,3 +28,4 @@
 /Users/sunml/BUPT-SoftwareEngineering-74/src/control/BudgetManager.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/BudgetAnalysisPanel.java
 /Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/PanelView.java
+/Users/sunml/BUPT-SoftwareEngineering-74/src/boundary/EllipseBorder.java
