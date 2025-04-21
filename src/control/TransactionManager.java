@@ -1,10 +1,9 @@
 package control;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import entity.Transaction;
 import entity.TransactionType;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionManager extends Manager {
     private static TransactionManager instance;
