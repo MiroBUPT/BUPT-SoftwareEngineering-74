@@ -35,7 +35,7 @@ public class SavingManager extends Manager {
         budgetManager = BudgetManager.getInstance();
         transactionManager = TransactionManager.getInstance();
         userManager = UserManager.getInstance();
-        System.out.println("SavingManager initialized.");
+        System.out.println("SavingManager initialized");
         loadData();
     }
 
