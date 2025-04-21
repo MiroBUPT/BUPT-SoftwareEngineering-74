@@ -9,15 +9,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AIManager extends Manager {
-    // 配置参数（建议通过环境变量设置）
+    // 配置参数
     private static final String DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
     private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    
+
     private final OkHttpClient httpClient = new OkHttpClient();
     private final Gson gson = new GsonBuilder().create();
 
-    // 其他单例模式代码保持不变...
+    // 单例模式代码
     private static AIManager instance;
     public static AIManager getInstance() {
         if (instance == null)
@@ -41,7 +41,7 @@ public class AIManager extends Manager {
     public TransactionType predictType(Transaction transaction) {
         String prompt = String.format("请将以下消费描述分类到[FOOD, TRANSPORT, HOUSING, ENTERTAINMENT, SHOPPING, OTHER]中，只需返回类型名称：%s",
             transaction.getDescription());
-        
+
         String response = callDeepSeekAPI(prompt);
         try {
             return TransactionType.valueOf(response.trim().toUpperCase());
@@ -52,13 +52,17 @@ public class AIManager extends Manager {
 
     // 生成综合建议（使用API）
     public String generateAdvice() {
-        User user = userManager.getCurrentUser();
+        String currentUserId = userManager.getCurrentUserId();
+        String userName = userManager.getUserName(currentUserId);
+        System.out.println("当前用户姓名: " + userName);
+
+        User user = userManager.getUserById(currentUserId);
         List<Transaction> transactions = transactionManager.getMonthlyTransactions(LocalDate.now());
-        
+
         String prompt = String.format("用户月收入：%.2f，近期消费记录：%s。请生成包含以下内容的建议："
             + "1. 基于消费习惯的预算分配 2. 合理的储蓄目标 3. 具体节省建议。使用中文Markdown格式。",
             user.getIncome(), formatTransactions(transactions));
-        
+
         return callDeepSeekAPI(prompt);
     }
 
@@ -90,7 +94,7 @@ public class AIManager extends Manager {
 
             try (Response response = httpClient.newCall(request).execute()) {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-                
+
                 JsonObject responseJson = gson.fromJson(response.body().charStream(), JsonObject.class);
                 return responseJson.getAsJsonArray("choices")
                     .get(0).getAsJsonObject()
@@ -105,7 +109,7 @@ public class AIManager extends Manager {
     // 辅助方法
     private String formatTransactions(List<Transaction> transactions) {
         return transactions.stream()
-            .map(t -> String.format("[%s: ¥%.2f - %s]", 
+            .map(t -> String.format("[%s: ¥%.2f - %s]",
                 t.getType(), t.getAmount(), t.getDescription()))
             .collect(Collectors.joining("\n"));
     }
