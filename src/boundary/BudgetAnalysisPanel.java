@@ -1,6 +1,5 @@
 package boundary;
 import java.awt.*;
-import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
@@ -13,7 +12,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 
 public class BudgetAnalysisPanel extends JPanel {
-    public BudgetAnalysisPanel(java.awt.Color borderColor, Color fillColor) {
+    public BudgetAnalysisPanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         this.setBorder(BorderFactory.createLineBorder(borderColor));
         this.setBackground(fillColor);
         // 使用 GridLayout，2 行 1 列

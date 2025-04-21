@@ -2,7 +2,6 @@ package boundary;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,7 +14,7 @@ public class ProfilePanel extends JPanel {
     private JButton resetButton;
     private JButton saveButton;
 
-    public ProfilePanel(java.awt.Color borderColor, Color fillColor) {
+    public ProfilePanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         // 设置边框颜色和填充颜色
         this.setBorder(BorderFactory.createLineBorder(borderColor));
         this.setBackground(fillColor);

@@ -5,6 +5,7 @@ control/UserManager.class
 boundary/Directory$Image.class
 boundary/BudgetQueryPanel$1.class
 control/BudgetManager.class
+boundary/EllipseBorder.class
 control/Manager.class
 boundary/TransactionQueryPanel$1.class
 boundary/GUIView$1.class
@@ -17,7 +18,6 @@ entity/TransactionType.class
 boundary/BudgetQueryPanel.class
 Application.class
 boundary/AutomatedDataEntryPanel.class
-boundary/Color.class
 boundary/TitleView.class
 boundary/Directory.class
 boundary/ManualDataEntryPanel$1.class
@@ -35,6 +35,7 @@ boundary/ProfilePanel$2.class
 boundary/GUIView.class
 boundary/TitleView$Button.class
 boundary/Panel.class
+boundary/GUIView$2.class
 boundary/ProfilePanel.class
 boundary/PanelView.class
 boundary/BudgetSetupPanel.class
