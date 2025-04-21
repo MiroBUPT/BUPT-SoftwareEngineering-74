@@ -24,10 +24,10 @@ class IndexView {
         directories.add(statisticsDir);
 
         // 3. DataQuery目录（Entry: BudgetQuery, TransactionQuery）
-        /*Directory dataQueryDir = new Directory("Data Query", null);
+        Directory dataQueryDir = new Directory("Data Query", null);
         dataQueryDir.addEntry(new Entry("Budget Query", new BudgetQueryPanel(Color.RED, Color.PINK)));
         dataQueryDir.addEntry(new Entry("Transaction Query", new TransactionQueryPanel(Color.DARK_GRAY, Color.CYAN)));
-        directories.add(dataQueryDir);*/
+        directories.add(dataQueryDir);
 
         // 4. AddTransaction目录（Entry: ManualEntry, AutomatedEntry）
         Directory addTransactionDir = new Directory("Add Transaction", null);

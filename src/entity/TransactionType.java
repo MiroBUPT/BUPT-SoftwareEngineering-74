@@ -5,5 +5,6 @@ public enum TransactionType {
     health,
     food,
     rent,
-    entertainment;
+    entertainment,
+    income;
 }
