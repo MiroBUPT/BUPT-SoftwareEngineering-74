@@ -1,6 +1,12 @@
 package control;
 
 import entity.User;
+
+import main.java.control.Manager;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +57,9 @@ public class UserManager extends Manager {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 user.password = password;
+
                 return true;
+
             }
         }
         return false;
@@ -68,7 +76,9 @@ public class UserManager extends Manager {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 user.name = userName;
+
                 return true;
+
             }
         }
         return false;

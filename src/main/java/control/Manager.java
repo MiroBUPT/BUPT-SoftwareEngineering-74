@@ -2,7 +2,7 @@ package control;
 
 public abstract class Manager {
     public Manager() {
-        var applicationManager = ApplicationManager.getInstance();
+        var applicationManager = control.ApplicationManager.getInstance();
         applicationManager.registerManager(this);
         Init();
     }

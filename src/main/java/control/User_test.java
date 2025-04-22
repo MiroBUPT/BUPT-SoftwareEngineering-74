@@ -1,6 +1,7 @@
 package control;
 
 import entity.User;
+
 import java.util.List;
 
 public class User_test {
@@ -12,17 +13,20 @@ public class User_test {
         // 获取 UserManager 实例
         UserManager userManager = UserManager.getInstance();
 
+
         // 创建新用户
         User newUser = new User();
         newUser.userId = "0011";
         newUser.name = "newUser";
         newUser.password = "newPassword";
 
+
         // 添加新用户到用户列表
         if (userManager.addUser(newUser)) {
             System.out.println("新用户添加成功");
         } else {
             System.out.println("新用户添加失败，用户 ID 已存在");
+
         }
 
         // 获取用户列表

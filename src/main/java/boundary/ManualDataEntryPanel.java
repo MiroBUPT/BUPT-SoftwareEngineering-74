@@ -1,4 +1,4 @@
-package boundary;
+package main.java.boundary;
 
 import java.awt.*;
 import java.awt.Color;
