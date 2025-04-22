@@ -2,7 +2,7 @@ package control;
 
 import entity.Transaction;
 import entity.TransactionType;
-import main.java.control.Manager;
+import control.Manager;
 
 import java.util.ArrayList;
 import java.util.List;

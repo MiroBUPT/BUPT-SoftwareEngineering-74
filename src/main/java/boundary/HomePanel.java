@@ -1,4 +1,4 @@
-package main.java.boundary;
+package boundary;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

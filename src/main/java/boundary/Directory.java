@@ -1,4 +1,4 @@
-package main.java.boundary;
+package boundary;
 
 import java.util.ArrayList;
 import java.util.List;

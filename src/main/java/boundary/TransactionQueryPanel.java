@@ -1,4 +1,4 @@
-package main.java.boundary;
+package boundary;
 
 /*class TransactionQueryPanel extends Panel {
     public TransactionQueryPanel(Color border, Color fill) {

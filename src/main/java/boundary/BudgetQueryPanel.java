@@ -1,4 +1,4 @@
-package main.java.boundary;
+package boundary;
 
 /* BudgetQueryPanel extends Panel {
     public BudgetQueryPanel(Color border, Color fill) {

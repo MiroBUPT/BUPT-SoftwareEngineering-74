@@ -2,7 +2,7 @@ package control;
 
 import entity.User;
 
-import main.java.control.Manager;
+import control.Manager;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +41,52 @@ public class UserManager extends Manager {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 return user.name;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据用户名获取用户ID
+     * 
+     * @param userName 用户名
+     * @return 用户ID，如果用户不存在则返回null
+     */
+    public String getUserIdByName(String userName) {
+        for (User user : userList) {
+            if (user.name.equals(userName)) {
+                return user.userId;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据用户名获取用户密码
+     * 
+     * @param userName 用户名
+     * @return 用户密码，如果用户不存在则返回null
+     */
+    public String getPasswordByName(String userName) {
+        for (User user : userList) {
+            if (user.name.equals(userName)) {
+                return user.password;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 根据用户ID获取用户密码
+     * 
+     * @param userId 用户ID
+     * @return 用户密码，如果用户不存在则返回null
+     */
+    public String getPassword(String userId) {
+        for (User user : userList) {
+            if (user.userId.equals(userId)) {
+                return user.password;
             }
         }
         return null;
