@@ -14,6 +14,10 @@ import java.util.List;
 import entity.Budget;
 import entity.TransactionType;
 import entity.User;
+import main.java.control.BudgetManager;
+import main.java.control.Manager;
+import main.java.control.TransactionManager;
+import main.java.control.UserManager;
 
 public class SavingManager extends Manager {
     private static SavingManager instance;

@@ -1,5 +1,7 @@
 package control;
 
+import main.java.control.AIManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +12,17 @@ public class ApplicationManager {
         return instance;
     }
 
-    private List<Manager> managerList = new ArrayList<>();
+    private List<control.Manager> managerList = new ArrayList<>();
 
     public void startApp() {
         AIManager.getInstance();
-        BudgetManager.getInstance();
-        SavingManager.getInstance();
-        TransactionManager.getInstance();
-        UserManager.getInstance();
+        control.BudgetManager.getInstance();
+        control.SavingManager.getInstance();
+        control.TransactionManager.getInstance();
+        control.UserManager.getInstance();
     }
 
-    public void registerManager(Manager manager) {
+    public void registerManager(control.Manager manager) {
         managerList.add(manager);
     }
 }

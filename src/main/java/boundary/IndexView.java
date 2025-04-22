@@ -1,4 +1,4 @@
-package boundary;
+package main.java.boundary;
 
 import java.awt.Color;
 import java.util.ArrayList;
