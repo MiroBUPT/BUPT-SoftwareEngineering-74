@@ -1,6 +1,10 @@
 package boundary;
 
 import javax.swing.*;
+
+import control.UserManager;
+import entity.User;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,26 +28,34 @@ public class ProfilePanel extends JPanel {
         gbc.insets = new Insets(8, 8, 8, 8); // 添加间距
         gbc.anchor = GridBagConstraints.WEST;
 
+
+        // 获取当前用户信息
+        UserManager userManager = UserManager.getInstance();
+        String currentUserId = userManager.getCurrentUserId();
+        User currentUser = userManager.getUserById(currentUserId);
+
         // 添加用户信息
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(new JLabel("Username:"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 0;
-        usernameField = new JTextField("dsfuis", 20);
+        usernameField = new JTextField(currentUser != null ? currentUser.name : "", 20);
+        usernameField.setEditable(false);
         add(usernameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Account ID:"), gbc);
+        add(new JLabel("User ID:"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
-        accountIdField = new JTextField("2489372598", 20);
+        accountIdField = new JTextField(currentUserId, 20);
+        accountIdField.setEditable(false);
         add(accountIdField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(new JLabel("Registration Date:"), gbc);
+        add(new JLabel("Please enter your old password:"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 2;
         registrationDateField = new JTextField("2021-06-30", 20);
@@ -51,7 +63,7 @@ public class ProfilePanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        add(new JLabel("Real-name Authentication:"), gbc);
+        add(new JLabel("Please enter new password:"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 3;
         realNameAuthField = new JTextField("authenticated", 20);
@@ -59,7 +71,7 @@ public class ProfilePanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 4;
-        add(new JLabel("Phone number:"), gbc);
+        add(new JLabel("Please confirm your new password:"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 4;
         phoneNumberField = new JTextField("2489372598", 20);
