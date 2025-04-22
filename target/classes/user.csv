@@ -1,4 +1,4 @@
-userId,userName,password
+userId,name,password
 0001,liuyi,0001
 0002,chener,0002
 0003,zhangsan,0003
@@ -9,3 +9,4 @@ userId,userName,password
 0008,zhouba,0008
 0009,wujiu,0009
 0010,zhengshi,0010
+0011,newUser,newPassword

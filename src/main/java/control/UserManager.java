@@ -1,8 +1,6 @@
 package control;
 
 import entity.User;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +51,7 @@ public class UserManager extends Manager {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 user.password = password;
-                Boolean flag = SavingManager.getInstance().saveUsersToCSV();
-                return flag;
+                return true;
             }
         }
         return false;
@@ -71,8 +68,7 @@ public class UserManager extends Manager {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 user.name = userName;
-                Boolean flag = SavingManager.getInstance().saveUsersToCSV();
-                return flag;
+                return true;
             }
         }
         return false;

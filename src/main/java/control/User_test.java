@@ -1,32 +1,41 @@
 package control;
 
 import entity.User;
-public class User_test{
-    public static void main(String[] args){
-        // 添加一些测试用户
+import java.util.List;
+
+public class User_test {
+    public static void main(String[] args) {
+        // 获取 SavingManager 实例并初始化
+        SavingManager savingManager = SavingManager.getInstance();
+        savingManager.Init();
+
+        // 获取 UserManager 实例
         UserManager userManager = UserManager.getInstance();
-        User user1 = new entity.User();
-        user1.userId = "001";
-        user1.name = "11";
-        user1.password = "zhangsan123";
-        userManager.addUser(user1);
 
-        User user2 = new entity.User();
-        user2.userId = "002";
-        user2.name = "22";
-        user2.password = "lisi456";
-        userManager.addUser(user2);
+        // 创建新用户
+        User newUser = new User();
+        newUser.userId = "0011";
+        newUser.name = "newUser";
+        newUser.password = "newPassword";
 
-        // 保存到CSV文件
-        String filePath = "users.csv";
-        if (SavingManager.getInstance().saveUsersToCSV()) {
-            System.out.println("用户数据保存成功");
+        // 添加新用户到用户列表
+        if (userManager.addUser(newUser)) {
+            System.out.println("新用户添加成功");
+        } else {
+            System.out.println("新用户添加失败，用户 ID 已存在");
         }
 
-        // // 从CSV文件加载
-        // if SavingManager.getInstance().loadUsersFromCSV(filePath)) {
-        //     System.out.println("用户数据加载成功");
-        // }
+        // 获取用户列表
+        List<User> userList = userManager.getUserList();
+
+        // 打印用户信息
+        if (userList.isEmpty()) {
+            System.out.println("当前没有用户信息。");
+        } else {
+            System.out.println("当前用户信息如下：");
+            for (User user : userList) {
+                System.out.println("用户ID: " + user.userId + ", 用户名: " + user.name + ", 密码: " + user.password);
+            }
+        }
     }
-    
 }
