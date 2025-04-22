@@ -21,6 +21,7 @@ import main.java.control.UserManager;
 
 public class SavingManager extends Manager {
     private static SavingManager instance;
+    private static boolean isInitialized = false;
 
     public static SavingManager getInstance() {
         if (instance == null)
@@ -36,11 +37,14 @@ public class SavingManager extends Manager {
 
     @Override
     public void Init() {
-        budgetManager = BudgetManager.getInstance();
-        transactionManager = TransactionManager.getInstance();
-        userManager = UserManager.getInstance();
-        System.out.println("SavingManager initialized");
-        loadData();
+        if (!isInitialized) {
+            budgetManager = BudgetManager.getInstance();
+            transactionManager = TransactionManager.getInstance();
+            userManager = UserManager.getInstance();
+            System.out.println("SavingManager initialized");
+            loadData();
+            isInitialized = true;
+        }
     }
 
     public void saveData() {
