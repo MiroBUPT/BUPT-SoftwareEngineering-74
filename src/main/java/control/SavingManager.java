@@ -33,6 +33,7 @@ public class SavingManager extends Manager {
     private TransactionManager transactionManager;
     private UserManager userManager;
     private static String userFilePath = "src/main/resources/user.csv";
+
     private static String budgetFilePath = "src/main/resources/budget.csv";
 
     @Override
