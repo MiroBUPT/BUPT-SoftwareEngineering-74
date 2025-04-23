@@ -38,7 +38,7 @@ public class BudgetAnalysisPanel extends JPanel {
     }
 
     private void init() {
-        System.out.println("预算分析面板init");
+        System.out.println("init Budget Panel");
 
         // 读取并解析 CSV 文件
         List<BudgetItem> budgetItems = readBudgetItemsFromCSV();
