@@ -2,51 +2,88 @@ package control;
 
 import entity.Transaction;
 import entity.TransactionType;
-import control.Manager;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionManager extends Manager {
     private static TransactionManager instance;
+    private List<Transaction> transactionList = new ArrayList<>();
 
     public static TransactionManager getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new TransactionManager();
+        }
         return instance;
     }
-
-    private List<Transaction> transactionList = new ArrayList<>();
 
     @Override
     public void Init() {
         System.out.println("TransactionManager initialized.");
     }
 
-    public void importData(Transaction transaction){
+    // 导入交易数据
+    public void importData(Transaction transaction) {
         transactionList.add(transaction);
     }
 
+    // 编辑交易数据
     public void editData(Transaction transaction, String transactionId) {
-
+        for (int i = 0; i < transactionList.size(); i++) {
+            if (transactionList.get(i).transactionId.equals(transactionId)) {
+                transactionList.set(i, transaction);
+                return;
+            }
+        }
     }
 
+    // 根据时间范围查询交易记录
     public List<Transaction> queryByTime(String startDate, String endDate) {
-        return transactionList;
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.date != null) {
+                if ((startDate == null || transaction.date.compareTo(startDate) >= 0) &&
+                        (endDate == null || transaction.date.compareTo(endDate) <= 0)) {
+                    result.add(transaction);
+                }
+            }
+        }
+        return result;
     }
 
+    // 根据所有者查询交易记录
     public List<Transaction> queryByOwner(String owner) {
-        return transactionList;
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.owner.name.equals(owner)) {
+                result.add(transaction);
+            }
+        }
+        return result;
     }
 
+    // 根据交易类型查询交易记录
     public List<Transaction> queryByType(TransactionType type) {
-        return transactionList;
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.type == type) {
+                result.add(transaction);
+            }
+        }
+        return result;
     }
 
+    // 根据是否为收入查询交易记录
     public List<Transaction> queryByIncome(boolean isIncome) {
-        return transactionList;
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.isIncome == isIncome) {
+                result.add(transaction);
+            }
+        }
+        return result;
     }
 
+    // 加载交易数据
     public void loadData(List<Transaction> transactions) {
         transactionList.clear();
         if (transactions != null) {
@@ -54,4 +91,30 @@ public class TransactionManager extends Manager {
         }
     }
 
+    // 获取所有交易记录
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    // 获取指定用户的收入交易记录
+    public List<Transaction> getIncomeTransactionsByUser(String userName) {
+        List<Transaction> incomeTransactions = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.owner.name.equals(userName) && transaction.isIncome) {
+                incomeTransactions.add(transaction);
+            }
+        }
+        return incomeTransactions;
+    }
+
+    // 获取指定用户的所有交易记录
+    public List<Transaction> getTransactionsByUserName(String userName) {
+        List<Transaction> userTransactions = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.owner.name.equals(userName)) {
+                userTransactions.add(transaction);
+            }
+        }
+        return userTransactions;
+    }
 }
