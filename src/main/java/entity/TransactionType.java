@@ -6,5 +6,8 @@ public enum TransactionType {
     food,
     rent,
     entertainment,
-    income;
+    income,
+    DigitalProduct,
+    Cosmetics,
+    game;
 }

@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "Maven Test",
+        "request": "launch",
+        "mainClass": "AIManagerTest",
+        "projectName": "BUPT-SoftwareEngineering-74",
+        "env": {
+          "DEEP_SEEK_API_KEY": "sk-tuY5xrIzl2kJoruU98505161Cf084e348d041c5dA951F9Ca"
+        }
+      }
+    ]
+  }
