@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Budget;
+import entity.Transaction;
 import entity.TransactionType;
 import entity.User;
 import control.BudgetManager;
@@ -34,6 +35,7 @@ public class SavingManager extends Manager {
     private UserManager userManager;
     private static String userFilePath = "src/main/resources/user.csv";
     private static String budgetFilePath = "src/main/resources/budget.csv";
+    private static String transactionFilePath = "src/main/resources/transaction.csv";
 
     @Override
     public void Init() {
@@ -50,12 +52,13 @@ public class SavingManager extends Manager {
     public void saveData() {
         saveUsersToCSV();
         saveBudgetsToCSV();
+        saveTransactionsToCSV();
     }
 
     public void loadData() {
         loadUsersFromCSV(userFilePath);
         loadBudgetFromCSV(budgetFilePath);
-        transactionManager.loadData(null);
+        loadTransactionsFromCSV(transactionFilePath);
     }
 
     public boolean saveUsersToCSV() {
@@ -99,6 +102,36 @@ public class SavingManager extends Manager {
                         escapeCsvField(String.valueOf(budget.type.ordinal())),
                         escapeCsvField(budget.owner.userId),
                         escapeCsvField(budget.date));
+                writer.write(line);
+                writer.newLine();
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 保存交易数据到 CSV 文件
+    public boolean saveTransactionsToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(transactionFilePath), StandardCharsets.UTF_8))) {
+            var transactionList = transactionManager.getTransactionList();
+            // 写入 CSV 表头
+            writer.write("transactionId,date,amount,description,type,owner,isIncome,location");
+            writer.newLine();
+
+            // 写入每个交易的数据
+            for (Transaction transaction : transactionList) {
+                String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s",
+                        escapeCsvField(transaction.transactionId),
+                        escapeCsvField(transaction.date),
+                        escapeCsvField(transaction.amount),
+                        escapeCsvField(transaction.description),
+                        escapeCsvField(String.valueOf(transaction.type.ordinal())),
+                        escapeCsvField(transaction.owner.userId),
+                        escapeCsvField(String.valueOf(transaction.isIncome)),
+                        escapeCsvField(transaction.location));
                 writer.write(line);
                 writer.newLine();
             }
@@ -174,6 +207,41 @@ public class SavingManager extends Manager {
             }
 
             budgetManager.loadData(loadedBudgets);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 从 CSV 文件加载交易数据
+    private boolean loadTransactionsFromCSV(String filePath) {
+        List<Transaction> loadedTransactions = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+
+            // 跳过表头
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = parseCsvLine(line);
+                if (fields.length >= 8) {
+                    Transaction transaction = new Transaction();
+                    transaction.transactionId = unescapeCsvField(fields[0]);
+                    transaction.date = unescapeCsvField(fields[1]);
+                    transaction.amount = unescapeCsvField(fields[2]);
+                    transaction.description = unescapeCsvField(fields[3]);
+                    transaction.type = TransactionType.values()[Integer.parseInt(unescapeCsvField(fields[4]))];
+                    transaction.owner = userManager.getUserById(unescapeCsvField(fields[5]));
+                    transaction.isIncome = Boolean.parseBoolean(unescapeCsvField(fields[6]));
+                    transaction.location = unescapeCsvField(fields[7]);
+                    loadedTransactions.add(transaction);
+                }
+            }
+
+            transactionManager.loadData(loadedTransactions);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
