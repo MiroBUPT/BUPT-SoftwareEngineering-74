@@ -1,4 +1,4 @@
-package main.java.boundary;
+package boundary;
 import java.awt.*;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;

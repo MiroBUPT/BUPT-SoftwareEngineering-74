@@ -1,4 +1,4 @@
-package main.java.boundary;
+package boundary;
 
 class PanelView {
     private Panel currentPanel;

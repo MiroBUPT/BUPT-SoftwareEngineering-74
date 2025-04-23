@@ -1,6 +1,6 @@
 package control;
 
-import main.java.control.AIManager;
+import control.AIManager;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,5 @@
 userId,name,password
-0001,liuyi,0001
+00001,liuyi,0001
 0002,chener,0002
 0003,zhangsan,0003
 0004,lisi,0004
@@ -10,3 +10,9 @@ userId,name,password
 0009,wujiu,0009
 0010,zhengshi,0010
 0011,newUser,newPassword
+0013,newUser,newPassword
+13,Miro,1
+14,miro,2
+15,mir,1
+16,222,222
+1,1,1
