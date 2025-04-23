@@ -111,6 +111,25 @@ public class UserManager extends Manager {
         return false;
     }
 
+        /**
+     * 修改用户Id
+     * 
+     * @param userId   用户ID
+     * @param userId   新ID
+     * @return 是否修改成功
+     */
+    public boolean editUserId(String userId, String newUserId) {
+        for (User user : userList) {
+            if (user.userId.equals(userId)) {
+                user.userId = newUserId;
+                setCurrentUser(newUserId);
+                return true;
+
+            }
+        }
+        return false;
+    }
+
     /**
      * 修改用户名
      * 

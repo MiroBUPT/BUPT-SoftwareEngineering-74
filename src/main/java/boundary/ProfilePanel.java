@@ -1,5 +1,6 @@
 package boundary;
 
+import control.SavingManager;
 import control.UserManager;
 import entity.User;
 
@@ -19,6 +20,8 @@ public class ProfilePanel extends JPanel {
     private JButton editUsernameButton;
     private JButton editUserIdButton;
     private JButton editPasswordButton;
+    private UserManager userManager; // 添加 UserManager 引用
+    private String currentUserId;    // 添加 currentUserId 变量
 
     public ProfilePanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         // 设置边框颜色和填充颜色
@@ -30,9 +33,9 @@ public class ProfilePanel extends JPanel {
         gbc.insets = new Insets(8, 8, 8, 8); // 添加间距
         gbc.anchor = GridBagConstraints.WEST;
 
-        // 获取当前用户信息
-        UserManager userManager = UserManager.getInstance();
-        String currentUserId = userManager.getCurrentUserId();
+        // 初始化 UserManager 和获取当前用户信息
+        userManager = UserManager.getInstance();
+        currentUserId = userManager.getCurrentUserId();
         User currentUser = userManager.getUserById(currentUserId);
 
         // 添加用户信息
@@ -107,6 +110,7 @@ public class ProfilePanel extends JPanel {
         add(saveButton, gbc);
 
         // 添加按钮事件监听器
+
         editUsernameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -117,8 +121,19 @@ public class ProfilePanel extends JPanel {
                         JOptionPane.showMessageDialog(null, "Username cannot be empty.");
                         return;
                     }
-                    // 更新用户名（根据需要实现）
-                    System.out.println("Username changed to: " + newUsername);
+                    if (userManager.getUserIdByName(newUsername) != null && !newUsername.equals(currentUser.name)) {
+                        JOptionPane.showMessageDialog(null, "Username already exists.");
+                        return;
+                    }
+                    // 更新用户名
+                    if (userManager.editUserName(currentUserId, newUsername)) {
+                        SavingManager savingManager = SavingManager.getInstance();
+                        savingManager.saveUsersToCSV();
+                        JOptionPane.showMessageDialog(null, "Save Successfully!");
+                        System.out.println("Username changed to: " + newUsername);
+                    } else {
+                        System.out.println("Wrong");
+                    }
                     usernameField.setEditable(false);
                     editUsernameButton.setText("Edit");
                 } else {
@@ -140,8 +155,21 @@ public class ProfilePanel extends JPanel {
                         JOptionPane.showMessageDialog(null, "User ID cannot be empty.");
                         return;
                     }
-                    // 更新用户ID（根据需要实现）
-                    System.out.println("User ID changed to: " + newUserId);
+                    if (userManager.getUserById(newUserId) != null && !newUserId.equals(currentUserId)) {
+                        JOptionPane.showMessageDialog(null, "User ID already exists.");
+                        return;
+                    }
+                    // 更新用户ID
+                    if (userManager.editUserId(currentUserId, newUserId)) {
+                        currentUserId = newUserId; // 更新 currentUserId
+                        SavingManager savingManager = SavingManager.getInstance();
+                        savingManager.saveUsersToCSV();
+                        JOptionPane.showMessageDialog(null, "Save Successfully!");
+                        System.out.println("User ID changed to: " + newUserId);
+                        refreshUserInformation(); // 刷新用户信息
+                    } else {
+                        System.out.println("Wrong");
+                    }
                     userIdField.setEditable(false);
                     editUserIdButton.setText("Edit");
                 } else {
@@ -163,11 +191,22 @@ public class ProfilePanel extends JPanel {
                     String confirmPassword = new String(confirmpasswordField.getPassword());
 
                     if (!newPassword.equals(confirmPassword)) {
-                        JOptionPane.showMessageDialog(null, "New password and confirm password do not match.");
+                        JOptionPane.showMessageDialog(null, "Please confirm that the new password you entered twice is the same");
                         return;
                     }
-                    // 更新密码（根据需要实现）
-                    System.out.println("Password changed.");
+                    if (!userManager.getPassword(currentUserId).equals(oldPassword)) {
+                        JOptionPane.showMessageDialog(null, "Old password is incorrect.");
+                        return;
+                    }
+                    // 更新密码
+                    if (userManager.editPassword(currentUserId, newPassword)) {
+                        SavingManager savingManager = SavingManager.getInstance();
+                        savingManager.saveUsersToCSV();
+                        JOptionPane.showMessageDialog(null, "Save Successfully!");
+                        System.out.println("Password changed.");
+                    } else {
+                        System.out.println("Wrong");
+                    }
                     oldpasswordField.setEditable(false);
                     newpasswordField.setEditable(false);
                     confirmpasswordField.setEditable(false);
@@ -186,8 +225,7 @@ public class ProfilePanel extends JPanel {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                usernameField.setText(currentUser != null ? currentUser.name : "");
-                userIdField.setText(currentUserId);
+                refreshUserInformation(); // 刷新用户信息
                 oldpasswordField.setText("");
                 newpasswordField.setText("");
                 confirmpasswordField.setText("");
@@ -234,5 +272,16 @@ public class ProfilePanel extends JPanel {
                 editPasswordButton.setText("Edit");
             }
         });
+    }
+
+    /**
+     * 刷新当前用户信息
+     */
+    private void refreshUserInformation() {
+        User currentUser = userManager.getUserById(currentUserId);
+        if (currentUser != null) {
+            usernameField.setText(currentUser.name);
+        }
+        userIdField.setText(currentUserId);
     }
 }
