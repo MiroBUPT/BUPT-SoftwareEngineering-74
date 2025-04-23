@@ -3,6 +3,27 @@
     "configurations": [
       {
         "type": "java",
+        "name": "LoginView",
+        "request": "launch",
+        "mainClass": "boundary.LoginView",
+        "projectName": "BUPT-SoftwareEngineering-74"
+      },
+      {
+        "type": "java",
+        "name": "GUIView",
+        "request": "launch",
+        "mainClass": "boundary.GUIView",
+        "projectName": "BUPT-SoftwareEngineering-74"
+      },
+      {
+        "type": "java",
+        "name": "Application",
+        "request": "launch",
+        "mainClass": "Application",
+        "projectName": "BUPT-SoftwareEngineering-74"
+      },
+      {
+        "type": "java",
         "name": "Maven Test",
         "request": "launch",
         "mainClass": "AIManagerTest",

@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import entity.Budget;
 import entity.Transaction;
@@ -214,39 +216,69 @@ public class SavingManager extends Manager {
         }
     }
 
-    // 从 CSV 文件加载交易数据
     private boolean loadTransactionsFromCSV(String filePath) {
-        List<Transaction> loadedTransactions = new ArrayList<>();
+    List<Transaction> loadedTransactions = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+    // 定义一个映射表，将字符串映射到 TransactionType 枚举值
+    Map<String, TransactionType> typeMap = new HashMap<>();
+    typeMap.put("groceries", TransactionType.groceries);
+    typeMap.put("health", TransactionType.health);
+    typeMap.put("food", TransactionType.food);
+    typeMap.put("income", TransactionType.income);
+    typeMap.put("rent", TransactionType.rent);
+    typeMap.put("entertainment", TransactionType.entertainment);
 
-            // 跳过表头
-            reader.readLine();
+    try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] fields = parseCsvLine(line);
-                if (fields.length >= 8) {
-                    Transaction transaction = new Transaction();
-                    transaction.transactionId = unescapeCsvField(fields[0]);
-                    transaction.date = unescapeCsvField(fields[1]);
-                    transaction.amount = unescapeCsvField(fields[2]);
-                    transaction.description = unescapeCsvField(fields[3]);
-                    transaction.type = TransactionType.values()[Integer.parseInt(unescapeCsvField(fields[4]))];
-                    transaction.owner = userManager.getUserById(unescapeCsvField(fields[5]));
-                    transaction.isIncome = Boolean.parseBoolean(unescapeCsvField(fields[6]));
-                    transaction.location = unescapeCsvField(fields[7]);
-                    loadedTransactions.add(transaction);
+        // 跳过表头
+        reader.readLine();
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] fields = parseCsvLine(line);
+            if (fields.length >= 8) {
+                Transaction transaction = new Transaction();
+                transaction.transactionId = unescapeCsvField(fields[0]);
+                transaction.date = unescapeCsvField(fields[1]);
+
+                // 验证金额是否为数字
+                String amountStr = unescapeCsvField(fields[2]);
+                if (!isNumeric(amountStr)) {
+                    System.err.println("Invalid numeric value for amount: " + amountStr);
+                    continue;
                 }
-            }
+                transaction.amount = amountStr;
 
-            transactionManager.loadData(loadedTransactions);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+                transaction.description = unescapeCsvField(fields[3]);
+
+                // 验证 TransactionType 是否有效
+                String typeStr = unescapeCsvField(fields[4]);
+                TransactionType type = typeMap.get(typeStr);
+                if (type == null) {
+                    System.err.println("Invalid TransactionType value: " + typeStr);
+                    continue;
+                }
+                transaction.type = type;
+
+                transaction.owner = userManager.getUserById(unescapeCsvField(fields[5]));
+                transaction.isIncome = Boolean.parseBoolean(unescapeCsvField(fields[6]));
+                transaction.location = unescapeCsvField(fields[7]);
+                loadedTransactions.add(transaction);
+            }
         }
+
+        transactionManager.loadData(loadedTransactions);
+        return true;
+    } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+    
+    // 辅助方法：检查字符串是否为数字
+    private boolean isNumeric(String str) {
+        return str != null && str.matches("-?\\d+(\\.\\d+)?");
     }
 
     // CSV字段转义处理（处理包含逗号或引号的情况）
