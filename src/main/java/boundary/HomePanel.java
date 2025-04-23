@@ -5,11 +5,13 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+
+import control.UserManager;
+
 import org.jfree.chart.plot.PlotOrientation;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 
 public class HomePanel extends JPanel {
     public HomePanel(java.awt.Color borderColor, java.awt.Color fillColor) {
@@ -18,15 +20,18 @@ public class HomePanel extends JPanel {
         setLayout(new BorderLayout());
         init();
     }
-
+    
     private void init() {
         System.out.println("主页面板初始化");
+        UserManager userManager = UserManager.getInstance(); // 获取 UserManager 实例
+        String currentUserId = userManager.getCurrentUserId(); // 获取当前用户 ID
+        String userName = userManager.getUserName(currentUserId); // 获取当前用户名
 
         // 左上角欢迎信息面板
         JPanel welcomePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         welcomePanel.setBackground(java.awt.Color.WHITE);
         welcomePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JLabel welcomeLabel = new JLabel("Welcome, username");
+        JLabel welcomeLabel = new JLabel("Welcome, " + (userName != null ? userName : "Guest") );
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
         welcomePanel.add(welcomeLabel);
         add(welcomePanel, BorderLayout.WEST);
