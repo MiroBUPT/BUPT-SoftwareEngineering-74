@@ -3,6 +3,10 @@ package boundary;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+
+import control.UserManager;
+import entity.User;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +15,15 @@ import java.util.List;
 public class GUIView extends JFrame {
     private static CardLayout cardLayout; // 定义为类的成员变量
     private static JPanel contentPanel;  // 定义为类的成员变量
-
+    private UserManager userManager; // 添加 UserManager 引用
+    private String currentUserId;    // 添加 currentUserId 变量
+    
     public GUIView() {
+        // 初始化 UserManager 和获取当前用户信息
+        userManager = UserManager.getInstance();
+        currentUserId = userManager.getCurrentUserId();
+        User currentUser = userManager.getUserById(currentUserId);
+
         // 创建主窗口
         setTitle("Smart Personal Finance Manager");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
