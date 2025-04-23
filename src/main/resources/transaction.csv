@@ -1,41 +1,201 @@
 transactionId,date,amount,description,type,owner,isIncome,location
-0001,2024-01-01,200.00,超市购物,groceries,张三,false,北京
-0002,2024-01-02,50.00,买药,health,李四,false,上海
-0003,2024-01-03,150.00,外出就餐,food,王五,false,广州
-0004,2024-01-04,3000.00,工资收入,income,赵六,true,深圳
-0005,2024-01-05,1000.00,房租支出,rent,孙七,false,成都
-0006,2024-01-06,80.00,购买水果,groceries,张三,false,杭州
-0007,2024-01-07,30.00,体检费用,health,李四,false,南京
-0008,2024-01-08,200.00,看电影,entertainment,王五,false,武汉
-0009,2024-01-09,5000.00,项目奖金,income,赵六,true,重庆
-0010,2024-01-10,1200.00,支付水电费,rent,孙七,false,西安
-0011,2024-01-11,150.00,购买日用品,groceries,张三,false,苏州
-0012,2024-01-12,60.00,挂号看病,health,李四,false,天津
-0013,2024-01-13,300.00,聚餐,food,王五,false,长沙
-0014,2024-01-14,2000.00,兼职收入,income,赵六,true,青岛
-0015,2024-01-15,800.00,缴纳物业费,rent,孙七,false,大连
-0016,2024-01-16,90.00,购买零食,groceries,张三,false,厦门
-0017,2024-01-17,40.00,配镜费用,health,李四,false,福州
-0018,2024-01-18,180.00,唱 KTV,entertainment,王五,false,合肥
-0019,2024-01-19,3500.00,销售提成,income,赵六,true,宁波
-0020,2024-01-20,1300.00,支付房租,rent,孙七,false,无锡
-0021,2024-01-21,160.00,购买文具,groceries,张三,false,郑州
-0022,2024-01-22,70.00,牙科治疗,health,李四,false,济南
-0023,2024-01-23,250.00,吃火锅,food,王五,false,沈阳
-0024,2024-01-24,1800.00,劳务报酬,income,赵六,true,佛山
-0025,2024-01-25,900.00,宽带费用,rent,孙七,false,东莞
-0026,2024-01-26,100.00,购买饮料,groceries,张三,false,昆明
-0027,2024-01-27,50.00,按摩放松,health,李四,false,南宁
-0028,2024-01-28,220.00,游乐场游玩,entertainment,王五,false,南昌
-0029,2024-01-29,4000.00,年终奖金,income,赵六,true,贵阳
-0030,2024-01-30,1400.00,房租支出,rent,孙七,false,太原
-0031,2024-02-01,170.00,购买衣物,groceries,张三,false,兰州
-0032,2024-02-02,80.00,疫苗接种,health,李四,false,西宁
-0033,2024-02-03,320.00,吃西餐,food,王五,false,海口
-0034,2024-02-04,2200.00,兼职收入,income,赵六,true,银川
-0035,2024-02-05,1000.00,支付水电费,rent,孙七,false,乌鲁木齐
-0036,2024-02-06,110.00,购买水果,groceries,张三,false,拉萨
-0037,2024-02-07,60.00,体检费用,health,李四,false,呼和浩特
-0038,2024-02-08,240.00,看话剧,entertainment,王五,false,哈尔滨
-0039,2024-02-09,4500.00,项目提成,income,赵六,true,长春
-0040,2024-02-10,1500.00,支付房租,rent,孙七,false,石家庄
+0001,2024-01-01,200.00,supermarket shopping,groceries,zhangsan,false,Beijing
+0002,2024-01-02,50.00,purchase medicine,health,lisi,false,Shanghai
+0003,2024-01-03,150.00,going out to eat,food,wangwu,false,Guangzhou
+0004,2024-01-04,3000.00,salary income,income,zhaoliu,true,Shenzhen
+0005,2024-01-05,1000.00,rent expense,rent,sunqi,false,Chengdu
+0006,2024-01-06,80.00,buying fruit,groceries,zhangsan,qingfalse,Hangzhou
+0007,2024-01-07,30.00,health check fee,health,lisi,qingfalse,Nanjing
+0008,2024-01-08,200.00,going to the movies,entertainment,wangwu,qingfalse,Wuhan
+0009,2024-01-09,5000.00,project bonus,income,zhaoliu,true,Chongqing
+0010,2024-01-10,1200.00,pay for utilities,rent,sunqi,false,Xian
+0011,2024-01-11,150.00,buy daily necessities,groceries,zhangsan,false,Suzhou
+0012,2024-01-12,60.00,register for a medical appointment,health,lisi,false,Tianjin
+0013,2024-01-13,300.00,banquet,food,wangwu,false,Changsha
+0014,2024-01-14,2000.00,part-time income,income,zhaoliu,true,Qingdao
+0015,2024-01-15,800.00,pay property fee,rent,sunqi,false,Dalian
+0016,2024-01-16,90.00,buy snacks,groceries,zhangsan,false,Xiamen
+0017,2024-01-17,40.00,Optical Fitting Fee,health,lisi,false,Fuzhou
+0018,2024-01-18,180.00,Karaoke,entertainment,wangwu,false,Hefei
+0019,2024-01-19,3500.00,Sales Commission,income,zhaoliu,true,Ningbo
+0020,2024-01-20,1300.00,Rent Payment,rent,sunqi,false,Wuxi
+0021,2024-01-21,160.00,buy stationery,groceries,zhangsan,false,Zhengzhou
+0022,2024-01-22,70.00,dental treatment,health,lisi,false,Jinan
+0023,2024-01-23,250.00,have hotpot,food,wangwu,false,Shenyang
+0024,2024-01-24,1800.00,labour remuneration,income,zhaoliu,true,Foshan
+0025,2024-01-25,900.00,Internet fee,rent,sunqi,false,Dongguan
+0026,2024-01-26,100.00,Buying drinks,groceries,zhangsan,false,Kunming
+0027,2024-01-27,50.00,Massage relaxation,health,lisi,false,Nanning
+0028,2024-01-28,220.00,Amusement park visit,entertainment,wangwu,false,Nanchang
+0029,2024-01-29,4000.00,year-end bonus,income,zhaoliu,true,Guiyang
+0030,2024-01-30,1400.00,rent expense,rent,sunqi,false,Taiyuan
+0031,2024-02-01,170.00,purchase of clothing,groceries,zhangsan,false,Lanzhou
+0032,2024-02-02,80.00,vaccination,health,lisi,false,Xining
+0033,2024-02-03,320.00,Eat Western cuisine,food,wangwu,false,Haikou
+0034,2024-02-04,2200.00,Part-time income,income,zhaoliu,true,Yinchuan
+0035,2024-02-05,1000.00,Pay utilities,rent,sunqi,false,Urumqi
+0036,2024-02-06,110.00,Buy fruit,groceries,zhangsan,false,Lhasa
+0037,2024-02-07,60.00,Physical Examination Fee,health,lisi,false,Hohhot
+0038,2024-02-08,240.00,Watch a Drama,entertainment,wangwu,false,Harbin
+0039,2024-02-09,4500.00,Project Commission,income,zhaoliu,true,Changchun
+0040,2024-02-10,1500.00,Pay Rent,rent,sunqi,false,Shijiazhuang
+0041,2024-03-15,185.90,Biweekly Grocery Delivery,groceries,lisi,false,Guangzhou
+0042,2024-08-28,120.00,Annual Physical Exam Fee,health,wangwu,false,Chongqing
+0043,2024-06-07,290.30,Restaurant Dinner Reservation,food,sunqi,false,Nanjing
+0044,2024-10-01,8500.00,Monthly Pension Deposit,income,zhaoliu,true,Shanghai
+0045,2024-02-19,380.80,Theme Park Annual Pass,entertainment,zhangsan,false,Qingdao
+0046,2024-05-23,210.00,Software License Renewal,DigitalProduct,wangwu,false,Chengdu
+0047,2024-09-10,195.65,Skincare Routine Overhaul,Cosmetics,lisi,false,Hangzhou
+0048,2024-01-03,85.20,Video Game Collector's Edition,game,sunqi,false,Wuhan
+0049,2024-11-05,7800.50,Freelance Writing Payment,income,zhangsan,true,Shenzhen
+0050,2024-04-22,1950.90,Co-Working Space Annual Fee,rent,zhaoliu,false,Tianjin
+0051,2024-07-10,220.50,Farm-to-Table Vegetable Box,groceries,zhangsan,false,Beijing
+0052,2024-03-01,98.00,Allergy Testing Service,health,lisi,false,Shanghai
+0053,2024-09-15,350.70,Cafe Brunch Experience,food,wangwu,false,Guangzhou
+0054,2024-06-20,6500.00,Stock Dividend Payout,income,sunqi,true,Shenzhen
+0055,2024-12-25,450.00,Concert VIP Package,entertainment,zhaoliu,false,Chengdu
+0056,2024-04-10,150.00,Online Course Enrollment,DigitalProduct,lisi,false,Hangzhou
+0057,2024-08-05,320.80,High-End Skincare Set,Cosmetics,wangwu,false,Nanjing
+0058,2024-05-12,75.00,Gaming Keyboard and Mouse,game,zhangsan,false,Wuhan
+0059,2024-10-28,9200.00,Photography Gig Earnings,income,sunqi,true,Chongqing
+0060,2024-03-22,2200.00,Monthly Rent Payment,rent,zhaoliu,false,Xi'an
+0061,2024-07-03,190.50,Gluten-Free Pantry Restock,groceries,zhangsan,false,Suzhou
+0062,2024-02-14,110.00,Orthopedic Pillow Purchase,health,lisi,false,Tianjin
+0063,2024-08-22,380.30,Food Truck Festival Visit,food,wangwu,false,Changsha
+0064,2024-06-11,7200.00,Affiliate Marketing Commission,income,sunqi,true,Qingdao
+0065,2024-11-18,480.00,Magic Show,entertainment,zhaoliu,false,Dalian
+0066,2024-04-28,160.00,E-book Purchase,DigitalProduct,lisi,false,Xiamen
+0067,2024-09-02,395.65,Makeup Artist Kit,Cosmetics,wangwu,false,Fuzhou
+0068,2024-01-15,65.00,Online Game Subscription,game,zhangsan,false,Hefei
+0069,2024-12-01,8800.50,Tutoring Service Income,income,sunqi,true,Ningbo
+0070,2024-03-18,2400.00,Rental Deposit,rent,zhaoliu,false,Wuxi
+0071,2024-07-25,205.90,International Food Aisle Purchase,groceries,zhangsan,false,Zhengzhou
+0072,2024-02-28,130.00,CPAP Machine Maintenance,health,lisi,false,Jinan
+0073,2024-09-30,330.70,Fine Dining Tasting Menu,food,wangwu,false,Shenyang
+0074,2024-06-03,6800.00,Rental Property Income,income,sunqi,true,Foshan
+0075,2024-11-10,430.00,Theater Season Pass,entertainment,zhaoliu,false,Dongguan
+0076,2024-04-08,170.00,App Premium Subscription,DigitalProduct,lisi,false,Kunming
+0077,2024-08-18,385.65,Luxury Fragrance Collection,Cosmetics,wangwu,false,Nanning
+0078,2024-05-28,80.00,Board Game Expansion,game,zhangsan,false,Nanchang
+0079,2024-10-08,9500.50,Rideshare Driver Earnings,income,sunqi,true,Guiyang
+0080,2024-03-28,2600.00,Co-Working Space Fee,rent,zhaoliu,false,Taiyuan
+0081,2024-07-12,215.90,Pet Treats & Supplies,groceries,zhangsan,false,Lanzhou
+0082,2024-02-20,140.00,Natural Supplement Subscription,health,lisi,false,Xining
+0083,2024-09-25,340.70,Cooking Class for Couples,food,wangwu,false,Haikou
+0084,2024-06-13,7000.00,Online Survey Rewards,income,sunqi,true,Yinchuan
+0085,2024-11-20,440.00,Circus Performance,entertainment,zhaoliu,false,Urumqi
+0086,2024-04-18,180.00,Digital Artwork Download,DigitalProduct,lisi,false,Lhasa
+0087,2024-08-25,375.65,Professional Hair Styling Tools,Cosmetics,wangwu,false,Hohhot
+0088,2024-05-08,85.00,Tabletop RPG Starter Set,game,zhangsan,false,Harbin
+0089,2024-10-18,9300.50,Selling Used Electronics,income,sunqi,true,Changchun
+0090,2024-03-08,2700.00,Storage Unit Rent,rent,zhaoliu,false,Shijiazhuang
+0091,2024-07-08,225.90,Zero-Waste Cleaning Kit,groceries,zhangsan,false,Qingdao
+0092,2024-02-08,150.00,Sports Massage Session,health,lisi,false,Shanghai
+0093,2024-09-12,350.70,Gourmet Food Tour,food,wangwu,false,Guangzhou
+0094,2024-06-23,7300.00,Real Estate Commission,income,sunqi,true,Shenzhen
+0095,2024-11-28,450.00,Music Festival Weekend Pass,entertainment,zhaoliu,false,Chengdu
+0096,2024-04-25,190.00,Cloud Storage Upgrade,DigitalProduct,lisi,false,Hangzhou
+0097,2024-08-08,365.65,Organic Beauty Gift Set,Cosmetics,wangwu,false,Nanjing
+0098,2024-05-18,90.00,Gaming Chair and Desk,game,zhangsan,false,Wuhan
+0099,2024-10-25,9400.50,Music Streaming Royalties,income,sunqi,true,Chongqing
+0100,2024-03-12,2800.00,Parking Space Rent,rent,zhaoliu,false,Xi'an
+0101,2024-07-20,235.90,Bulk Coffee Bean Purchase,groceries,zhangsan,false,Suzhou
+0102,2024-02-12,160.00,Mental Health Counseling,health,lisi,false,Tianjin
+0103,2024-09-08,360.70,Wine Pairing Dinner,food,wangwu,false,Changsha
+0104,2024-06-08,7400.00,Patreon Subscriber Payments,income,sunqi,true,Qingdao
+0105,2024-11-08,460.00,Arcade Game Marathon,entertainment,zhaoliu,false,Dalian
+0106,2024-04-12,200.00,Domain Name Registration,DigitalProduct,lisi,false,Xiamen
+0107,2024-08-02,355.65,Nail Art Studio,Cosmetics,wangwu,false,Fuzhou
+0108,2024-05-22,95.00,Game Controller Charger,game,zhangsan,false,Hefei
+0109,2024-10-02,9100.50,Conference Speaking Honorarium,income,sunqi,true,Ningbo
+0110,2024-03-22,2900.00,Lease Agreement Fee,rent,zhaoliu,false,Wuxi
+0111,2024-07-22,245.90,Artisan Bread & Pastries,groceries,zhangsan,false,Zhengzhou
+0112,2024-02-22,170.00,Acupuncture Treatment,health,lisi,false,Jinan
+0113,2024-09-22,370.70,Foodie Market Adventure,food,wangwu,false,Shenyang
+0114,2024-06-18,7600.00,Website Ad Revenue Payout,income,sunqi,true,Foshan
+0115,2024-11-12,470.00,Magic Show,entertainment,zhaoliu,false,Dongguan
+0116,2024-04-22,210.00,Web Hosting Fee,DigitalProduct,lisi,false,Kunming
+0117,2024-08-22,345.65,Beauty Blender and Sponge Set,Cosmetics,wangwu,false,Nanning
+0118,2024-05-02,100.00,Gaming Headset,game,zhangsan,false,Nanchang
+0119,2024-10-22,9000.50,Referral Bonus for Insurance,income,sunqi,true,Guiyang
+0120,2024-03-02,3000.00,Rental Insurance,rent,zhaoliu,false,Taiyuan
+0121,2024-07-02,255.90,Seasonal Fruit Basket,groceries,zhangsan,false,Lanzhou
+0122,2024-02-02,180.00,Prescription Eyeglasses,health,lisi,false,Xining
+0123,2024-09-17,380.70,Seafood Buffet Feast,food,wangwu,false,Haikou
+0124,2024-06-17,7700.00,Selling Digital Artwork,income,sunqi,true,Yinchuan
+0125,2024-11-17,480.00,Carnival Ride Wristband,entertainment,zhaoliu,false,Urumqi
+0126,2024-04-17,220.00,Digital Magazine Subscription,DigitalProduct,lisi,false,Lhasa
+0127,2024-08-17,335.65,Mineral Makeup Collection,Cosmetics,wangwu,false,Hohhot
+0128,2024-05-07,105.00,Video Game Strategy Guide,game,zhangsan,false,Harbin
+0129,2024-10-17,8900.50,Teaching Online Course Fees,income,sunqi,true,Changchun
+0130,2024-03-17,3100.00,Short-Term Rental,rent,zhaoliu,false,Shijiazhuang
+0131,2024-07-07,265.90,Canned Goods Emergency Stock,groceries,zhangsan,false,Qingdao
+0132,2024-02-07,190.00,Sleep Apnea Consultation,health,lisi,false,Shanghai
+0133,2024-09-13,390.70,Vegetarian Food Festival,food,wangwu,false,Guangzhou
+0134,2024-06-27,7800.00,Consulting Service Invoice,income,sunqi,true,Shenzhen
+0135,2024-11-27,490.00,Escape Room Adventure,entertainment,zhaoliu,false,Chengdu
+0136,2024-04-27,230.00,Online Game Expansion Pack,DigitalProduct,lisi,false,Hangzhou
+0137,2024-08-07,325.65,Hair Extension Purchase,Cosmetics,wangwu,false,Nanjing
+0138,2024-05-17,110.00,Mobile Game In-App Purchase,game,zhangsan,false,Wuhan
+0139,2024-10-27,8600.50,Selling Vintage Clothing,income,sunqi,true,Chongqing
+0140,2024-03-27,3200.00,Property Management Fee,rent,zhaoliu,false,Xi'an
+0141,2024-07-27,275.90,Organic Baby Food Selection,groceries,zhangsan,false,Suzhou
+0142,2024-02-27,200.00,Herbal Remedy Purchase,health,lisi,false,Tianjin
+0143,2024-09-27,400.70,Chocolate Tasting Event,food,wangwu,false,Changsha
+0144,2024-06-07,7900.00,Affiliate Program Payout,income,sunqi,true,Qingdao
+0145,2024-11-07,500.00,Laser Tag Party,entertainment,zhaoliu,false,Dalian
+0146,2024-04-07,240.00,Video Editing Software,DigitalProduct,lisi,false,Xiamen
+0147,2024-08-27,315.65,Eyelash Growth Serum,Cosmetics,wangwu,false,Fuzhou
+0148,2024-05-27,115.00,Game Card Booster Pack,game,zhangsan,false,Hefei
+0149,2024-10-07,8700.50,Royalties for Podcast,income,sunqi,true,Ningbo
+0150,2024-03-07,3300.00,Security Deposit Refund,rent,zhaoliu,false,Wuxi
+0151,2024-07-13,285.90,Specialty Tea Collection,groceries,zhangsan,false,Zhengzhou
+0152,2024-02-13,210.00,Physical Therapy Equipment,health,lisi,false,Jinan
+0153,2024-09-03,410.70,Farm-to-Table Dinner,food,wangwu,false,Shenyang
+0154,2024-06-13,8000.00,Renting Out Parking Space,income,sunqi,true,Foshan
+0155,2024-11-13,510.00,Bowling Night Out,entertainment,zhaoliu,false,Dongguan
+0156,2024-04-13,250.00,Music Production Software,DigitalProduct,lisi,false,Kunming
+0157,2024-08-13,305.65,Brow Sculpting Kit,Cosmetics,wangwu,false,Nanning
+0158,2024-05-03,120.00,Arcade Game Machine,game,zhangsan,false,Nanchang
+0159,2024-10-13,8800.50,Selling Homemade Soap,income,sunqi,true,Guiyang
+0160,2024-03-13,3400.00,Rent Increase Notice,rent,zhaoliu,false,Taiyuan
+0161,2024-07-03,295.90,Ethically Sourced Chocolate,groceries,zhangsan,false,Lanzhou
+0162,2024-02-03,220.00,Dermatology Consultation,health,lisi,false,Xining
+0163,2024-09-18,420.70,Artisanal Food Fair,food,wangwu,false,Haikou
+0164,2024-06-28,8200.00,Freelance Graphic Design,income,sunqi,true,Yinchuan
+0165,2024-11-23,520.00,Miniature Golf Tournament,entertainment,zhaoliu,false,Urumqi
+0166,2024-04-23,260.00,Anti-Virus Software License,DigitalProduct,lisi,false,Lhasa
+0167,2024-08-03,295.65,Lipstick Sampler Set,Cosmetics,wangwu,false,Hohhot
+0168,2024-05-13,125.00,Pinball Machine,game,zhangsan,false,Harbin
+0169,2024-10-23,8400.50,Monthly Pension Deposit,income,sunqi,true,Changchun
+0170,2024-03-23,3500.00,Rental Application Fee,rent,zhaoliu,false,Shijiazhuang
+0171,2024-07-23,305.90,Plant-Based Protein Shopping,groceries,zhangsan,false,Qingdao
+0172,2024-02-23,230.00,Nutritionist Consultation,health,lisi,false,Shanghai
+0173,2024-09-23,430.70,Food and Wine Festival,food,wangwu,false,Guangzhou
+0174,2024-06-13,8300.00,Stock Dividend Payout,income,sunqi,true,Shenzhen
+0175,2024-11-03,530.00,Roller Skating Rink Visit,entertainment,zhaoliu,false,Chengdu
+0176,2024-04-03,270.00,Productivity App Purchase,DigitalProduct,lisi,false,Hangzhou
+0177,2024-08-13,285.65,Foundation Finder Service,Cosmetics,wangwu,false,Nanjing
+0178,2024-05-03,130.00,Gaming Console Accessories,game,zhangsan,false,Wuhan
+0179,2024-10-03,8100.50,Freelance Writing Payment,income,sunqi,true,Chongqing
+0180,2024-03-03,3600.00,Furnished Apartment Rent,rent,zhaoliu,false,Xi'an
+0181,2024-07-18,315.90,Reusable Produce Bags,groceries,zhangsan,false,Suzhou
+0182,2024-02-18,240.00,Medical Alert System,health,lisi,false,Tianjin
+0183,2024-09-08,440.70,Pizza Making Workshop,food,wangwu,false,Changsha
+0184,2024-06-28,8400.00,Photography Gig Earnings,income,sunqi,true,Qingdao
+0185,2024-11-18,540.00,Ice Skating Show,entertainment,zhaoliu,false,Dalian
+0186,2024-04-18,280.00,Virtual Private Network,DigitalProduct,lisi,false,Xiamen
+0187,2024-08-08,275.65,Body Scrub and Lotion Set,Cosmetics,wangwu,false,Fuzhou
+0188,2024-05-28,135.00,Online Multiplayer Game,game,zhangsan,false,Hefei
+0189,2024-10-28,7900.50,Tutoring Service Income,income,sunqi,true,Ningbo
+0190,2024-03-28,3700.00,Roommate Rent Split,rent,zhaoliu,false,Wuxi
+0191,2024-07-08,325.90,Gourmet Olive Oil & Vinegar,groceries,zhangsan,false,Zhengzhou
+0192,2024-02-08,250.00,Chiropractic Adjustment,health,lisi,false,Jinan
+0193,2024-09-28,450.70,Gourmet Ice Cream Tasting,food,wangwu,false,Shenyang
+0194,2024-06-08,8500.00,Rideshare Driver Earnings,income,sunqi,true,Foshan
+0195,2024-11-08,550.00,Amusement Park Season Pass,entertainment,zhaoliu,false,Dongguan
+0196,2024-04-08,290.00,Online Backup Service,DigitalProduct,lisi,false,Kunming
+0197,2024-08-18,265.65,Facial Steamer and Brush,Cosmetics,wangwu,false,Nanning
+0198,2024-05-18,140.00,Indie Game Bundle,game,zhangsan,false,Nanchang
+0199,2024-10-18,8200.50,Online Survey Rewards,income,sunqi,true,Guiyang
+0200,2024-03-18,3800.00,Commercial Space Lease,rent,zhaoliu,false,Taiyuan

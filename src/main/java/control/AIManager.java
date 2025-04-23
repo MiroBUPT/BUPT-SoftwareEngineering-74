@@ -11,15 +11,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class AIManager extends Manager {
     // 配置参数
     private static final String DEEPSEEK_API_URL = "https://chat.zju.edu.cn/api/ai/v1/chat/completions";
-    private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");
+    // private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");
+    private static final String API_KEY = "sk-tuY5xrIzl2kJoruU98505161Cf084e348d041c5dA951F9Ca"; // 硬编码的 API 密钥
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    private final OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient = new OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(30, TimeUnit.SECONDS)
+    .writeTimeout(30, TimeUnit.SECONDS)
+    .build();
+    
     private final Gson gson = new GsonBuilder().create();
 
     // 单例模式代码
@@ -159,7 +166,6 @@ public class AIManager extends Manager {
             messages.add(userMessage);
 
             requestBody.add("messages", messages);
-            // 删除了流式响应的设置：requestBody.addProperty("stream", true);
 
             Request request = new Request.Builder()
                 .url(DEEPSEEK_API_URL)
@@ -175,7 +181,7 @@ public class AIManager extends Manager {
                     throw new IOException("Unexpected code " + response + ", 错误信息: " + errorBody);
                 }
 
-                // 删除了流式响应的处理逻辑，直接获取整个响应体
+                // 获取整个响应体
                 if (response.body() != null) {
                     String responseBody = response.body().string();
                     JsonObject jsonResponse = gson.fromJson(responseBody, JsonObject.class);
