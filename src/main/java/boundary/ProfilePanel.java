@@ -106,7 +106,7 @@ public class ProfilePanel extends JPanel {
         add(resetButton, gbc);
 
         gbc.gridy = 6;
-        saveButton = new JButton("Save");
+        saveButton = new JButton("Log Out");
         add(saveButton, gbc);
 
         // 添加按钮事件监听器
@@ -243,33 +243,27 @@ public class ProfilePanel extends JPanel {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
-                String userId = userIdField.getText();
-                String oldPassword = new String(oldpasswordField.getPassword());
-                String newPassword = new String(newpasswordField.getPassword());
-                String confirmPassword = new String(confirmpasswordField.getPassword());
-
-                if (!newPassword.equals(confirmPassword)) {
-                    JOptionPane.showMessageDialog(null, "New password and confirm password do not match.");
-                    return;
+                        // 创建一个自定义的确认对话框
+                Object[] options = {"Yes", "No"};
+                int confirm = JOptionPane.showOptionDialog(
+                    null,
+                    "Are you sure you want to logout?",
+                    "Logout",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // 清除当前用户信息
+                    userManager.setCurrentUser(null);
+                    
+                    // 重定向到 LoginView
+                    SwingUtilities.getWindowAncestor(ProfilePanel.this).dispose(); // 关闭当前窗口
+                    LoginView loginView = new LoginView();
+                    loginView.setVisible(true);
                 }
-
-                // 更新用户信息（根据需要实现）
-                System.out.println("Saved Profile Information:");
-                System.out.println("Username: " + username);
-                System.out.println("User ID: " + userId);
-                System.out.println("Old Password: " + oldPassword);
-                System.out.println("New Password: " + newPassword);
-
-                // 使信息框不可编辑
-                usernameField.setEditable(false);
-                userIdField.setEditable(false);
-                oldpasswordField.setEditable(false);
-                newpasswordField.setEditable(false);
-                confirmpasswordField.setEditable(false);
-                editUsernameButton.setText("Edit");
-                editUserIdButton.setText("Edit");
-                editPasswordButton.setText("Edit");
             }
         });
     }
