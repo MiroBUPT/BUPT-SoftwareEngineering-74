@@ -62,7 +62,7 @@ public class AIManagerTest {
         Budget budget = new Budget();
         budget.amount = "2000";
         budgets.add(budget);
-        when(mockBudgetManager.getBudgetsByUserName(userName)).thenReturn(budgets);
+        when(mockBudgetManager.queryByOwner(userName)).thenReturn(budgets);
 
         // 由于调用 API 是实际网络请求，这里不进行真实调用，仅测试方法是否能正常返回
         String advice = aiManager.generateAdvice();
