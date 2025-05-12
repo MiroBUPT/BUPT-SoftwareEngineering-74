@@ -76,7 +76,7 @@ public class AIManager extends Manager {
         // 根据用户名获取该用户的所有交易记录
         List<Transaction> transactions = transactionManager.getTransactionsByUserName(userName);
         // 根据用户名获取该用户的预算记录
-        List<Budget> budgets = budgetManager.getBudgetsByUserName(userName);
+        List<Budget> budgets = budgetManager.queryByOwner(userName);
 
         String prompt = buildPrompt(monthlyIncome, transactions, budgets);
         return callDeepSeekAPI(prompt);

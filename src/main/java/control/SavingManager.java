@@ -227,6 +227,9 @@ public class SavingManager extends Manager {
     typeMap.put("income", TransactionType.income);
     typeMap.put("rent", TransactionType.rent);
     typeMap.put("entertainment", TransactionType.entertainment);
+    typeMap.put("DigitalProduct", TransactionType.digitalProduct);
+    typeMap.put("game", TransactionType.game);
+    typeMap.put("Cosmetics", TransactionType.cosmetics);
 
     try (BufferedReader reader = new BufferedReader(
             new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {

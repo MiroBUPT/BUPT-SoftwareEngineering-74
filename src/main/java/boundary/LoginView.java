@@ -62,7 +62,7 @@ public class LoginView extends JFrame {
         // 创建消息标签
         messageLabel = new JLabel("");
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2;
         add(messageLabel, gbc);
 

@@ -3,6 +3,13 @@
     "configurations": [
       {
         "type": "java",
+        "name": "User_test",
+        "request": "launch",
+        "mainClass": "control.User_test",
+        "projectName": "BUPT-SoftwareEngineering-74"
+      },
+      {
+        "type": "java",
         "name": "LoginView",
         "request": "launch",
         "mainClass": "boundary.LoginView",
