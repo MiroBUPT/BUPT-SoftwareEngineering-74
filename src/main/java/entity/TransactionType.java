@@ -9,5 +9,8 @@ public enum TransactionType {
     income,
     digitalProduct,
     cosmetics,
+    travel,
+    transportation,
+    education,
     game;
 }

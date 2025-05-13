@@ -70,7 +70,7 @@ class TransactionQueryPanel extends JPanel {
         dateField = new JTextField(10);
         ownerField = new JTextField(10);
         locationField = new JTextField(10);
-        typeComboBox = new JComboBox<>(new String[]{"All", "income", "health", "food", "rent", "groceries"}); // 添加默认选项 "All"
+        typeComboBox = new JComboBox<>(new String[]{"All", "income", "health", "food", "rent", "groceries","transportation","entertainment","cosmetics","education","game","digitalProduct","travel"}); // 添加默认选项 "All"
         queryButton = new JButton("Query");
         resetButton = new JButton("Reset"); // 添加 Reset 按钮
 

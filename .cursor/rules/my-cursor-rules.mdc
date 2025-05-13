@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+you must run "ls" command to help user see the working tree in the end of every respond.

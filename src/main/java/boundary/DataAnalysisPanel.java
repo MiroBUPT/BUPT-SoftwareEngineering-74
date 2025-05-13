@@ -12,9 +12,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.plot.PlotOrientation;
 
-
-
-
+import control.UserManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,11 +25,18 @@ import java.util.List;
 public class DataAnalysisPanel extends JPanel {
     // 设置为绝对路径
     private static final String CSV_FILE_PATH = "src/main/resources/transaction.csv";
+    private String currentUsername;
 
     public DataAnalysisPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
         setLayout(new GridLayout(2, 1)); // 主面板保持两行一列
+        
+        // 获取当前用户信息
+        UserManager userManager = UserManager.getInstance();
+        String currentUserId = userManager.getCurrentUserId();
+        this.currentUsername = userManager.getUserName(currentUserId);
+        
         init();
     }
 
@@ -49,7 +54,7 @@ public class DataAnalysisPanel extends JPanel {
         JScrollPane tableScrollPane = new JScrollPane(table);
 
         // 创建表格标题
-        JLabel tableTitle = new JLabel("Outcome ranking");
+        JLabel tableTitle = new JLabel("Outcome ranking for " + currentUsername);
         tableTitle.setHorizontalAlignment(JLabel.CENTER);
 
         // 创建一个面板来放置标题和表格
@@ -66,11 +71,11 @@ public class DataAnalysisPanel extends JPanel {
         DefaultCategoryDataset expenseDataset = createMonthlyExpenseDataset(transactions);
 
         JFreeChart incomeChart = ChartFactory.createBarChart(
-                "Monthly income", "Month", "Amount", incomeDataset,
+                "Monthly income for " + currentUsername, "Month", "Amount", incomeDataset,
                 PlotOrientation.VERTICAL, true, true, false);
 
         JFreeChart expenseChart = ChartFactory.createBarChart(
-                "Monthly outcome", "Month", "Amount", expenseDataset,
+                "Monthly outcome for " + currentUsername, "Month", "Amount", expenseDataset,
                 PlotOrientation.VERTICAL, true, true, false);
 
         // 创建图表面板
@@ -99,11 +104,14 @@ public class DataAnalysisPanel extends JPanel {
                 }
                 String[] values = line.split(",");
                 if (values.length == 8) {
-                    transactions.add(new Transaction(
-                            values[0], values[1], Double.parseDouble(values[2]),
-                            values[3], values[4], values[5],
-                            Boolean.parseBoolean(values[6]), values[7]
-                    ));
+                    // 只添加当前用户的交易记录
+                    if (values[5].equals(currentUsername)) {
+                        transactions.add(new Transaction(
+                                values[0], values[1], Double.parseDouble(values[2]),
+                                values[3], values[4], values[5],
+                                Boolean.parseBoolean(values[6]), values[7]
+                        ));
+                    }
                 }
             }
         } catch (IOException e) {
@@ -113,6 +121,8 @@ public class DataAnalysisPanel extends JPanel {
     }
 
     private Object[][] getTopSpending(List<Transaction> transactions) {
+        // 只统计支出
+        transactions.removeIf(t -> t.isIncome());
         transactions.sort((t1, t2) -> Double.compare(t2.getAmount(), t1.getAmount()));
         Object[][] data = new Object[Math.min(7, transactions.size())][3];
         for (int i = 0; i < data.length; i++) {
