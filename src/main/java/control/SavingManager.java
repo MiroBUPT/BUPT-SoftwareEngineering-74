@@ -125,13 +125,18 @@ public class SavingManager extends Manager {
 
             // 写入每个交易的数据
             for (Transaction transaction : transactionList) {
+                // 获取用户名，如果找不到则使用userId
+                String ownerName = transaction.owner != null && transaction.owner.name != null ? 
+                                  transaction.owner.name : 
+                                  (transaction.owner != null ? transaction.owner.userId : "unknown");
+                
                 String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s",
                         escapeCsvField(transaction.transactionId),
                         escapeCsvField(transaction.date),
                         escapeCsvField(transaction.amount),
                         escapeCsvField(transaction.description),
                         escapeCsvField(String.valueOf(transaction.type.ordinal())),
-                        escapeCsvField(transaction.owner.userId),
+                        escapeCsvField(ownerName), // 使用用户名而非用户ID
                         escapeCsvField(String.valueOf(transaction.isIncome)),
                         escapeCsvField(transaction.location));
                 writer.write(line);
@@ -227,9 +232,12 @@ public class SavingManager extends Manager {
     typeMap.put("income", TransactionType.income);
     typeMap.put("rent", TransactionType.rent);
     typeMap.put("entertainment", TransactionType.entertainment);
-    typeMap.put("DigitalProduct", TransactionType.digitalProduct);
+    typeMap.put("digitalProduct", TransactionType.digitalProduct);
     typeMap.put("game", TransactionType.game);
-    typeMap.put("Cosmetics", TransactionType.cosmetics);
+    typeMap.put("cosmetics", TransactionType.cosmetics);
+    typeMap.put("transportation", TransactionType.transportation);
+    typeMap.put("education", TransactionType.education);
+    typeMap.put("travel", TransactionType.travel);
 
     try (BufferedReader reader = new BufferedReader(
             new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
@@ -257,14 +265,54 @@ public class SavingManager extends Manager {
 
                 // 验证 TransactionType 是否有效
                 String typeStr = unescapeCsvField(fields[4]);
-                TransactionType type = typeMap.get(typeStr);
-                if (type == null) {
-                    System.err.println("Invalid TransactionType value: " + typeStr);
-                    continue;
+                try {
+                    // 尝试将type值解析为枚举索引
+                    int typeOrdinal = Integer.parseInt(typeStr);
+                    if (typeOrdinal >= 0 && typeOrdinal < TransactionType.values().length) {
+                        transaction.type = TransactionType.values()[typeOrdinal];
+                    } else {
+                        // 如果索引越界，尝试使用名称映射
+                        TransactionType type = typeMap.get(typeStr.toLowerCase());
+                        if (type == null) {
+                            System.err.println("Invalid TransactionType value: " + typeStr);
+                            continue;
+                        }
+                        transaction.type = type;
+                    }
+                } catch (NumberFormatException e) {
+                    // 如果不是数字，尝试使用名称映射
+                    TransactionType type = typeMap.get(typeStr.toLowerCase());
+                    if (type == null) {
+                        System.err.println("Invalid TransactionType value: " + typeStr);
+                        continue;
+                    }
+                    transaction.type = type;
                 }
-                transaction.type = type;
 
-                transaction.owner = userManager.getUserById(unescapeCsvField(fields[5]));
+                // 根据owner字段查找用户，先尝试按用户名查找，再尝试按用户ID查找
+                String ownerValue = unescapeCsvField(fields[5]);
+                User owner = null;
+                
+                // 先尝试通过ID查找
+                owner = userManager.getUserById(ownerValue);
+                
+                if (owner == null) {
+                    // 如果通过ID找不到，尝试通过名称查找
+                    String userId = userManager.getUserIdByName(ownerValue);
+                    if (userId != null) {
+                        owner = userManager.getUserById(userId);
+                    }
+                }
+                
+                if (owner == null) {
+                    // 如果仍然找不到，创建一个临时用户
+                    owner = new User();
+                    owner.userId = "temp_" + ownerValue;
+                    owner.name = ownerValue;
+                    System.err.println("Creating temporary user for owner: " + ownerValue);
+                }
+                
+                transaction.owner = owner;
                 transaction.isIncome = Boolean.parseBoolean(unescapeCsvField(fields[6]));
                 transaction.location = unescapeCsvField(fields[7]);
                 loadedTransactions.add(transaction);

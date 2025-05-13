@@ -10,7 +10,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
-
+import control.UserManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +26,18 @@ import java.util.Map;
 public class BudgetAnalysisPanel extends JPanel {
 
     private static final String CSV_FILE_PATH = "src/main/resources/budget.csv";
+    private String currentUsername;
 
     public BudgetAnalysisPanel(Color borderColor, Color fillColor) {
         this.setBorder(BorderFactory.createLineBorder(borderColor));
         this.setBackground(fillColor);
         // 使用 GridLayout，2 行 1 列
         this.setLayout(new GridLayout(2, 1));
+
+        // 获取当前用户信息
+        UserManager userManager = UserManager.getInstance();
+        String currentUserId = userManager.getCurrentUserId();
+        this.currentUsername = userManager.getUserName(currentUserId);
 
         // 初始化图表数据
         init();
@@ -48,14 +54,14 @@ public class BudgetAnalysisPanel extends JPanel {
 
         // 创建饼图
         JFreeChart pieChart = ChartFactory.createPieChart(
-                "Each project budget proportion", pieDataset, true, true, false);
+                "Budget proportion for " + currentUsername, pieDataset, true, true, false);
 
         // 初始化折线图数据
         DefaultCategoryDataset lineDataset = createMonthlyExpenseDataset(budgetItems);
 
         // 创建折线图
         JFreeChart lineChart = ChartFactory.createLineChart(
-                "Monthly Expense Trend", // 图表标题
+                "Monthly Expense Trend for " + currentUsername, // 图表标题
                 "Month", // X轴标签
                 "Total Expense", // Y轴标签
                 lineDataset, // 数据集
@@ -82,10 +88,13 @@ public class BudgetAnalysisPanel extends JPanel {
                 }
                 String[] values = line.split(",");
                 if (values.length == 5) {
-                    budgetItems.add(new BudgetItem(
-                            values[0], Double.parseDouble(values[1]),
-                            values[2], values[3], values[4]
-                    ));
+                    // 只添加当前用户的预算数据
+                    if (values[3].equals(currentUsername)) {
+                        budgetItems.add(new BudgetItem(
+                                values[0], Double.parseDouble(values[1]),
+                                values[2], values[3], values[4]
+                        ));
+                    }
                 }
             }
         } catch (IOException e) {

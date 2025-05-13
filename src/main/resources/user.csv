@@ -1,7 +1,7 @@
 userId,name,password
-00001,liuyi,0001
+0001,liuyi,0001
 0002,chener,0002
-0003,zhangsan01,0004
+0003,zhangsan,0003
 0004,lisi,0004
 0005,wangwu,0005
 0006,zhaoliu,0006
@@ -18,3 +18,4 @@ userId,name,password
 1,1,1
 18,2222,2222
 19,3432344,34342424
+default,Default User,123456

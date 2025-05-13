@@ -199,3 +199,53 @@ transactionId,date,amount,description,type,owner,isIncome,location
 0198,2024-05-18,140.00,Indie Game Bundle,game,zhangsan,false,Nanchang
 0199,2024-10-18,8200.50,Online Survey Rewards,income,sunqi,true,Guiyang
 0200,2024-03-18,3800.00,Commercial Space Lease,rent,zhaoliu,false,Taiyuan
+0201,2024-03-20,150.00,Monthly salary,income,lisi,true,Office
+0202,2024-03-20,45.50,Grocery shopping at Walmart,groceries,lisi,false,Walmart
+0203,2024-03-20,80.00,Dinner at Italian restaurant,food,lisi,false,Italian Restaurant
+0204,2024-03-20,1200.00,Monthly rent payment,rent,lisi,false,Apartment
+0205,2024-03-20,25.00,Movie tickets,entertainment,lisi,false,Cinema
+0206,2024-03-20,35.00,Medicine purchase,health,lisi,false,Pharmacy
+0207,2024-03-20,15.99,Netflix subscription,digitalProduct,lisi,false,Online
+0208,2024-03-20,50.00,Makeup products,cosmetics,lisi,false,Beauty Store
+0209,2024-03-20,200.00,Weekend trip,travel,lisi,false,Beach Resort
+0210,2024-03-20,30.00,Metro card recharge,transportation,lisi,false,Metro Station
+0211,2024-03-21,2000.00,Project bonus,income,lisi,true,Company
+0212,2024-03-21,65.00,Organic vegetables and fruits,groceries,lisi,false,Whole Foods
+0213,2024-03-21,95.00,Annual health checkup,health,lisi,false,Hospital
+0214,2024-03-21,55.00,Brunch with friends,food,lisi,false,Cafe
+0215,2024-03-21,45.00,Concert tickets,entertainment,lisi,false,Music Hall
+0216,2024-03-21,29.99,Online course subscription,education,lisi,false,Online
+0217,2024-03-21,40.00,Skincare products,cosmetics,lisi,false,Beauty Store
+0218,2024-03-21,150.00,Hotel booking,travel,lisi,false,Hotel
+0219,2024-03-21,25.00,Taxi fare,transportation,lisi,false,City
+0220,2024-03-21,59.99,New game purchase,game,lisi,false,Game Store
+0221,2024-03-22,1800.00,Part-time job payment,income,lisi,true,Office
+0222,2024-03-22,75.00,Household supplies,groceries,lisi,false,Supermarket
+0223,2024-03-22,120.00,Dental checkup,health,lisi,false,Dental Clinic
+0224,2024-03-22,85.00,Family dinner,food,lisi,false,Restaurant
+0225,2024-03-22,35.00,Book purchase,education,lisi,false,Bookstore
+0226,2024-03-22,45.00,Perfume,cosmetics,lisi,false,Department Store
+0227,2024-03-22,300.00,Weekend getaway,travel,lisi,false,Mountain Resort
+0228,2024-03-22,40.00,Bus pass,transportation,lisi,false,Bus Station
+0229,2024-03-22,19.99,Music streaming service,digitalProduct,lisi,false,Online
+0230,2024-03-22,49.99,Gaming console game,game,lisi,false,Game Store
+0231,2024-03-23,2500.00,Consulting fee,income,lisi,true,Client Office
+0232,2024-03-23,85.00,Specialty grocery items,groceries,lisi,false,Specialty Store
+0233,2024-03-23,150.00,Prescription medication,health,lisi,false,Pharmacy
+0234,2024-03-23,120.00,Business lunch,food,lisi,false,Business Center
+0235,2024-03-23,60.00,Theater tickets,entertainment,lisi,false,Theater
+0236,2024-03-23,199.99,Online certification course,education,lisi,false,Online
+0237,2024-03-23,70.00,Luxury skincare set,cosmetics,lisi,false,Luxury Store
+0238,2024-03-23,400.00,Business trip,travel,lisi,false,Airport
+0239,2024-03-23,50.00,Ride sharing,transportation,lisi,false,City
+0240,2024-03-23,29.99,Software subscription,digitalProduct,lisi,false,Online
+0241,2024-03-24,3000.00,Project milestone payment,income,lisi,true,Company
+0242,2024-03-24,95.00,Party supplies,groceries,lisi,false,Party Store
+0243,2024-03-24,200.00,Specialist consultation,health,lisi,false,Medical Center
+0244,2024-03-24,150.00,Group dinner,food,lisi,false,Restaurant
+0245,2024-03-24,80.00,Theme park tickets,entertainment,lisi,false,Theme Park
+0246,2024-03-24,299.99,Professional workshop,education,lisi,false,Training Center
+0247,2024-03-24,90.00,Makeup collection,cosmetics,lisi,false,Beauty Store
+0248,2024-03-24,500.00,International trip,travel,lisi,false,Airport
+0249,2024-03-24,60.00,Car maintenance,transportation,lisi,false,Auto Shop
+0250,2024-03-24,39.99,Cloud storage subscription,digitalProduct,lisi,false,Online
