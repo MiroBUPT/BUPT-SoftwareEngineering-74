@@ -96,6 +96,25 @@ public class TransactionManager extends Manager {
         return transactionList;
     }
 
+    // 获取当前最大的交易ID
+    public String getMaxTransactionId() {
+        int maxId = 0;
+        for (Transaction transaction : transactionList) {
+            try {
+                // 尝试从交易ID中提取数字部分
+                String idStr = transaction.transactionId.replaceAll("[^0-9]", "");
+                if (!idStr.isEmpty()) {
+                    int id = Integer.parseInt(idStr);
+                    maxId = Math.max(maxId, id);
+                }
+            } catch (NumberFormatException e) {
+                // 忽略无法解析的ID
+                continue;
+            }
+        }
+        return String.format("%04d", maxId + 1);
+    }
+    
     // 获取指定用户的收入交易记录
     public List<Transaction> getIncomeTransactionsByUser(String userName) {
         List<Transaction> incomeTransactions = new ArrayList<>();

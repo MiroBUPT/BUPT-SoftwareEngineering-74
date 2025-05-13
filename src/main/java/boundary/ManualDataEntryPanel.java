@@ -148,8 +148,8 @@ public class ManualDataEntryPanel extends JPanel {
         
         // 创建 Transaction 对象
         Transaction transaction = new Transaction();
-        // 生成唯一的交易ID
-        transaction.transactionId = "T" + UUID.randomUUID().toString().substring(0, 8);
+        // 使用自动递增的ID
+        transaction.transactionId = transactionManager.getMaxTransactionId();
         transaction.amount = amount;
         transaction.type = TransactionType.valueOf(type); // 转换为枚举类型
         transaction.date = time;
