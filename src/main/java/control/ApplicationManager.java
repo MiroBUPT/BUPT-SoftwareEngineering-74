@@ -1,4 +1,5 @@
 package control;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +21,6 @@ public class ApplicationManager {
         control.TransactionManager.getInstance();
         control.UserManager.getInstance();
         control.SavingManager.getInstance().Init();
-
-        System.out.println(control.AIManager.getInstance().generateAdvice());
     }
 
     public void registerManager(control.Manager manager) {
