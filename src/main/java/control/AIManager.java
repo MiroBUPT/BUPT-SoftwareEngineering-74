@@ -5,32 +5,28 @@ import entity.Transaction;
 import entity.TransactionType;
 import okhttp3.*;
 import com.google.gson.*;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class AIManager extends Manager {
-    // 配置参数
     private static final String DEEPSEEK_API_URL = "https://chat.zju.edu.cn/api/ai/v1/chat/completions";
-    // private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");
-    private static final String API_KEY = "sk-tuY5xrIzl2kJoruU98505161Cf084e348d041c5dA951F9Ca"; // 硬编码的 API 密钥
+    private static final String API_KEY = "sk-tuY5xrIzl2kJoruU98505161Cf084e348d041c5dA951F9Ca";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private final OkHttpClient httpClient = new OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .writeTimeout(30, TimeUnit.SECONDS)
-    .build();
-    
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
+
     private final Gson gson = new GsonBuilder().create();
 
     // 单例模式代码
     private static AIManager instance;
+
     public static AIManager getInstance() {
         if (instance == null)
             instance = new AIManager();
@@ -41,19 +37,6 @@ public class AIManager extends Manager {
     private TransactionManager transactionManager;
     private UserManager userManager;
 
-    // 添加 setter 方法
-    public void setBudgetManager(BudgetManager budgetManager) {
-        this.budgetManager = budgetManager;
-    }
-
-    public void setTransactionManager(TransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
     @Override
     public void Init() {
         budgetManager = BudgetManager.getInstance();
@@ -62,94 +45,180 @@ public class AIManager extends Manager {
         System.out.println("AIManager initialized.");
     }
 
-    // 生成综合建议（使用API）
+    /**
+     * Generate advices using users' transaction and budget data.
+     * 
+     * @return
+     */
     public String generateAdvice() {
         String currentUserId = userManager.getCurrentUserId();
         String userName = userManager.getUserName(currentUserId);
+        userName = "lisi";
         System.out.println("当前用户姓名: " + userName);
 
-        // 根据用户名获取该用户的收入交易记录
-        List<Transaction> incomeTransactions = transactionManager.getIncomeTransactionsByUser(userName);
-        // 计算用户月收入
-        double monthlyIncome = calculateMonthlyIncome(incomeTransactions);
+        double monthlyIncome = calculateMonthlyIncome(userName);
+        Map<String, Double> spendMap = calculateMonthlySpend(userName);
+        Map<String, Double> budgets = getMonthlyBudget(userName);
 
-        // 根据用户名获取该用户的所有交易记录
-        List<Transaction> transactions = transactionManager.getTransactionsByUserName(userName);
-        // 根据用户名获取该用户的预算记录
-        List<Budget> budgets = budgetManager.queryByOwner(userName);
-
-        String prompt = buildPrompt(monthlyIncome, transactions, budgets);
+        String prompt = buildPrompt(monthlyIncome, spendMap, budgets);
+        //return prompt;
         return callDeepSeekAPI(prompt);
     }
 
-    // 构建 API 请求的提示信息
-    private String buildPrompt(double monthlyIncome, List<Transaction> transactions, List<Budget> budgets) {
-        return String.format("用户月收入：%.2f，近期消费记录：%s，预算记录：%s。请生成包含以下内容的建议："
-                + "1. 基于消费习惯的预算分配 2. 合理的储蓄目标 3. 具体节省建议。使用中文Markdown格式。",
-                monthlyIncome, formatTransactions(transactions), formatBudgets(budgets));
-    }
+    private String buildPrompt(double monthlyIncome, Map<String, Double> spend, Map<String, Double> budgets) {
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("生成用户的阅读消费建议。该用户的月度收入为：")
+                .append(String.format("%.2f", monthlyIncome))
+                .append("。\n");
 
-    // 计算用户月收入
-    private double calculateMonthlyIncome(List<Transaction> incomeTransactions) {
-        double totalIncome = 0;
-        for (Transaction transaction : incomeTransactions) {
-            try {
-                totalIncome += Double.parseDouble(transaction.amount);
-            } catch (NumberFormatException e) {
-                // 处理金额格式错误
-                System.err.println("金额格式错误: " + transaction.amount);
+        prompt.append("该用户这个月在各个类别的消费为：");
+        if (spend.isEmpty()) {
+            prompt.append("无消费记录");
+        } else {
+            boolean first = true;
+            for (Map.Entry<String, Double> entry : spend.entrySet()) {
+                if (!first) {
+                    prompt.append(",");
+                }
+                prompt.append(entry.getKey())
+                        .append(":")
+                        .append(String.format("%.2f", entry.getValue()));
+                first = false;
             }
         }
-        return totalIncome;
-    }
+        prompt.append("。\n");
 
-    // 辅助方法：格式化预算数据
-    private String formatBudgets(List<Budget> budgets) {
-        return budgets.stream()
-               .map(this::formatSingleBudget)
-               .collect(Collectors.joining("\n"));
-    }
-
-    // 格式化单个预算数据
-    private String formatSingleBudget(Budget budget) {
-        try {
-            // 添加调试信息
-            System.out.println("原始预算金额: " + budget.amount);
-            double amount = Double.parseDouble(budget.amount);
-            System.out.println("转换后的预算金额: " + amount);
-            return String.format("[食品预算: ¥%.2f, 交通预算: ¥%.2f, 住房预算: ¥%.2f]",
-                    amount, 0.0, 0.0); // 这里假设交通和住房预算为 0，可根据实际情况修改
-        } catch (NumberFormatException e) {
-            System.err.println("预算金额格式错误: " + budget.amount);
-            return "[预算金额格式错误]";
+        prompt.append("该用户这个月在各个类别的计划预算为：");
+        if (budgets.isEmpty()) {
+            prompt.append("无计划预算");
+        } else {
+            boolean first = true;
+            for (Map.Entry<String, Double> entry : budgets.entrySet()) {
+                if (!first) {
+                    prompt.append(",");
+                }
+                prompt.append(entry.getKey())
+                        .append(":")
+                        .append(String.format("%.2f", entry.getValue()));
+                first = false;
+            }
         }
+        prompt.append("。");
+        prompt.append("以字符串形式输出而非markdown格式,不要有markdown的语法出现。将建议浓缩为一个自然段输出而非分段形式。");
+
+        return prompt.toString();
     }
 
-    // 辅助方法：格式化交易数据
-    private String formatTransactions(List<Transaction> transactions) {
-        return transactions.stream()
-               .map(this::formatSingleTransaction)
-               .collect(Collectors.joining("\n"));
-    }
-
-    // 格式化单个交易数据
-    private String formatSingleTransaction(Transaction transaction) {
-        try {
-            double amount = Double.parseDouble(transaction.amount);
-            return String.format("[%s: ¥%.2f - %s]",
-                    transaction.type, amount, transaction.description);
-        } catch (NumberFormatException e) {
-            System.err.println("交易金额格式错误: " + transaction.amount);
-            return "[交易金额格式错误]";
+    /**
+     * Get the monthly income of the user for the previous month.
+     * 
+     * @param userName the username to query
+     * @return total income of the previous month
+     */
+    private double calculateMonthlyIncome(String userName) {
+        double res = 0;
+        List<Transaction> incomes = transactionManager.getIncomeTransactionsByUser(userName);
+        YearMonth currentYearMonth = YearMonth.now();
+        YearMonth lastYearMonth = currentYearMonth.minusMonths(1);
+        int lastMonth = lastYearMonth.getMonthValue();
+        int lastYear = lastYearMonth.getYear();
+        for (Transaction transaction : incomes) {
+            try {
+                String[] dateParts = transaction.date.split("-");
+                if (dateParts.length != 3)
+                    continue;
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+                if (year == lastYear && month == lastMonth) {
+                    res += Double.parseDouble(transaction.amount);
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("金额或日期格式错误 - 金额: " + transaction.amount
+                        + ", 日期: " + transaction.date);
+            }
         }
+        return res;
+    }
+
+    /**
+     * Get the monthly spending of the user for the previous month.
+     * 
+     * @param userName
+     * @return
+     */
+    private Map<String, Double> calculateMonthlySpend(String userName) {
+        List<Transaction> transactions = transactionManager.queryByOwner(userName);
+        Map<String, Double> categorySpending = new HashMap<>();
+        YearMonth currentYearMonth = YearMonth.now();
+        YearMonth lastYearMonth = currentYearMonth.minusMonths(1);
+        int lastMonth = lastYearMonth.getMonthValue();
+        int lastYear = lastYearMonth.getYear();
+        for (Transaction transaction : transactions) {
+            try {
+                if (transaction.isIncome) {
+                    continue;
+                }
+
+                String[] dateParts = transaction.date.split("-");
+                if (dateParts.length != 3) {
+                    continue;
+                }
+
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+
+                if (year == lastYear && month == lastMonth) {
+                    TransactionType type = transaction.type;
+                    String typeName = type.name();
+                    double amount = Double.parseDouble(transaction.amount);
+                    categorySpending.merge(typeName, amount, Double::sum);
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("金额或日期格式错误 - 金额: " + transaction.amount
+                        + ", 日期: " + transaction.date);
+            }
+        }
+        return categorySpending;
+    }
+
+    /**
+     * Get the monthly budget of the user for the previous month.
+     * @param userName
+     * @return
+     */
+    private Map<String, Double> getMonthlyBudget(String userName) {
+        List<Budget> budgets = budgetManager.queryByOwner(userName);
+        Map<String, Double> monthlyBudget = new HashMap<>();
+
+        YearMonth currentYearMonth = YearMonth.now();
+        YearMonth lastYearMonth = currentYearMonth.minusMonths(1);
+        int lastMonth = lastYearMonth.getMonthValue();
+        int lastYear = lastYearMonth.getYear();
+
+        for (Budget budget : budgets) {
+            try {
+                String[] dateParts = budget.date.split("-");
+                if (dateParts.length != 3) {
+                    continue;
+                }
+
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+
+                if (year == lastYear && month == lastMonth) {
+                    String category = budget.type.name();
+                    double amount = Double.parseDouble(budget.amount);
+                    monthlyBudget.put(category, amount);
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("预算金额或日期格式错误 - 金额: " + budget.amount
+                        + ", 日期: " + budget.date);
+            }
+        }
+        return monthlyBudget;
     }
 
     private String callDeepSeekAPI(String prompt) {
-        String apiKey = System.getenv("DEEPSEEK_API_KEY");
-        System.out.println("使用的 API 密钥: " + apiKey); // 添加调试信息
-        if (apiKey == null || apiKey.isEmpty()) {
-            throw new RuntimeException("API 密钥未设置，请检查 DEEPSEEK_API_KEY 环境变量。");
-        }
         try {
             JsonObject requestBody = new JsonObject();
             requestBody.addProperty("model", "deepseek-r1-distill-qwen");
@@ -168,11 +237,11 @@ public class AIManager extends Manager {
             requestBody.add("messages", messages);
 
             Request request = new Request.Builder()
-                .url(DEEPSEEK_API_URL)
-                .addHeader("Authorization", "Bearer " + apiKey)
-                .addHeader("Content-Type", "application/json")
-                .post(RequestBody.create(gson.toJson(requestBody), JSON))
-                .build();
+                    .url(DEEPSEEK_API_URL)
+                    .addHeader("Authorization", "Bearer " + API_KEY)
+                    .addHeader("Content-Type", "application/json")
+                    .post(RequestBody.create(gson.toJson(requestBody), JSON))
+                    .build();
 
             try (Response response = httpClient.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
@@ -207,5 +276,5 @@ public class AIManager extends Manager {
             e.printStackTrace();
             return null;
         }
-    } 
+    }
 }

@@ -1,9 +1,8 @@
 package control;
-
-import control.AIManager;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.Transaction;
 
 public class ApplicationManager {
     private static ApplicationManager instance = new ApplicationManager();
@@ -20,6 +19,9 @@ public class ApplicationManager {
         control.SavingManager.getInstance();
         control.TransactionManager.getInstance();
         control.UserManager.getInstance();
+        control.SavingManager.getInstance().Init();
+
+        System.out.println(control.AIManager.getInstance().generateAdvice());
     }
 
     public void registerManager(control.Manager manager) {

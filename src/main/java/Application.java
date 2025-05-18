@@ -1,7 +1,5 @@
 
-
 import control.ApplicationManager;
-
 
 import javax.swing.SwingUtilities;
 
