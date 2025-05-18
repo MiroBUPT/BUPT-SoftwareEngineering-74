@@ -17,10 +17,6 @@ import entity.Budget;
 import entity.Transaction;
 import entity.TransactionType;
 import entity.User;
-import control.BudgetManager;
-import control.Manager;
-import control.TransactionManager;
-import control.UserManager;
 
 public class SavingManager extends Manager {
     private static SavingManager instance;
