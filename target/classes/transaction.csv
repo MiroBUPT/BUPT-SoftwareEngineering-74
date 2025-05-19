@@ -230,4 +230,3 @@ transactionId,date,amount,description,type,owner,isIncome,location
 0248,2024-03-24,500.00,International trip,8,lisi,false,Airport
 0249,2024-03-24,60.00,Car maintenance,9,lisi,false,Auto Shop
 0250,2025-03-15,1500,哥们牛逼吧,5,lisi,true,beijing
-0251,11,11,11,5,lisi,true,11

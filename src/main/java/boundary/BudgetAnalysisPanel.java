@@ -1,182 +1,319 @@
 package boundary;
+
 import java.awt.*;
+import javax.swing.*;
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
 
+import control.BudgetManager;
+import control.TransactionManager;
 import control.UserManager;
+import entity.Budget;
+import entity.Transaction;
+import entity.TransactionType;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-
 
 public class BudgetAnalysisPanel extends JPanel {
-
-    private static final String CSV_FILE_PATH = "src/main/resources/budget.csv";
+    private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", 
+                                          "July", "August", "September", "October", "November", "December"};
+    private static final String[] TRANSACTION_TYPES = {"income", "health", "food", "rent", "groceries",
+                                                     "transportation", "entertainment", "cosmetics",
+                                                     "education", "game", "digitalProduct", "travel"};
+    
+    private BudgetManager budgetManager;
+    private TransactionManager transactionManager;
+    private UserManager userManager;
     private String currentUsername;
+    
+    private JComboBox<String> typeComboBox;
+    private JComboBox<String> monthComboBox;
+    private JComboBox<Integer> yearComboBox;
+    private JPanel topPanel;
+    private JPanel bottomPanel;
+    private ChartPanel barChartPanel;
+    private ChartPanel pieChartPanel;
+    private ChartPanel lineChartPanel;
+    private JPanel controlPanel;
 
     public BudgetAnalysisPanel(Color borderColor, Color fillColor) {
         this.setBorder(BorderFactory.createLineBorder(borderColor));
         this.setBackground(fillColor);
-        // 使用 GridLayout，2 行 1 列
-        this.setLayout(new GridLayout(2, 1));
-
+        
+        // 初始化管理器
+        budgetManager = BudgetManager.getInstance();
+        transactionManager = TransactionManager.getInstance();
+        userManager = UserManager.getInstance();
+        
         // 获取当前用户信息
-        UserManager userManager = UserManager.getInstance();
         String currentUserId = userManager.getCurrentUserId();
         this.currentUsername = userManager.getUserName(currentUserId);
-
-        // 初始化图表数据
-        init();
+        
+        // 设置布局
+        this.setLayout(new BorderLayout());
+        
+        // 创建控制面板
+        createControlPanel();
+        
+        // 创建图表面板
+        createChartPanels();
+        
+        // 初始化数据
+        updateCharts();
     }
 
-    private void init() {
-        System.out.println("init Budget Panel");
-
-        // 读取并解析 CSV 文件
-        List<BudgetItem> budgetItems = readBudgetItemsFromCSV();
-
-        // 初始化饼图数据
-        DefaultPieDataset pieDataset = createPieDataset(budgetItems);
-
-        // 创建饼图
-        JFreeChart pieChart = ChartFactory.createPieChart(
-                "Budget proportion for " + currentUsername, pieDataset, true, true, false);
-
-        // 初始化折线图数据
-        DefaultCategoryDataset lineDataset = createMonthlyExpenseDataset(budgetItems);
-
-        // 创建折线图
-        JFreeChart lineChart = ChartFactory.createLineChart(
-                "Monthly Expense Trend for " + currentUsername, // 图表标题
-                "Month", // X轴标签
-                "Total Expense", // Y轴标签
-                lineDataset, // 数据集
-                PlotOrientation.VERTICAL, // 图表方向
-                true, // 是否显示图例
-                true, // 是否显示工具提示
-                false // 是否生成URL链接
-        );
-
-        // 添加图表到面板
-        this.add(new ChartPanel(pieChart));
-        this.add(new ChartPanel(lineChart));
+    private void createControlPanel() {
+        controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        
+        typeComboBox = new JComboBox<>(TRANSACTION_TYPES);
+        monthComboBox = new JComboBox<>(MONTHS);
+        
+        // 创建年份选择下拉框
+        Calendar cal = Calendar.getInstance();
+        int currentYear = cal.get(Calendar.YEAR);
+        Integer[] years = new Integer[5];
+        for (int i = 0; i < 5; i++) {
+            years[i] = currentYear - i;
+        }
+        yearComboBox = new JComboBox<>(years);
+        
+        controlPanel.add(new JLabel("Type:"));
+        controlPanel.add(typeComboBox);
+        controlPanel.add(new JLabel("Year:"));
+        controlPanel.add(yearComboBox);
+        controlPanel.add(new JLabel("Month:"));
+        controlPanel.add(monthComboBox);
+        
+        // 添加事件监听器
+        typeComboBox.addActionListener(e -> updateCharts());
+        monthComboBox.addActionListener(e -> updateCharts());
+        yearComboBox.addActionListener(e -> updateCharts());
+        
+        this.add(controlPanel, BorderLayout.NORTH);
     }
 
-    private List<BudgetItem> readBudgetItemsFromCSV() {
-        List<BudgetItem> budgetItems = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
-            String line;
-            boolean isFirstLine = true; // 用于跳过表头
-            while ((line = br.readLine()) != null) {
-                if (isFirstLine) {
-                    isFirstLine = false; // 跳过表头
-                    continue;
-                }
-                String[] values = line.split(",");
-                if (values.length == 5) {
-                    // 只添加当前用户的预算数据
-                    if (values[3].equals(currentUsername)) {
-                        budgetItems.add(new BudgetItem(
-                                values[0], Double.parseDouble(values[1]),
-                                values[2], values[3], values[4]
-                        ));
-                    }
-                }
+    private void createChartPanels() {
+        // 创建上半部分（柱状图）面板
+        topPanel = new JPanel(new BorderLayout());
+        
+        // 创建下半部分面板（包含饼图和折线图）
+        bottomPanel = new JPanel(new GridLayout(1, 2));
+        
+        // 将面板添加到主面板
+        JPanel chartsPanel = new JPanel(new GridLayout(2, 1));
+        chartsPanel.add(topPanel);
+        chartsPanel.add(bottomPanel);
+        
+        this.add(chartsPanel, BorderLayout.CENTER);
+    }
+
+    private void updateCharts() {
+        String selectedType = (String) typeComboBox.getSelectedItem();
+        String selectedMonth = (String) monthComboBox.getSelectedItem();
+        Integer selectedYear = (Integer) yearComboBox.getSelectedItem();
+        
+        // 更新柱状图
+        updateBarChart(selectedType);
+        
+        // 更新饼图
+        updatePieChart(selectedYear, selectedMonth);
+        
+        // 更新折线图
+        updateLineChart(selectedType);
+    }
+
+    private void updateBarChart(String type) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        List<Budget> budgets = budgetManager.getBudgetList();
+        
+        // 获取所有历史数据
+        Map<String, Double> monthlyBudgets = new TreeMap<>();
+        for (Budget budget : budgets) {
+            if (budget.owner.name.equals(currentUsername) && 
+                budget.type.name().equals(type)) {
+                String month = budget.date.substring(0, 7); // 获取 YYYY-MM 格式
+                monthlyBudgets.put(month, monthlyBudgets.getOrDefault(month, 0.0) + Double.parseDouble(budget.amount));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return budgetItems;
+        
+        // 添加数据到数据集
+        for (Map.Entry<String, Double> entry : monthlyBudgets.entrySet()) {
+            String[] dateParts = entry.getKey().split("-");
+            String month = MONTHS[Integer.parseInt(dateParts[1]) - 1];
+            dataset.addValue(entry.getValue(), type, month + " " + dateParts[0]);
+        }
+        
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Historical Budget Comparison for " + type,
+            "Month",
+            "Budget Amount",
+            dataset,
+            PlotOrientation.VERTICAL,
+            true,
+            true,
+            false
+        );
+        
+        if (barChartPanel != null) {
+            topPanel.remove(barChartPanel);
+        }
+        barChartPanel = new ChartPanel(chart);
+        topPanel.add(barChartPanel, BorderLayout.CENTER);
+        topPanel.revalidate();
     }
 
-    private DefaultPieDataset createPieDataset(List<BudgetItem> budgetItems) {
+    private void updatePieChart(Integer year, String month) {
         DefaultPieDataset dataset = new DefaultPieDataset();
+        List<Budget> budgets = budgetManager.getBudgetList();
+        
+        // 获取选中月份的数据
+        int monthIndex = Arrays.asList(MONTHS).indexOf(month);
+        
         Map<String, Double> typeAmountMap = new HashMap<>();
-        for (BudgetItem item : budgetItems) {
-            String type = item.getType();
-            double amount = item.getAmount();
-            typeAmountMap.put(type, typeAmountMap.getOrDefault(type, 0.0) + amount);
+        for (Budget budget : budgets) {
+            if (budget.owner.name.equals(currentUsername) &&
+                budget.date.startsWith(year + "-" + String.format("%02d", monthIndex + 1))) {
+                String type = budget.type.name();
+                typeAmountMap.put(type, typeAmountMap.getOrDefault(type, 0.0) + Double.parseDouble(budget.amount));
+            }
         }
+        
         for (Map.Entry<String, Double> entry : typeAmountMap.entrySet()) {
             dataset.setValue(entry.getKey(), entry.getValue());
         }
-        return dataset;
+        
+        JFreeChart chart = ChartFactory.createPieChart(
+            "Budget Distribution for " + month + " " + year,
+            dataset,
+            true,
+            true,
+            false
+        );
+        
+        if (pieChartPanel != null) {
+            bottomPanel.remove(pieChartPanel);
+        }
+        pieChartPanel = new ChartPanel(chart);
+        bottomPanel.add(pieChartPanel, 0); // 确保饼图始终在左侧
+        bottomPanel.revalidate();
     }
 
-    private DefaultCategoryDataset createMonthlyExpenseDataset(List<BudgetItem> budgetItems) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        Map<String, Map<Integer, Double>> yearlyExpenseMap = new HashMap<>();
-
-        for (BudgetItem item : budgetItems) {
-            String date = item.getDate();
-            int year = Integer.parseInt(date.substring(0, 4));
-            int month = Integer.parseInt(date.substring(5, 7));
-            double amount = item.getAmount();
-
-            Map<Integer, Double> monthlyExpenses = yearlyExpenseMap.computeIfAbsent(String.valueOf(year), k -> new HashMap<>());
-            monthlyExpenses.put(month, monthlyExpenses.getOrDefault(month, 0.0) + amount);
-        }
-
-        // 将数据添加到数据集
-        for (Map.Entry<String, Map<Integer, Double>> entry : yearlyExpenseMap.entrySet()) {
-            String year = entry.getKey();
-            Map<Integer, Double> monthlyExpenses = entry.getValue();
-            for (int month = 1; month <= 12; month++) {
-                dataset.addValue(monthlyExpenses.getOrDefault(month, 0.0), year, String.valueOf(month));
+    private void updateLineChart(String type) {
+        XYSeries budgetSeries = new XYSeries("Budget");
+        XYSeries actualSeries = new XYSeries("Actual");
+        List<Budget> budgets = budgetManager.getBudgetList();
+        List<Transaction> transactions = transactionManager.getTransactionList();
+        
+        // 设置时间范围：2024年4月到2025年4月
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(2024, Calendar.APRIL, 1);
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(2025, Calendar.APRIL, 1);
+        
+        // 获取所有历史数据
+        Map<String, Double> monthlyBudgets = new TreeMap<>();
+        Map<String, Double> monthlyActuals = new TreeMap<>();
+        
+        // 处理预算数据
+        for (Budget budget : budgets) {
+            if (budget.owner.name.equals(currentUsername) && 
+                budget.type.name().equals(type)) {
+                String month = budget.date.substring(0, 7);
+                monthlyBudgets.put(month, monthlyBudgets.getOrDefault(month, 0.0) + Double.parseDouble(budget.amount));
             }
         }
-
-        return dataset;
+        
+        // 处理实际支出数据
+        for (Transaction transaction : transactions) {
+            if (transaction.owner.name.equals(currentUsername) && 
+                transaction.type.name().equals(type) &&
+                !transaction.isIncome) {
+                String month = transaction.date.substring(0, 7);
+                monthlyActuals.put(month, monthlyActuals.getOrDefault(month, 0.0) + Double.parseDouble(transaction.amount));
+            }
+        }
+        
+        // 添加数据到序列
+        int index = 0;
+        for (String month : monthlyBudgets.keySet()) {
+            String[] dateParts = month.split("-");
+            int year = Integer.parseInt(dateParts[0]);
+            int monthNum = Integer.parseInt(dateParts[1]);
+            
+            // 只添加在时间范围内的数据
+            if (year >= 2024 && monthNum >= 4 || year <= 2025 && monthNum <= 4) {
+                budgetSeries.add(index, monthlyBudgets.get(month));
+                actualSeries.add(index, monthlyActuals.getOrDefault(month, 0.0));
+                index++;
+            }
+        }
+        
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(budgetSeries);
+        dataset.addSeries(actualSeries);
+        
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            "Budget vs Actual for " + type,
+            "Month",
+            "Amount",
+            dataset,
+            PlotOrientation.VERTICAL,
+            true,
+            true,
+            false
+        );
+        
+        // 设置线条颜色和样式
+        XYPlot plot = chart.getXYPlot();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesPaint(0, Color.GREEN); // 预算线为绿色
+        renderer.setSeriesPaint(1, Color.RED);   // 实际线为红色
+        
+        // 添加数据标签
+        renderer.setDefaultItemLabelsVisible(true);
+        renderer.setDefaultItemLabelGenerator((ds, series, item) -> {
+            if (series == 1) { // 只在实际支出线上显示标签
+                double actual = actualSeries.getY(item).doubleValue();
+                double budget = budgetSeries.getY(item).doubleValue();
+                if (actual > budget) {
+                    return String.format("Over Budget: %.2f", actual - budget);
+                }
+            }
+            return null;
+        });
+        
+        plot.setRenderer(renderer);
+        
+        if (lineChartPanel != null) {
+            bottomPanel.remove(lineChartPanel);
+        }
+        lineChartPanel = new ChartPanel(chart);
+        bottomPanel.add(lineChartPanel);
+        bottomPanel.revalidate();
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("预算分析面板");
+        JFrame frame = new JFrame("Budget Analysis Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new BudgetAnalysisPanel(Color.BLACK, Color.WHITE));
         frame.pack();
-        frame.setSize(800, 600);
+        frame.setSize(1200, 800);
         frame.setVisible(true);
-    }
-
-    private static class BudgetItem {
-        private String budgetId;
-        private double amount;
-        private String type;
-        private String owner;
-        private String date;
-
-        public BudgetItem(String budgetId, double amount, String type, String owner, String date) {
-            this.budgetId = budgetId;
-            this.amount = amount;
-            this.type = type;
-            this.owner = owner;
-            this.date = date;
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public String getDate() {
-            return date;
-        }
     }
 }
