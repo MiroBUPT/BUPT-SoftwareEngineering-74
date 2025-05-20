@@ -20,7 +20,7 @@ class IndexView {
         // 2. Statistics目录（Entry: DataAnalysis, AIAdvice）
         Directory statisticsDir = new Directory("Statistics", null);
         statisticsDir.addEntry(new Entry("Data Analysis", new DataAnalysisPanel(Color.BLACK, Color.WHITE)));
-        //statisticsDir.addEntry(new Entry("AI Advice", new AIAdvicePanel(Color.GREEN, Color.LIGHT_GRAY)));
+        statisticsDir.addEntry(new Entry("AI Advice", new AIAdvicePanel(Color.GREEN, Color.LIGHT_GRAY)));
         directories.add(statisticsDir);
 
         // 3. DataQuery目录（Entry: BudgetQuery, TransactionQuery）
