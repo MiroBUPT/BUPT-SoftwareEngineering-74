@@ -45,7 +45,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class TransactionQueryPanel extends JPanel {
+import control.TransactionManager;
+import control.UserManager;
+import entity.Transaction;
+import entity.TransactionType;
+
+public class TransactionQueryPanel extends JPanel {
     private JTextField dateField; // 日期查询字段
     private JTextField ownerField; // 所有者查询字段
     private JTextField locationField; // 地点查询字段
@@ -54,11 +59,18 @@ class TransactionQueryPanel extends JPanel {
     private JButton resetButton; // 添加 Reset 按钮
     private JTable resultsTable;
     private DefaultTableModel tableModel;
+    private TransactionManager transactionManager;
+    private UserManager userManager;
 
     public TransactionQueryPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
         setLayout(new BorderLayout());
+        
+        // 初始化管理器
+        transactionManager = TransactionManager.getInstance();
+        userManager = UserManager.getInstance();
+        
         init();
     }
 
@@ -99,7 +111,7 @@ class TransactionQueryPanel extends JPanel {
         queryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                queryTransactions();
+                queryData();
             }
         });
 
@@ -112,65 +124,50 @@ class TransactionQueryPanel extends JPanel {
         });
     }
 
-    private void queryTransactions() {
-        String date = dateField.getText().trim(); // 日期查询条件
-        String owner = ownerField.getText().toLowerCase(); // 所有者查询条件
-        String location = locationField.getText().toLowerCase(); // 地点查询条件
-        String type = (String) typeComboBox.getSelectedItem(); // 类型查询条件
-
-        System.out.println("Query Conditions: Date: " + date + ", Owner: " + owner + ", Location: " + location + ", Type: " + type);
+    private void queryData() {
+        String date = dateField.getText();
+        String owner = ownerField.getText().toLowerCase();
+        String location = locationField.getText().toLowerCase();
+        String type = (String) typeComboBox.getSelectedItem();
 
         // 清空表格数据
         tableModel.setRowCount(0);
 
-        // 读取 CSV 文件并过滤数据
+        // 获取所有交易记录
+        List<Transaction> transactions = transactionManager.getTransactionList();
         List<Object[]> filteredData = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/transaction.csv"))) { // 修改文件路径
-            String line;
-            boolean isFirstLine = true; // 跳过标题行
-            while ((line = br.readLine()) != null) {
-                if (isFirstLine) {
-                    isFirstLine = false; // 跳过标题行
-                    continue;
-                }
-                String[] fields = line.split(",");
-                String transactionId = fields[0];
-                String transactionDate = fields[1];
-                double amount = Double.parseDouble(fields[2]);
-                String description = fields[3];
-                String transactionType = fields[4];
-                String transactionOwner = fields[5];
-                boolean isIncome = fields[6].equalsIgnoreCase("true");
-                String transactionLocation = fields[7];
 
-                // 检查是否匹配查询条件
-                boolean matches = true;
-                if (!date.isEmpty() && !transactionDate.equals(date)) {
-                    matches = false;
-                }
-                if (!owner.isEmpty() && !transactionOwner.toLowerCase().contains(owner)) {
-                    matches = false;
-                }
-                if (!location.isEmpty() && !transactionLocation.toLowerCase().contains(location)) {
-                    matches = false;
-                }
-                if (!type.equals("All") && !transactionType.equals(type)) { // 处理 "All" 选项
-                    matches = false;
-                }
-
-                if (matches) {
-                    filteredData.add(new Object[]{
-                            transactionDate, description, amount, transactionOwner,
-                            transactionType, isIncome ? "Income" : "Outcome", transactionLocation
-                    });
-                }
+        for (Transaction transaction : transactions) {
+            // 检查是否匹配查询条件
+            boolean matches = true;
+            
+            if (!date.isEmpty() && !transaction.date.equals(date)) {
+                matches = false;
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Cannot read CSV : " + e.getMessage());
-            return;
+            if (!owner.isEmpty() && !transaction.owner.name.toLowerCase().contains(owner)) {
+                matches = false;
+            }
+            if (!location.isEmpty() && !transaction.location.toLowerCase().contains(location)) {
+                matches = false;
+            }
+            if (!type.equals("All") && !transaction.type.name().equals(type)) {
+                matches = false;
+            }
+
+            if (matches) {
+                filteredData.add(new Object[]{
+                    transaction.date,
+                    transaction.description,
+                    transaction.amount,
+                    transaction.owner.name,
+                    transaction.type.name(),
+                    transaction.isIncome ? "Income" : "Outcome",
+                    transaction.location
+                });
+            }
         }
 
-        // 将过滤后的数据显示在表格中
+        // 将过滤后的数据添加到表格
         for (Object[] row : filteredData) {
             tableModel.addRow(row);
         }
@@ -181,16 +178,16 @@ class TransactionQueryPanel extends JPanel {
         dateField.setText("");
         ownerField.setText("");
         locationField.setText("");
-        typeComboBox.setSelectedIndex(0); // 重置下拉菜单到第一个选项（"All"）
+        typeComboBox.setSelectedItem("All");
         tableModel.setRowCount(0); // 清空表格数据
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Transactions Query Panel");
+        JFrame frame = new JFrame("Transaction Query Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new TransactionQueryPanel(Color.BLACK, Color.WHITE));
         frame.pack();
-        frame.setSize(600, 400);
+        frame.setSize(800, 600);
         frame.setVisible(true);
     }
 }

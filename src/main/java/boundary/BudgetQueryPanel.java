@@ -36,18 +36,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import control.BudgetManager;
+import control.UserManager;
+import entity.Budget;
+import entity.TransactionType;
+
 public class BudgetQueryPanel extends JPanel {
     private JTextField queryField;
     private JTextField dateField;
+    private JTextField ownerField;
+    private JComboBox<String> typeComboBox;
     private JButton queryButton;
-    private JButton resetButton; // 添加 Reset 按钮
+    private JButton resetButton;
     private JTable resultsTable;
     private DefaultTableModel tableModel;
+    private BudgetManager budgetManager;
+    private UserManager userManager;
 
     public BudgetQueryPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
         setLayout(new BorderLayout());
+        
+        // 初始化管理器
+        budgetManager = BudgetManager.getInstance();
+        userManager = UserManager.getInstance();
+        
         init();
     }
 
@@ -56,16 +70,23 @@ public class BudgetQueryPanel extends JPanel {
 
         // 创建查询输入字段和按钮
         JPanel queryPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        queryField = new JTextField(20);
-        dateField = new JTextField(20);
+        queryField = new JTextField(10);
+        dateField = new JTextField(10);
+        ownerField = new JTextField(10);
+        typeComboBox = new JComboBox<>(new String[]{"All", "income", "health", "food", "rent", "groceries", "transportation", "entertainment", "cosmetics", "education", "game", "digitalProduct", "travel"});
         queryButton = new JButton("Query");
-        resetButton = new JButton("Reset"); // 初始化 Reset 按钮
-        queryPanel.add(new JLabel("ID/Description:"));
+        resetButton = new JButton("Reset");
+
+        queryPanel.add(new JLabel("BudgetID:"));
         queryPanel.add(queryField);
         queryPanel.add(new JLabel("Date:"));
         queryPanel.add(dateField);
+        queryPanel.add(new JLabel("Owner:"));
+        queryPanel.add(ownerField);
+        queryPanel.add(new JLabel("Type:"));
+        queryPanel.add(typeComboBox);
         queryPanel.add(queryButton);
-        queryPanel.add(resetButton); // 将 Reset 按钮添加到面板
+        queryPanel.add(resetButton);
 
         add(queryPanel, BorderLayout.NORTH);
 
@@ -96,6 +117,9 @@ public class BudgetQueryPanel extends JPanel {
     private void queryData() {
         String query = queryField.getText();
         String dateString = dateField.getText();
+        String owner = ownerField.getText().toLowerCase();
+        String type = (String) typeComboBox.getSelectedItem();
+        
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date queryDate = null;
         try {
@@ -110,50 +134,58 @@ public class BudgetQueryPanel extends JPanel {
         // 清空表格数据
         tableModel.setRowCount(0);
 
-        // 读取 CSV 文件并查询数据
-        List<BudgetItem> items = loadBudgetItems();
-        for (BudgetItem item : items) {
-            if ((item.getBudgetId().equals(query) || item.getDescription().contains(query)) && (queryDate == null || item.getDate().equals(queryDate))) {
+        // 获取所有预算记录
+        List<Budget> budgets = budgetManager.getBudgetList();
+        for (Budget budget : budgets) {
+            boolean matches = true;
+            
+            // 检查ID或描述是否匹配
+            if (!query.isEmpty() && 
+                !budget.budgetId.equals(query) && 
+                !budget.type.name().toLowerCase().contains(query.toLowerCase())) {
+                matches = false;
+            }
+            
+            // 检查日期是否匹配
+            if (queryDate != null) {
+                try {
+                    Date budgetDate = dateFormat.parse(budget.date);
+                    if (!budgetDate.equals(queryDate)) {
+                        matches = false;
+                    }
+                } catch (ParseException e) {
+                    matches = false;
+                }
+            }
+
+            // 检查所有者是否匹配
+            if (!owner.isEmpty() && !budget.owner.name.toLowerCase().contains(owner)) {
+                matches = false;
+            }
+
+            // 检查类型是否匹配
+            if (!type.equals("All") && !budget.type.name().equals(type)) {
+                matches = false;
+            }
+
+            if (matches) {
                 Object[] row = new Object[]{
-                        item.getBudgetId(),
-                        item.getAmount(),
-                        item.getType(),
-                        item.getOwner(),
-                        item.getDate()
+                    budget.budgetId,
+                    budget.amount,
+                    budget.type.name(),
+                    budget.owner.name,
+                    budget.date
                 };
                 tableModel.addRow(row);
             }
         }
     }
 
-    private List<BudgetItem> loadBudgetItems() {
-        List<BudgetItem> items = new ArrayList<>();
-        String filePath = "src/main/resources/budget.csv"; // 修改文件路径
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            br.readLine(); // Skip header
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values.length == 5) {
-                    String budgetId = values[0];
-                    double amount = Double.parseDouble(values[1]);
-                    String type = values[2];
-                    String owner = values[3];
-                    String date = values[4];
-                    items.add(new BudgetItem(budgetId, amount, type, owner, date));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return items;
-    }
-
     private void resetFields() {
-        // 清空所有查询输入字段
         queryField.setText("");
         dateField.setText("");
-        // 清空表格数据
+        ownerField.setText("");
+        typeComboBox.setSelectedItem("All");
         tableModel.setRowCount(0);
     }
 
@@ -162,7 +194,7 @@ public class BudgetQueryPanel extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new BudgetQueryPanel(Color.BLACK, Color.WHITE));
         frame.pack();
-        frame.setSize(400, 300);
+        frame.setSize(800, 600);
         frame.setVisible(true);
     }
 

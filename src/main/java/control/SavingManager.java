@@ -202,7 +202,19 @@ public class SavingManager extends Manager {
                     Budget budget = new Budget();
                     budget.budgetId = unescapeCsvField(fields[0]);
                     budget.amount = unescapeCsvField(fields[1]);
-                    budget.type = TransactionType.valueOf(unescapeCsvField(fields[2]));
+                    String typeStr = unescapeCsvField(fields[2]);
+                    try {
+                        budget.type = TransactionType.valueOf(typeStr);
+                    } catch (IllegalArgumentException ex) {
+                        // 如果 typeStr 不是英文名，尝试用数字索引
+                        try {
+                            int idx = Integer.parseInt(typeStr);
+                            budget.type = TransactionType.values()[idx];
+                        } catch (Exception e2) {
+                            System.err.println("Invalid TransactionType value: " + typeStr);
+                            continue;
+                        }
+                    }
                     budget.owner = userManager.getUserById(unescapeCsvField(fields[3]));
                     budget.date = unescapeCsvField(fields[4]);
                     loadedBudgets.add(budget);
