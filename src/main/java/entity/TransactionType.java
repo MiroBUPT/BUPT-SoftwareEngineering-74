@@ -1,6 +1,7 @@
 package entity;
 
 public enum TransactionType {
+    none,
     groceries,
     health,
     food,
