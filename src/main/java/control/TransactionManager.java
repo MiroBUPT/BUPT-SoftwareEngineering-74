@@ -2,6 +2,13 @@ package control;
 
 import entity.Transaction;
 import entity.TransactionType;
+import entity.User;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +121,7 @@ public class TransactionManager extends Manager {
         }
         return String.format("%04d", maxId + 1);
     }
-    
+
     // 获取指定用户的收入交易记录
     public List<Transaction> getIncomeTransactionsByUser(String userName) {
         List<Transaction> incomeTransactions = new ArrayList<>();
@@ -135,5 +142,71 @@ public class TransactionManager extends Manager {
             }
         }
         return userTransactions;
+    }
+
+    public void importFromCSV(String filePath) {
+        List<Transaction> loadedTransactions = new ArrayList<>();
+        List<String> infos = new ArrayList<>();
+        User curUser = UserManager.getInstance().getUserById(UserManager.getInstance().getCurrentUserId());
+        int id = Integer.parseInt(transactionList.getLast().transactionId) + 1;
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+
+            for (int i = 0; i < 17; i++) {
+                reader.readLine();
+            }
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values.length < 6) {
+                    continue;
+                }
+
+                Transaction transaction = new Transaction();
+
+                String fullDateTime = values[0].trim();
+                transaction.date = fullDateTime.split(" ")[0];
+
+                infos.add(values[1].trim() + "-" + values[2].trim() + "-" + values[3].trim());
+                
+                transaction.isIncome = values[4].trim().equals("收入");
+
+                transaction.amount = values[5].trim().substring(1);
+
+                transaction.type = TransactionType.none;
+                transaction.transactionId = String.format("%04d", id);
+                id++;
+                transaction.owner = curUser;
+                transaction.description = "";
+                transaction.location = "";
+                loadedTransactions.add(transaction);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String[] typeAndDesc = getInferredTypeAndDesc(infos);
+        for (int i = 0; i < loadedTransactions.size(); i++) {
+            if(i >= typeAndDesc.length) {
+                break;
+            }
+            String[] tmp = typeAndDesc[i].split("-");
+            try {
+                loadedTransactions.get(i).type = TransactionType.valueOf(tmp[0]);
+            } catch (IllegalArgumentException e) {
+                loadedTransactions.get(i).type = TransactionType.none;
+            }
+            try {
+                loadedTransactions.get(i).description = tmp[1];
+            } catch (IllegalArgumentException e) {
+                loadedTransactions.get(i).description = "";
+            }
+        }
+        transactionList.addAll(loadedTransactions);
+        SavingManager.getInstance().saveData();
+    }
+
+    private String[] getInferredTypeAndDesc(List<String> infos) {
+        return AIManager.getInstance().getInferredTypeAndDesc(infos).split(",");
     }
 }
