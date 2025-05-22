@@ -229,57 +229,52 @@ transactionId,date,amount,description,type,owner,isIncome,location
 0247,2024-03-24,90.00,Makeup collection,7,lisi,false,Beauty Store
 0248,2024-03-24,500.00,International trip,8,lisi,false,Airport
 0249,2024-03-24,60.00,Car maintenance,9,lisi,false,Auto Shop
-0250,2025-04-01,155.20,Weekly grocery shopping,groceries,lisi,false,Shanghai
-0251,2025-04-03,45.00,Gym membership fee,health,lisi,false,Beijing
-0252,2025-04-05,210.80,Dinner at a nice restaurant,food,lisi,false,Guangzhou
-0253,2025-04-08,1500.00,Monthly apartment rent,rent,lisi,false,Shenzhen
-0254,2025-04-10,88.00,Movie tickets and popcorn,entertainment,lisi,false,Chengdu
-0255,2025-04-12,35.99,New app subscription,digitalProduct,lisi,false,Hangzhou
-0256,2025-04-14,120.50,Buying new makeup,cosmetics,lisi,false,Nanjing
-0257,2025-04-16,2500.00,Weekend trip to mountains,travel,lisi,false,Wuhan
-0258,2025-04-18,50.00,Bus and subway fares,transportation,lisi,false,Chongqing
-0259,2025-04-20,300.00,Online course enrollment,education,lisi,false,Xi'an
-0260,2025-04-21,75.00,New video game purchase,game,lisi,false,Suzhou
-0261,2025-04-23,180.30,Bulk food purchase,groceries,lisi,false,Tianjin
-0262,2025-04-25,60.00,Yoga class drop-in,health,lisi,false,Changsha
-0263,2025-04-26,260.00,Dinner with friends,food,lisi,false,Qingdao
-0264,2025-04-28,1500.00,Rent payment,rent,lisi,false,Dalian
-0265,2025-04-30,99.50,Concert ticket,entertainment,lisi,false,Xiamen
-0266,2025-04-02,22.00,Ebook purchase,digitalProduct,lisi,false,Fuzhou
-0267,2025-04-04,78.00,Skincare products,cosmetics,lisi,false,Hefei
-0268,2025-04-06,1800.00,Train tickets for trip,travel,lisi,false,Ningbo
-0269,2025-04-09,40.00,Taxi rides,transportation,lisi,false,Wuxi
-0270,2025-04-11,400.00,Workshop fee,education,lisi,false,Zhengzhou
-0271,2025-04-13,90.00,Board game purchase,game,lisi,false,Jinan
-0272,2025-04-15,170.80,Bakery and coffee run,food,lisi,false,Shenyang
-0273,2025-04-17,1500.00,Rent,rent,lisi,false,Foshan
-0274,2025-04-19,110.00,Karaoke night,entertainment,lisi,false,Dongguan
-0275,2025-04-21,29.00,Cloud storage subscription,digitalProduct,lisi,false,Kunming
-0276,2025-04-24,65.50,Hair products,cosmetics,lisi,false,Nanning
-0277,2025-04-26,2200.00,Flight tickets,travel,lisi,false,Nanchang
-0278,2025-04-29,55.00,Fuel refill,transportation,lisi,false,Guiyang
-0279,2025-04-03,350.00,University course material,education,lisi,false,Taiyuan
-0280,2025-04-07,85.00,Gaming subscription,game,lisi,false,Lanzhou
-0281,2025-04-10,160.40,Specialty food items,groceries,lisi,false,Xining
-0282,2025-04-12,50.00,Pharmacy purchase,health,lisi,false,Haikou
-0283,2025-04-14,230.00,Brunch outing,food,lisi,false,Yinchuan
-0284,2025-04-16,1500.00,Rent payment,rent,lisi,false,Urumqi
-0285,2025-04-19,130.00,Arcade visit,entertainment,lisi,false,Lhasa
-0286,2025-04-22,49.99,Software license,digitalProduct,lisi,false,Hohhot
-0287,2025-04-24,95.00,New perfume,cosmetics,lisi,false,Harbin
-0288,2025-04-27,2800.00,Long distance train ticket,travel,lisi,false,Changchun
-0289,2025-04-29,60.00,Train ticket,transportation,lisi,false,Shijiazhuang
-0290,2025-04-04,450.00,Coding boot camp fee,education,lisi,false,Qingdao
-0291,2025-04-06,110.00,In-game currency,game,lisi,false,Shanghai
-0292,2025-04-08,190.00,Organic produce,groceries,lisi,false,Guangzhou
-0293,2025-04-11,70.00,Doctor's co-pay,health,lisi,false,Shenzhen
-0294,2025-04-13,240.00,Restaurant dinner,food,lisi,false,Chengdu
-0295,2025-04-15,1500.00,Rent payment,rent,lisi,false,Hangzhou
-0296,2025-04-17,150.00,Theme park ticket,entertainment,lisi,false,Nanjing
-0297,2025-04-20,39.99,Online course material,digitalProduct,lisi,false,Wuhan
-0298,2025-04-22,105.00,New nail polish set,cosmetics,lisi,false,Chongqing
-0299,2025-04-25,3200.00,Cruise booking,travel,lisi,false,Xi'an
-0300,2025-04-28,70.00,Public transport pass,transportation,lisi,false,Suzhou
+0250,2025-04-01,155.20,Weekly grocery shopping,1,lisi,false,Shanghai
+0251,2025-04-03,45.00,Gym membership fee,2,lisi,false,Beijing
+0252,2025-04-05,210.80,Dinner at a nice restaurant,3,lisi,false,Guangzhou
+0253,2025-04-08,1500.00,Monthly apartment rent,4,lisi,false,Shenzhen
+0254,2025-04-10,88.00,Movie tickets and popcorn,5,lisi,false,Chengdu
+0256,2025-04-14,120.50,Buying new makeup,8,lisi,false,Nanjing
+0257,2025-04-16,2500.00,Weekend trip to mountains,9,lisi,false,Wuhan
+0258,2025-04-18,50.00,Bus and subway fares,10,lisi,false,Chongqing
+0259,2025-04-20,300.00,Online course enrollment,11,lisi,false,Xi'an
+0260,2025-04-21,75.00,New video game purchase,12,lisi,false,Suzhou
+0261,2025-04-23,180.30,Bulk food purchase,1,lisi,false,Tianjin
+0262,2025-04-25,60.00,Yoga class drop-in,2,lisi,false,Changsha
+0263,2025-04-26,260.00,Dinner with friends,3,lisi,false,Qingdao
+0264,2025-04-28,1500.00,Rent payment,4,lisi,false,Dalian
+0265,2025-04-30,99.50,Concert ticket,5,lisi,false,Xiamen
+0267,2025-04-04,78.00,Skincare products,8,lisi,false,Hefei
+0268,2025-04-06,1800.00,Train tickets for trip,9,lisi,false,Ningbo
+0269,2025-04-09,40.00,Taxi rides,10,lisi,false,Wuxi
+0270,2025-04-11,400.00,Workshop fee,11,lisi,false,Zhengzhou
+0271,2025-04-13,90.00,Board game purchase,12,lisi,false,Jinan
+0272,2025-04-15,170.80,Bakery and coffee run,3,lisi,false,Shenyang
+0273,2025-04-17,1500.00,Rent,4,lisi,false,Foshan
+0274,2025-04-19,110.00,Karaoke night,5,lisi,false,Dongguan
+0276,2025-04-24,65.50,Hair products,8,lisi,false,Nanning
+0277,2025-04-26,2200.00,Flight tickets,9,lisi,false,Nanchang
+0278,2025-04-29,55.00,Fuel refill,10,lisi,false,Guiyang
+0279,2025-04-03,350.00,University course material,11,lisi,false,Taiyuan
+0280,2025-04-07,85.00,Gaming subscription,12,lisi,false,Lanzhou
+0281,2025-04-10,160.40,Specialty food items,1,lisi,false,Xining
+0282,2025-04-12,50.00,Pharmacy purchase,2,lisi,false,Haikou
+0283,2025-04-14,230.00,Brunch outing,3,lisi,false,Yinchuan
+0284,2025-04-16,1500.00,Rent payment,4,lisi,false,Urumqi
+0285,2025-04-19,130.00,Arcade visit,5,lisi,false,Lhasa
+0287,2025-04-24,95.00,New perfume,8,lisi,false,Harbin
+0288,2025-04-27,2800.00,Long distance train ticket,9,lisi,false,Changchun
+0289,2025-04-29,60.00,Train ticket,10,lisi,false,Shijiazhuang
+0290,2025-04-04,450.00,Coding boot camp fee,11,lisi,false,Qingdao
+0291,2025-04-06,110.00,In-game currency,12,lisi,false,Shanghai
+0292,2025-04-08,190.00,Organic produce,1,lisi,false,Guangzhou
+0293,2025-04-11,70.00,Doctor's co-pay,2,lisi,false,Shenzhen
+0294,2025-04-13,240.00,Restaurant dinner,3,lisi,false,Chengdu
+0295,2025-04-15,1500.00,Rent payment,4,lisi,false,Hangzhou
+0296,2025-04-17,150.00,Theme park ticket,5,lisi,false,Nanjing
+0298,2025-04-22,105.00,New nail polish set,8,lisi,false,Chongqing
+0299,2025-04-25,3200.00,Cruise booking,9,lisi,false,Xi'an
+0300,2025-04-28,70.00,Public transport pass,10,lisi,false,Suzhou
 0301,2024-05-01,5000.00,Monthly Salary,5,lisi,true,Work
 0302,2024-06-01,5000.00,Monthly Salary,5,lisi,true,Work
 0303,2024-07-01,6000.00,Monthly Salary,5,lisi,true,Work
