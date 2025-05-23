@@ -1,3 +1,4 @@
+UserManagerTest.class
+SavingManagerTest.class
 TransactionManagerTest.class
-AIManagerTest.class
 BudgetManagerTest.class

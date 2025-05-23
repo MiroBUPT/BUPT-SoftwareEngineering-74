@@ -1,37 +1,31 @@
+// import java.util.ArrayList;
+// import java.util.List;
+
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.Test;
+// import org.mockito.Mockito;
+// import static org.mockito.Mockito.when;
+
 // import control.AIManager;
 // import control.BudgetManager;
 // import control.TransactionManager;
 // import control.UserManager;
 // import entity.Budget;
 // import entity.Transaction;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.mockito.Mockito;
-
-// import java.util.ArrayList;
-// import java.util.List;
-
-// import static org.junit.jupiter.api.Assertions.assertNotNull;
-// import static org.mockito.Mockito.when;
 
 // public class AIManagerTest {
 
-//     private AIManager aiManager;
 //     private BudgetManager mockBudgetManager;
 //     private TransactionManager mockTransactionManager;
 //     private UserManager mockUserManager;
 
 //     @BeforeEach
 //     public void setUp() {
-//         aiManager = AIManager.getInstance();
+//         AIManager.getInstance();
 //         mockBudgetManager = Mockito.mock(BudgetManager.class);
 //         mockTransactionManager = Mockito.mock(TransactionManager.class);
 //         mockUserManager = Mockito.mock(UserManager.class);
 
-//         // 使用 setter 方法设置模拟对象
-//         aiManager.setBudgetManager(mockBudgetManager);
-//         aiManager.setTransactionManager(mockTransactionManager);
-//         aiManager.setUserManager(mockUserManager);
 //     }
 
 //     @Test
@@ -64,8 +58,5 @@
 //         budgets.add(budget);
 //         when(mockBudgetManager.queryByOwner(userName)).thenReturn(budgets);
 
-//         // 由于调用 API 是实际网络请求，这里不进行真实调用，仅测试方法是否能正常返回
-//         String advice = aiManager.generateAdvice();
-//         assertNotNull(advice);
 //     }
 // }    

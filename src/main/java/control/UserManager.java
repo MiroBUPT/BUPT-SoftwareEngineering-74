@@ -1,9 +1,9 @@
 package control;
 
-import entity.User;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.User;
 
 public class UserManager extends Manager {
     private static UserManager instance;
