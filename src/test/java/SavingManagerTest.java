@@ -74,10 +74,48 @@ public class SavingManagerTest {
     public void testSaveAndLoadData() {
         savingManager.saveData(); // 写入 CSV
         savingManager.loadData(); // 重新加载
-
         assertEquals("Alice", userManager.getUserName("u001"));
         assertEquals(1, budgetManager.getBudgetList().size());
         assertEquals(1, transactionManager.getTransactionList().size());
+    }
+
+    @Test
+    public void testUserDataAfterReload() {
+        savingManager.saveData();
+        savingManager.loadData(); // 加载
+
+        User user = userManager.getUserById("u001");
+        assertEquals("u001", user.userId);
+        assertEquals("Alice", user.name);
+        assertEquals("123456", user.password);
+    }
+
+    @Test
+    public void testBudgetDataAfterReload() {
+        savingManager.saveData();
+        savingManager.loadData(); // 加载
+
+        Budget budget = budgetManager.getBudgetList().get(0);
+        assertEquals("b001", budget.budgetId);
+        assertEquals("500", budget.amount);
+        assertEquals(TransactionType.food, budget.type);
+        assertEquals("u001", budget.owner.userId);
+        assertEquals("2024-01", budget.date);
+    }
+
+    @Test
+    public void testTransactionDataAfterReload() {
+        savingManager.saveData();
+        savingManager.loadData(); // 加载
+
+        Transaction tx = transactionManager.getTransactionList().get(0);
+        assertEquals("t001", tx.transactionId);
+        assertEquals("2024-01-01", tx.date);
+        assertEquals("20", tx.amount);
+        assertEquals("snack", tx.description);
+        assertEquals(TransactionType.food, tx.type);
+        assertEquals("u001", tx.owner.userId);
+        assertEquals("Beijing", tx.location);
     }
 
     // 用于设置私有静态字段
