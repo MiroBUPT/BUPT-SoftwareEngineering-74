@@ -44,23 +44,28 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import control.TransactionManager;
 import control.UserManager;
 import entity.Transaction;
 import entity.TransactionType;
+import control.SavingManager;
 
 public class TransactionQueryPanel extends JPanel {
     private JTextField dateField; // 日期查询字段
     private JTextField ownerField; // 所有者查询字段
     private JTextField locationField; // 地点查询字段
-    private JComboBox<String> typeComboBox; // 类型下拉菜单
+    private JComboBox<String> typeComboBox; // 类型下拉菜单 (查询用)
     private JButton queryButton;
     private JButton resetButton; // 添加 Reset 按钮
     private JTable resultsTable;
     private DefaultTableModel tableModel;
     private TransactionManager transactionManager;
     private UserManager userManager;
+    private JComboBox<TransactionType> modifyTypeComboBox; // 修改类型下拉菜单
+    private JButton modifyTypeButton; // 修改类型按钮
 
     public TransactionQueryPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
@@ -100,12 +105,31 @@ public class TransactionQueryPanel extends JPanel {
         add(queryPanel, BorderLayout.NORTH);
 
         // 创建表格模型和表格
-        String[] columnNames = {"Date", "Description", "Amount", "Account", "Type", "Income/Outcome", "Location"};
+        String[] columnNames = {"ID", "Date", "Description", "Amount", "Account", "Type", "Income/Outcome", "Location"};
         tableModel = new DefaultTableModel(columnNames, 0);
         resultsTable = new JTable(tableModel);
+        // Hide the ID column, but keep it in the model to retrieve the transaction ID
+        resultsTable.getColumnModel().getColumn(0).setMinWidth(0);
+        resultsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        resultsTable.getColumnModel().getColumn(0).setWidth(0);
 
         // 添加表格到面板
         add(new JScrollPane(resultsTable), BorderLayout.CENTER);
+        
+        // 创建修改类型面板
+        JPanel modifyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        
+        // 修改类型下拉框
+        modifyTypeComboBox = new JComboBox<>(TransactionType.values());
+        modifyPanel.add(new JLabel("Change Type to:"));
+        modifyPanel.add(modifyTypeComboBox);
+        
+        // 修改类型按钮
+        modifyTypeButton = new JButton("Modify Type");
+        modifyPanel.add(modifyTypeButton);
+        modifyTypeButton.setEnabled(false); // Initially disabled
+
+        add(modifyPanel, BorderLayout.SOUTH);
 
         // 添加 Query 按钮事件监听器
         queryButton.addActionListener(new ActionListener() {
@@ -122,6 +146,74 @@ public class TransactionQueryPanel extends JPanel {
                 resetFields();
             }
         });
+        
+        // 添加表格行选择监听器
+        resultsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && resultsTable.getSelectedRow() != -1) {
+                    // A row is selected, enable modify button and show current type
+                    modifyTypeButton.setEnabled(true);
+                    int selectedRow = resultsTable.getSelectedRow();
+                    String currentTypeString = (String) resultsTable.getValueAt(selectedRow, 5); // Type is at column index 5
+                    try {
+                         TransactionType currentType = TransactionType.valueOf(currentTypeString);
+                         modifyTypeComboBox.setSelectedItem(currentType);
+                    } catch (IllegalArgumentException ex) {
+                         // Handle cases where the type in the table doesn't match enum names
+                         modifyTypeComboBox.setSelectedItem(TransactionType.none); // Or another default
+                    }
+                } else {
+                    // No row is selected, disable modify button
+                    modifyTypeButton.setEnabled(false);
+                }
+            }
+        });
+        
+        // 添加修改类型按钮事件监听器
+        modifyTypeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = resultsTable.getSelectedRow();
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(TransactionQueryPanel.this, 
+                            "Please select a transaction to modify.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                String transactionId = (String) resultsTable.getValueAt(selectedRow, 0); // Get ID from hidden column
+                TransactionType newType = (TransactionType) modifyTypeComboBox.getSelectedItem();
+                
+                // Get the Transaction object from the manager based on ID to ensure we have the full object
+                Transaction transactionToModify = null;
+                for (Transaction transaction : transactionManager.getTransactionList()) {
+                    if (transaction.transactionId.equals(transactionId)) {
+                        transactionToModify = transaction;
+                        break;
+                    }
+                }
+
+                if (transactionToModify != null) {
+                    // Create a copy or modify directly - let's modify directly for simplicity if editData handles replacement
+                    // Assuming editData replaces the object based on ID
+                    // Update the type on the found object and call editData
+                    transactionToModify.type = newType;
+                    transactionManager.editData(transactionToModify, transactionId);
+                    
+                    // Save changes to file
+                    SavingManager.getInstance().saveTransactionsToCSV();
+                    
+                    // Refresh table display
+                    queryData(); // Re-run the query to update the table
+
+                    JOptionPane.showMessageDialog(TransactionQueryPanel.this, 
+                            "Transaction type modified successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                     JOptionPane.showMessageDialog(TransactionQueryPanel.this, 
+                            "Could not find the transaction in data manager.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 
     private void queryData() {
@@ -135,8 +227,7 @@ public class TransactionQueryPanel extends JPanel {
 
         // 获取所有交易记录
         List<Transaction> transactions = transactionManager.getTransactionList();
-        List<Object[]> filteredData = new ArrayList<>();
-
+        
         for (Transaction transaction : transactions) {
             // 检查是否匹配查询条件
             boolean matches = true;
@@ -150,26 +241,24 @@ public class TransactionQueryPanel extends JPanel {
             if (!location.isEmpty() && !transaction.location.toLowerCase().contains(location)) {
                 matches = false;
             }
-            if (!type.equals("All") && !transaction.type.name().equals(type)) {
+            // Handle the case where type is null in Transaction object
+            String transactionTypeName = (transaction.type != null) ? transaction.type.name() : "none";
+            if (!type.equals("All") && !transactionTypeName.equals(type)) {
                 matches = false;
             }
 
             if (matches) {
-                filteredData.add(new Object[]{
+                tableModel.addRow(new Object[]{
+                    transaction.transactionId, // Add ID to the model
                     transaction.date,
                     transaction.description,
                     transaction.amount,
                     transaction.owner.name,
-                    transaction.type.name(),
+                    transactionTypeName, // Use the potentially null-safe type name
                     transaction.isIncome ? "Income" : "Outcome",
                     transaction.location
                 });
             }
-        }
-
-        // 将过滤后的数据添加到表格
-        for (Object[] row : filteredData) {
-            tableModel.addRow(row);
         }
     }
 
@@ -187,7 +276,7 @@ public class TransactionQueryPanel extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new TransactionQueryPanel(Color.BLACK, Color.WHITE));
         frame.pack();
-        frame.setSize(800, 600);
+        frame.setSize(900, 600); // Increased size to accommodate new controls
         frame.setVisible(true);
     }
 }
