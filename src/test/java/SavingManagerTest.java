@@ -74,10 +74,26 @@ public class SavingManagerTest {
     public void testSaveAndLoadData() {
         savingManager.saveData(); // 写入 CSV
         savingManager.loadData(); // 重新加载
-
         assertEquals("Alice", userManager.getUserName("u001"));
         assertEquals(1, budgetManager.getBudgetList().size());
         assertEquals(1, transactionManager.getTransactionList().size());
+    }
+    @Test
+    public void testSaveUsersToCSV() {
+        assertTrue(savingManager.saveUsersToCSV());
+        assertTrue(Files.exists(Paths.get(testUserCsv)));
+    }
+
+    @Test
+    public void testSaveBudgetsToCSV() {
+        assertTrue(savingManager.saveBudgetsToCSV());
+        assertTrue(Files.exists(Paths.get(testBudgetCsv)));
+    }
+
+    @Test
+    public void testSaveTransactionsToCSV() {
+        assertTrue(savingManager.saveTransactionsToCSV());
+        assertTrue(Files.exists(Paths.get(testTransactionCsv)));
     }
 
     // 用于设置私有静态字段
