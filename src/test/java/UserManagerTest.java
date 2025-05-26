@@ -12,10 +12,19 @@ import org.junit.jupiter.api.Test;
 import control.UserManager;
 import entity.User;
 
+/**
+ * Test class for UserManager functionality.
+ * Tests all major operations of the UserManager including user management, authentication, and profile updates.
+ */
 public class UserManagerTest {
 
+    /** Instance of UserManager to be tested */
     private UserManager userManager;
 
+    /**
+     * Set up test environment before each test.
+     * Initializes a new UserManager instance and loads test user data.
+     */
     @BeforeEach
     public void setUp() {
         userManager = UserManager.getInstance();
@@ -40,6 +49,10 @@ public class UserManagerTest {
         userManager.loadData(testUsers);
     }
 
+    /**
+     * Test successful password modification.
+     * Verifies that password can be changed for an existing user.
+     */
     @Test
     public void testEditPassword_Success() {
         boolean result = userManager.editPassword("u001", "newpass123");
@@ -47,18 +60,31 @@ public class UserManagerTest {
         assertEquals("newpass123", userManager.getPassword("u001"), "密码应已被更新");
     }
 
+    /**
+     * Test password modification for non-existent user.
+     * Verifies that password change fails for non-existent users.
+     */
     @Test
     public void testEditPassword_FailForNonExistentUser() {
         boolean result = userManager.editPassword("u999", "fakepass");
         assertFalse(result, "不存在的用户应修改失败");
     }
-     @Test
+
+    /**
+     * Test successful username modification.
+     * Verifies that username can be changed for an existing user.
+     */
+    @Test
     public void testEditUserName_Success() {
         boolean result = userManager.editUserName("u001", "AliceNew");
         assertTrue(result);
         assertEquals("AliceNew", userManager.getUserName("u001"));
     }
 
+    /**
+     * Test successful user ID modification.
+     * Verifies that user ID can be changed and current user is updated accordingly.
+     */
     @Test
     public void testEditUserId_Success() {
         boolean result = userManager.editUserId("u001", "u999");
@@ -68,6 +94,10 @@ public class UserManagerTest {
         assertNull(userManager.getUserById("u001"));  // 旧 ID 应找不到
     }
 
+    /**
+     * Test successful user addition.
+     * Verifies that a new user can be added to the system.
+     */
     @Test
     public void testAddUser_Success() {
         User newUser = new User();
@@ -80,6 +110,10 @@ public class UserManagerTest {
         assertEquals("Charlie", userManager.getUserName("u003"));
     }
 
+    /**
+     * Test user addition with duplicate ID.
+     * Verifies that adding a user with an existing ID fails.
+     */
     @Test
     public void testAddUser_Fail_ExistingId() {
         User duplicateUser = new User();

@@ -10,15 +10,28 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for BudgetManager functionality.
+ * Tests all major operations of the BudgetManager including adding, editing, querying, and loading budgets.
+ */
 public class BudgetManagerTest {
+    /** Instance of BudgetManager to be tested */
     private BudgetManager budgetManager;
 
+    /**
+     * Set up test environment before each test.
+     * Initializes a new BudgetManager instance and clears existing data.
+     */
     @BeforeEach
     public void setUp() {
         budgetManager = BudgetManager.getInstance();
         budgetManager.loadData(new ArrayList<>()); // 清空数据
     }
 
+    /**
+     * Test adding a new budget to the manager.
+     * Verifies that the budget list size increases by 1 after adding.
+     */
     @Test
     public void testAddBudget() {
         Budget budget = new Budget();
@@ -27,6 +40,10 @@ public class BudgetManagerTest {
         assertEquals(1, budgetManager.getBudgetList().size(), "添加预算记录后列表大小应为 1");
     }
 
+    /**
+     * Test editing an existing budget.
+     * Verifies that the edit operation completes without errors.
+     */
     @Test
     public void testEditBudget() {
         Budget budget = new Budget();
@@ -38,6 +55,10 @@ public class BudgetManagerTest {
         assertTrue(true);
     }
 
+    /**
+     * Test querying budgets by owner.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByOwner() {
         String owner = "John";
@@ -45,6 +66,10 @@ public class BudgetManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test querying budgets by transaction type.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByType() {
         TransactionType type = TransactionType.food;
@@ -52,6 +77,10 @@ public class BudgetManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test querying budgets by date.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByTime() {
         String date = "2023-01-01";
@@ -59,6 +88,10 @@ public class BudgetManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test loading budget data into the manager.
+     * Verifies that the budget list size matches the loaded data size.
+     */
     @Test
     public void testLoadData() {
         List<Budget> budgets = new ArrayList<>();

@@ -3,18 +3,36 @@ package boundary;
 import javax.swing.border.Border;
 import java.awt.*;
 
-// 自定义椭圆形边框类
+/**
+ * Custom border implementation that creates an elliptical border around components.
+ * This class implements the Border interface to provide a rounded, elliptical border
+ * with customizable color and thickness.
+ */
 public class EllipseBorder implements Border {
+    /** The color of the border */
     private Color color;
+    /** The thickness of the border in pixels */
     private int thickness;
 
-    // 构造函数，接收边框颜色和厚度
+    /**
+     * Constructs a new EllipseBorder with specified color and thickness.
+     * @param color The color to use for the border
+     * @param thickness The thickness of the border in pixels
+     */
     public EllipseBorder(Color color, int thickness) {
         this.color = color;
         this.thickness = thickness;
     }
 
-    // 绘制边框的方法
+    /**
+     * Paints the elliptical border around the specified component.
+     * @param c The component to paint the border around
+     * @param g The graphics context to use for painting
+     * @param x The x coordinate of the border
+     * @param y The y coordinate of the border
+     * @param width The width of the border
+     * @param height The height of the border
+     */
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
         Graphics2D g2d = (Graphics2D) g;
@@ -23,13 +41,20 @@ public class EllipseBorder implements Border {
         g2d.drawOval(x + thickness / 2, y + thickness / 2, width - thickness, height - thickness);
     }
 
-    // 获取边框的内边距
+    /**
+     * Gets the insets of the border.
+     * @param c The component the border is being painted on
+     * @return The insets of the border
+     */
     @Override
     public Insets getBorderInsets(Component c) {
         return new Insets(thickness, thickness, thickness, thickness);
     }
 
-    // 判断边框是否不透明
+    /**
+     * Determines if the border is opaque.
+     * @return false, as this border is not opaque
+     */
     @Override
     public boolean isBorderOpaque() {
         return false;

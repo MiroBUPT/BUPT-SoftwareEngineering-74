@@ -9,12 +9,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Registration interface for new user account creation.
+ * Provides fields for username and password input with validation.
+ */
 public class RegisterView extends JFrame {
+    /** Text field for entering username */
     private JTextField userNameField;
+    /** Password field for entering password */
     private JPasswordField passwordField;
+    /** Button for submitting registration */
     private JButton registerButton;
+    /** Label for displaying registration status messages */
     private JLabel messageLabel;
 
+    /**
+     * Constructs a new RegisterView.
+     * Initializes the registration interface and sets up event handlers.
+     */
     public RegisterView() {
         setTitle("Register");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

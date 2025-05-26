@@ -30,28 +30,52 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Panel for analyzing budget data using various chart visualizations.
+ * Provides bar charts, pie charts, and line charts for budget analysis.
+ */
 public class BudgetAnalysisPanel extends JPanel {
+    /** Array of month names for display and selection */
     private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", 
                                           "July", "August", "September", "October", "November", "December"};
+    /** Array of available transaction types for analysis */
     private static final String[] TRANSACTION_TYPES = {"income", "health", "food", "rent", "groceries",
                                                      "transportation", "entertainment", "cosmetics",
                                                      "education", "game", "digitalProduct", "travel"};
     
+    /** Manager for budget-related operations */
     private BudgetManager budgetManager;
+    /** Manager for transaction-related operations */
     private TransactionManager transactionManager;
+    /** Manager for user-related operations */
     private UserManager userManager;
+    /** Username of the current user */
     private String currentUsername;
     
+    /** Combo box for selecting transaction type */
     private JComboBox<String> typeComboBox;
+    /** Combo box for selecting month */
     private JComboBox<String> monthComboBox;
+    /** Combo box for selecting year */
     private JComboBox<Integer> yearComboBox;
+    /** Panel containing the top section of charts */
     private JPanel topPanel;
+    /** Panel containing the bottom section of charts */
     private JPanel bottomPanel;
+    /** Panel containing the bar chart */
     private ChartPanel barChartPanel;
+    /** Panel containing the pie chart */
     private ChartPanel pieChartPanel;
+    /** Panel containing the line chart */
     private ChartPanel lineChartPanel;
+    /** Panel containing control elements */
     private JPanel controlPanel;
 
+    /**
+     * Constructs a new BudgetAnalysisPanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public BudgetAnalysisPanel(Color borderColor, Color fillColor) {
         this.setBorder(BorderFactory.createLineBorder(borderColor));
         this.setBackground(fillColor);
@@ -78,6 +102,9 @@ public class BudgetAnalysisPanel extends JPanel {
         updateCharts();
     }
 
+    /**
+     * Creates the control panel with type, year, and month selection components.
+     */
     private void createControlPanel() {
         controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
@@ -108,6 +135,9 @@ public class BudgetAnalysisPanel extends JPanel {
         this.add(controlPanel, BorderLayout.NORTH);
     }
 
+    /**
+     * Creates the panels for displaying charts.
+     */
     private void createChartPanels() {
         // 创建上半部分（柱状图）面板
         topPanel = new JPanel(new BorderLayout());
@@ -123,6 +153,9 @@ public class BudgetAnalysisPanel extends JPanel {
         this.add(chartsPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Updates all charts based on current selection values.
+     */
     private void updateCharts() {
         String selectedType = (String) typeComboBox.getSelectedItem();
         String selectedMonth = (String) monthComboBox.getSelectedItem();
@@ -138,6 +171,10 @@ public class BudgetAnalysisPanel extends JPanel {
         updateLineChart(selectedType);
     }
 
+    /**
+     * Updates the bar chart with historical budget data for the selected type.
+     * @param type The selected transaction type
+     */
     private void updateBarChart(String type) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         List<Budget> budgets = budgetManager.getBudgetList();
@@ -178,6 +215,11 @@ public class BudgetAnalysisPanel extends JPanel {
         topPanel.revalidate();
     }
 
+    /**
+     * Updates the pie chart with budget distribution for the selected month and year.
+     * @param year The selected year
+     * @param month The selected month
+     */
     private void updatePieChart(Integer year, String month) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         List<Budget> budgets = budgetManager.getBudgetList();
@@ -214,6 +256,10 @@ public class BudgetAnalysisPanel extends JPanel {
         bottomPanel.revalidate();
     }
 
+    /**
+     * Updates the line chart comparing budget vs actual spending for the selected type.
+     * @param type The selected transaction type
+     */
     private void updateLineChart(String type) {
         XYSeries budgetSeries = new XYSeries("Budget");
         XYSeries actualSeries = new XYSeries("Actual");
@@ -308,6 +354,10 @@ public class BudgetAnalysisPanel extends JPanel {
         bottomPanel.revalidate();
     }
 
+    /**
+     * Main method for testing the BudgetAnalysisPanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Budget Analysis Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

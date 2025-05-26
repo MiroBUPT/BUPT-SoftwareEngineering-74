@@ -41,18 +41,37 @@ import control.UserManager;
 import entity.Budget;
 import entity.TransactionType;
 
+/**
+ * Panel for querying and displaying budget information.
+ * Provides search functionality and tabular display of budget records.
+ */
 public class BudgetQueryPanel extends JPanel {
+    /** Text field for entering budget ID */
     private JTextField queryField;
+    /** Text field for entering date */
     private JTextField dateField;
+    /** Text field for entering owner name */
     private JTextField ownerField;
+    /** Combo box for selecting budget type */
     private JComboBox<String> typeComboBox;
+    /** Button to execute the search query */
     private JButton queryButton;
+    /** Button to reset all search fields */
     private JButton resetButton;
+    /** Table displaying search results */
     private JTable resultsTable;
+    /** Model for the results table */
     private DefaultTableModel tableModel;
+    /** Manager for budget-related operations */
     private BudgetManager budgetManager;
+    /** Manager for user-related operations */
     private UserManager userManager;
 
+    /**
+     * Constructs a new BudgetQueryPanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public BudgetQueryPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
@@ -65,6 +84,10 @@ public class BudgetQueryPanel extends JPanel {
         init();
     }
 
+    /**
+     * Initializes the panel components and sets up event listeners.
+     * Creates search fields, buttons, and results table.
+     */
     private void init() {
         System.out.println("预算查询面板初始化");
 
@@ -114,6 +137,10 @@ public class BudgetQueryPanel extends JPanel {
         });
     }
 
+    /**
+     * Executes the search query based on current filter values.
+     * Updates the results table with matching budget records.
+     */
     private void queryData() {
         String query = queryField.getText();
         String dateString = dateField.getText();
@@ -181,6 +208,9 @@ public class BudgetQueryPanel extends JPanel {
         }
     }
 
+    /**
+     * Resets all search fields to their default values.
+     */
     private void resetFields() {
         queryField.setText("");
         dateField.setText("");
@@ -189,6 +219,10 @@ public class BudgetQueryPanel extends JPanel {
         tableModel.setRowCount(0);
     }
 
+    /**
+     * Main method for testing the BudgetQueryPanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Budget Query Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -198,13 +232,29 @@ public class BudgetQueryPanel extends JPanel {
         frame.setVisible(true);
     }
 
+    /**
+     * Inner class representing a budget item with its properties.
+     */
     static class BudgetItem {
+        /** Unique identifier for the budget */
         private String budgetId;
+        /** Amount allocated for the budget */
         private double amount;
+        /** Type of the budget */
         private String type;
+        /** Owner of the budget */
         private String owner;
+        /** Date of the budget */
         private Date date;
 
+        /**
+         * Constructs a new BudgetItem with specified properties.
+         * @param budgetId The budget identifier
+         * @param amount The budget amount
+         * @param type The budget type
+         * @param owner The budget owner
+         * @param dateString The budget date in yyyy-MM-dd format
+         */
         public BudgetItem(String budgetId, double amount, String type, String owner, String dateString) {
             this.budgetId = budgetId;
             this.amount = amount;
@@ -217,26 +267,50 @@ public class BudgetQueryPanel extends JPanel {
             }
         }
 
+        /**
+         * Gets the budget identifier.
+         * @return The budget ID
+         */
         public String getBudgetId() {
             return budgetId;
         }
 
+        /**
+         * Gets the budget amount.
+         * @return The budget amount
+         */
         public double getAmount() {
             return amount;
         }
 
+        /**
+         * Gets the budget description.
+         * @return The budget type as description
+         */
         public String getDescription() {
             return type;
         }
 
+        /**
+         * Gets the budget type.
+         * @return The budget type
+         */
         public String getType() {
             return type;
         }
 
+        /**
+         * Gets the budget owner.
+         * @return The budget owner
+         */
         public String getOwner() {
             return owner;
         }
 
+        /**
+         * Gets the budget date.
+         * @return The budget date
+         */
         public Date getDate() {
             return date;
         }

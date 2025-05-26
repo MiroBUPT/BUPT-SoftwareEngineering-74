@@ -5,16 +5,27 @@ import java.util.List;
 
 import entity.User;
 
+/**
+ * Manager class for handling user-related operations.
+ * Implements the Singleton pattern and manages user data including authentication and profile management.
+ */
 public class UserManager extends Manager {
+    /** Singleton instance of UserManager */
     private static UserManager instance;
 
+    /**
+     * Gets the singleton instance of UserManager.
+     * @return The singleton instance
+     */
     public static UserManager getInstance() {
         if (instance == null)
             instance = new UserManager();
         return instance;
     }
 
+    /** ID of the currently logged-in user */
     private String currentUserId;
+    /** List of all registered users */
     private List<User> userList = new ArrayList<>();
 
     @Override
@@ -22,15 +33,18 @@ public class UserManager extends Manager {
         System.out.println("UserManager initialized.");
     }
 
+    /**
+     * Gets the list of all users.
+     * @return List of all registered users
+     */
     public List<User> getUserList() {
         return userList;
     }
 
     /**
-     * 根据用户ID获取用户名
-     * 
-     * @param userId 用户ID
-     * @return 用户名，如果用户不存在则返回null
+     * Gets the username for a given user ID.
+     * @param userId The user ID to look up
+     * @return The username, or null if user doesn't exist
      */
     public String getUserName(String userId) {
         for (User user : userList) {
@@ -42,10 +56,9 @@ public class UserManager extends Manager {
     }
 
     /**
-     * 根据用户名获取用户ID
-     * 
-     * @param userName 用户名
-     * @return 用户ID，如果用户不存在则返回null
+     * Gets the user ID for a given username.
+     * @param userName The username to look up
+     * @return The user ID, or null if user doesn't exist
      */
     public String getUserIdByName(String userName) {
         for (User user : userList) {
@@ -57,10 +70,9 @@ public class UserManager extends Manager {
     }
 
     /**
-     * 根据用户名获取用户密码
-     * 
-     * @param userName 用户名
-     * @return 用户密码，如果用户不存在则返回null
+     * Gets the password for a given username.
+     * @param userName The username to look up
+     * @return The password, or null if user doesn't exist
      */
     public String getPasswordByName(String userName) {
         for (User user : userList) {
@@ -71,12 +83,10 @@ public class UserManager extends Manager {
         return null;
     }
 
-
     /**
-     * 根据用户ID获取用户密码
-     * 
-     * @param userId 用户ID
-     * @return 用户密码，如果用户不存在则返回null
+     * Gets the password for a given user ID.
+     * @param userId The user ID to look up
+     * @return The password, or null if user doesn't exist
      */
     public String getPassword(String userId) {
         for (User user : userList) {
@@ -88,30 +98,26 @@ public class UserManager extends Manager {
     }
 
     /**
-     * 修改用户密码
-     * 
-     * @param userId   用户ID
-     * @param password 新密码
-     * @return 是否修改成功
+     * Updates the password for a given user ID.
+     * @param userId The user ID to update
+     * @param password The new password
+     * @return true if update was successful, false otherwise
      */
     public boolean editPassword(String userId, String password) {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 user.password = password;
-
                 return true;
-
             }
         }
         return false;
     }
 
-        /**
-     * 修改用户Id
-     * 
-     * @param userId   用户ID
-     * @param userId   新ID
-     * @return 是否修改成功
+    /**
+     * Updates the user ID for a given user.
+     * @param userId The current user ID
+     * @param newUserId The new user ID
+     * @return true if update was successful, false otherwise
      */
     public boolean editUserId(String userId, String newUserId) {
         for (User user : userList) {
@@ -119,35 +125,30 @@ public class UserManager extends Manager {
                 user.userId = newUserId;
                 setCurrentUser(newUserId);
                 return true;
-
             }
         }
         return false;
     }
 
     /**
-     * 修改用户名
-     * 
-     * @param userId   用户ID
-     * @param userName 新用户名
-     * @return 是否修改成功
+     * Updates the username for a given user ID.
+     * @param userId The user ID to update
+     * @param userName The new username
+     * @return true if update was successful, false otherwise
      */
     public boolean editUserName(String userId, String userName) {
         for (User user : userList) {
             if (user.userId.equals(userId)) {
                 user.name = userName;
-
                 return true;
-
             }
         }
         return false;
     }
 
     /**
-     * 加载用户数据
-     * 
-     * @param users 用户列表
+     * Loads user data from a list of users.
+     * @param users The list of users to load
      */
     public void loadData(List<User> users) {
         userList.clear();
@@ -155,28 +156,25 @@ public class UserManager extends Manager {
     }
 
     /**
-     * 获取当前登录用户ID
-     * 
-     * @return 当前用户ID
+     * Gets the ID of the currently logged-in user.
+     * @return The current user ID
      */
     public String getCurrentUserId() {
         return currentUserId;
     }
 
     /**
-     * 设置当前登录用户
-     * 
-     * @param userId 用户ID
+     * Sets the currently logged-in user.
+     * @param userId The user ID to set as current
      */
     public void setCurrentUser(String userId) {
         this.currentUserId = userId;
     }
 
     /**
-     * 添加新用户
-     * 
-     * @param user 要添加的用户对象
-     * @return 是否添加成功（如果用户ID已存在则失败）
+     * Adds a new user to the system.
+     * @param user The user object to add
+     * @return true if user was added successfully, false if user ID already exists
      */
     public boolean addUser(User user) {
         for (User u : userList) {
@@ -189,10 +187,9 @@ public class UserManager extends Manager {
     }
 
     /**
-     * 根据用户ID获取用户对象
-     * 
-     * @param userId 用户ID
-     * @return 用户对象，如果不存在则返回null
+     * Gets a user object by their ID.
+     * @param userId The user ID to look up
+     * @return The user object, or null if user doesn't exist
      */
     public User getUserById(String userId) {
         for (User user : userList) {

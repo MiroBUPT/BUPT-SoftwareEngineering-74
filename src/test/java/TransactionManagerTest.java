@@ -10,15 +10,28 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for TransactionManager functionality.
+ * Tests all major operations of the TransactionManager including importing, editing, querying, and loading transactions.
+ */
 public class TransactionManagerTest {
+    /** Instance of TransactionManager to be tested */
     private TransactionManager transactionManager;
 
+    /**
+     * Set up test environment before each test.
+     * Initializes a new TransactionManager instance and clears existing data.
+     */
     @BeforeEach
     public void setUp() {
         transactionManager = TransactionManager.getInstance();
         transactionManager.loadData(new ArrayList<>()); // 清空数据
     }
 
+    /**
+     * Test importing a new transaction.
+     * Verifies that the transaction list size increases by 1 after importing.
+     */
     @Test
     public void testImportData() {
         Transaction transaction = new Transaction();
@@ -28,6 +41,10 @@ public class TransactionManagerTest {
         assertEquals(1, transactionManager.queryByTime(null, null).size(), "导入交易记录后列表大小应为 1");
     }
 
+    /**
+     * Test editing an existing transaction.
+     * Verifies that the edit operation completes without errors.
+     */
     @Test
     public void testEditData() {
         Transaction transaction = new Transaction();
@@ -39,6 +56,10 @@ public class TransactionManagerTest {
         assertTrue(true);
     }
 
+    /**
+     * Test querying transactions by time range.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByTime() {
         String startDate = "2023-01-01";
@@ -47,6 +68,10 @@ public class TransactionManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test querying transactions by owner.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByOwner() {
         String owner = "John";
@@ -54,6 +79,10 @@ public class TransactionManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test querying transactions by type.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByType() {
         TransactionType type = TransactionType.food;
@@ -61,6 +90,10 @@ public class TransactionManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test querying transactions by income status.
+     * Verifies that the query returns a non-null result.
+     */
     @Test
     public void testQueryByIncome() {
         boolean isIncome = true;
@@ -68,6 +101,10 @@ public class TransactionManagerTest {
         assertNotNull(result, "查询结果不应为 null");
     }
 
+    /**
+     * Test loading transaction data into the manager.
+     * Verifies that the transaction list size matches the loaded data size.
+     */
     @Test
     public void testLoadData() {
         List<Transaction> transactions = new ArrayList<>();

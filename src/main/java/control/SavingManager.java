@@ -18,21 +18,37 @@ import entity.Transaction;
 import entity.TransactionType;
 import entity.User;
 
+/**
+ * Manager class for handling data persistence operations.
+ * Implements the Singleton pattern and manages saving/loading of data to/from CSV files.
+ */
 public class SavingManager extends Manager {
+    /** Singleton instance of SavingManager */
     private static SavingManager instance;
+    /** Flag indicating whether the manager has been initialized */
     private static boolean isInitialized = false;
 
+    /**
+     * Gets the singleton instance of SavingManager.
+     * @return The singleton instance
+     */
     public static SavingManager getInstance() {
         if (instance == null)
             instance = new SavingManager();
         return instance;
     }
 
+    /** Manager for budget-related operations */
     private BudgetManager budgetManager;
+    /** Manager for transaction-related operations */
     private TransactionManager transactionManager;
+    /** Manager for user-related operations */
     private UserManager userManager;
+    /** File path for user data */
     private static String userFilePath = "src/main/resources/user.csv";
+    /** File path for budget data */
     private static String budgetFilePath = "src/main/resources/budget.csv";
+    /** File path for transaction data */
     private static String transactionFilePath = "src/main/resources/transaction.csv";
 
     @Override
@@ -47,27 +63,37 @@ public class SavingManager extends Manager {
         }
     }
 
+    /**
+     * Saves all data to CSV files.
+     * Saves users, budgets, and transactions.
+     */
     public void saveData() {
         saveUsersToCSV();
         saveBudgetsToCSV();
         saveTransactionsToCSV();
     }
 
+    /**
+     * Loads all data from CSV files.
+     * Loads users, budgets, and transactions.
+     */
     public void loadData() {
         loadUsersFromCSV(userFilePath);
         loadBudgetFromCSV(budgetFilePath);
         loadTransactionsFromCSV(transactionFilePath);
     }
 
+    /**
+     * Saves user data to CSV file.
+     * @return true if save was successful, false otherwise
+     */
     public boolean saveUsersToCSV() {
         try (BufferedWriter writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(userFilePath), StandardCharsets.UTF_8))) {
             var userList = userManager.getUserList();
-            // 写入CSV表头
             writer.write("userId,name,password");
             writer.newLine();
 
-            // 写入每个用户的数据
             for (User user : userList) {
                 String line = String.format("%s,%s,%s",
                         escapeCsvField(user.userId),
@@ -84,15 +110,17 @@ public class SavingManager extends Manager {
         }
     }
 
+    /**
+     * Saves budget data to CSV file.
+     * @return true if save was successful, false otherwise
+     */
     public boolean saveBudgetsToCSV() {
         try (BufferedWriter writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(budgetFilePath), StandardCharsets.UTF_8))) {
             var budgetList = budgetManager.getBudgetList();
-            // 写入CSV表头
             writer.write("budgetId,amount,type,owner,date");
             writer.newLine();
 
-            // 写入每个用户的数据
             for (Budget budget : budgetList) {
                 String line = String.format("%s,%s,%s,%s,%s",
                         escapeCsvField(budget.budgetId),
@@ -110,18 +138,18 @@ public class SavingManager extends Manager {
         }
     }
 
-    // 保存交易数据到 CSV 文件
+    /**
+     * Saves transaction data to CSV file.
+     * @return true if save was successful, false otherwise
+     */
     public boolean saveTransactionsToCSV() {
         try (BufferedWriter writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(transactionFilePath), StandardCharsets.UTF_8))) {
             var transactionList = transactionManager.getTransactionList();
-            // 写入 CSV 表头
             writer.write("transactionId,date,amount,description,type,owner,isIncome,location");
             writer.newLine();
 
-            // 写入每个交易的数据
             for (Transaction transaction : transactionList) {
-                // 获取用户名，如果找不到则使用userId
                 String ownerName = transaction.owner != null && transaction.owner.name != null ? 
                                   transaction.owner.name : 
                                   (transaction.owner != null ? transaction.owner.userId : "unknown");
@@ -132,7 +160,7 @@ public class SavingManager extends Manager {
                         escapeCsvField(transaction.amount),
                         escapeCsvField(transaction.description),
                         escapeCsvField(String.valueOf(transaction.type.ordinal())),
-                        escapeCsvField(ownerName), // 使用用户名而非用户ID
+                        escapeCsvField(ownerName),
                         escapeCsvField(String.valueOf(transaction.isIncome)),
                         escapeCsvField(transaction.location));
                 writer.write(line);
@@ -146,10 +174,9 @@ public class SavingManager extends Manager {
     }
 
     /**
-     * 从CSV文件加载用户列表
-     * 
-     * @param filePath 文件路径
-     * @return 是否加载成功
+     * Loads user data from a CSV file.
+     * @param filePath The path to the CSV file
+     * @return true if load was successful, false otherwise
      */
     private boolean loadUsersFromCSV(String filePath) {
         List<User> loadedUsers = new ArrayList<>();
@@ -157,7 +184,6 @@ public class SavingManager extends Manager {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 
-            // 跳过表头
             reader.readLine();
 
             String line;
@@ -181,10 +207,9 @@ public class SavingManager extends Manager {
     }
 
     /**
-     * Load Budget data from a CSV file.
-     * 
-     * @param filePath file path of the CSV file
-     * @return whether the loading was successful
+     * Loads budget data from a CSV file.
+     * @param filePath The path to the CSV file
+     * @return true if load was successful, false otherwise
      */
     private boolean loadBudgetFromCSV(String filePath) {
         List<Budget> loadedBudgets = new ArrayList<>();
@@ -192,7 +217,6 @@ public class SavingManager extends Manager {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 
-            // 跳过表头
             reader.readLine();
 
             String line;
@@ -206,7 +230,6 @@ public class SavingManager extends Manager {
                     try {
                         budget.type = TransactionType.valueOf(typeStr);
                     } catch (IllegalArgumentException ex) {
-                        // 如果 typeStr 不是英文名，尝试用数字索引
                         try {
                             int idx = Integer.parseInt(typeStr);
                             budget.type = TransactionType.values()[idx];
@@ -229,153 +252,130 @@ public class SavingManager extends Manager {
         }
     }
 
+    /**
+     * Loads transaction data from a CSV file.
+     * @param filePath The path to the CSV file
+     * @return true if load was successful, false otherwise
+     */
     private boolean loadTransactionsFromCSV(String filePath) {
-    List<Transaction> loadedTransactions = new ArrayList<>();
+        List<Transaction> loadedTransactions = new ArrayList<>();
 
-    // 定义一个映射表，将字符串映射到 TransactionType 枚举值
-    Map<String, TransactionType> typeMap = new HashMap<>();
-    typeMap.put("groceries", TransactionType.groceries);
-    typeMap.put("health", TransactionType.health);
-    typeMap.put("food", TransactionType.food);
-    typeMap.put("income", TransactionType.income);
-    typeMap.put("rent", TransactionType.rent);
-    typeMap.put("entertainment", TransactionType.entertainment);
-    typeMap.put("digitalProduct", TransactionType.digitalProduct);
-    typeMap.put("game", TransactionType.game);
-    typeMap.put("cosmetics", TransactionType.cosmetics);
-    typeMap.put("transportation", TransactionType.transportation);
-    typeMap.put("education", TransactionType.education);
-    typeMap.put("travel", TransactionType.travel);
+        Map<String, TransactionType> typeMap = new HashMap<>();
+        typeMap.put("groceries", TransactionType.groceries);
+        typeMap.put("health", TransactionType.health);
+        typeMap.put("food", TransactionType.food);
+        typeMap.put("income", TransactionType.income);
+        typeMap.put("rent", TransactionType.rent);
+        typeMap.put("entertainment", TransactionType.entertainment);
+        typeMap.put("digitalProduct", TransactionType.digitalProduct);
+        typeMap.put("game", TransactionType.game);
+        typeMap.put("cosmetics", TransactionType.cosmetics);
+        typeMap.put("transportation", TransactionType.transportation);
+        typeMap.put("education", TransactionType.education);
+        typeMap.put("travel", TransactionType.travel);
 
-    try (BufferedReader reader = new BufferedReader(
-            new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 
-        // 跳过表头
-        reader.readLine();
+            reader.readLine();
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] fields = parseCsvLine(line);
-            if (fields.length >= 8) {
-                Transaction transaction = new Transaction();
-                transaction.transactionId = unescapeCsvField(fields[0]);
-                transaction.date = unescapeCsvField(fields[1]);
-
-                // 验证金额是否为数字
-                String amountStr = unescapeCsvField(fields[2]);
-                if (!isNumeric(amountStr)) {
-                    System.err.println("Invalid numeric value for amount: " + amountStr);
-                    continue;
-                }
-                transaction.amount = amountStr;
-
-                transaction.description = unescapeCsvField(fields[3]);
-
-                // 验证 TransactionType 是否有效
-                String typeStr = unescapeCsvField(fields[4]);
-                try {
-                    // 尝试将type值解析为枚举索引
-                    int typeOrdinal = Integer.parseInt(typeStr);
-                    if (typeOrdinal >= 0 && typeOrdinal < TransactionType.values().length) {
-                        transaction.type = TransactionType.values()[typeOrdinal];
-                    } else {
-                        // 如果索引越界，尝试使用名称映射
-                        TransactionType type = typeMap.get(typeStr.toLowerCase());
-                        if (type == null) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = parseCsvLine(line);
+                if (fields.length >= 8) {
+                    Transaction transaction = new Transaction();
+                    transaction.transactionId = unescapeCsvField(fields[0]);
+                    transaction.date = unescapeCsvField(fields[1]);
+                    transaction.amount = unescapeCsvField(fields[2]);
+                    transaction.description = unescapeCsvField(fields[3]);
+                    String typeStr = unescapeCsvField(fields[4]);
+                    try {
+                        transaction.type = TransactionType.valueOf(typeStr);
+                    } catch (IllegalArgumentException ex) {
+                        try {
+                            int idx = Integer.parseInt(typeStr);
+                            transaction.type = TransactionType.values()[idx];
+                        } catch (Exception e2) {
                             System.err.println("Invalid TransactionType value: " + typeStr);
                             continue;
                         }
-                        transaction.type = type;
                     }
-                } catch (NumberFormatException e) {
-                    // 如果不是数字，尝试使用名称映射
-                    TransactionType type = typeMap.get(typeStr.toLowerCase());
-                    if (type == null) {
-                        System.err.println("Invalid TransactionType value: " + typeStr);
-                        continue;
-                    }
-                    transaction.type = type;
+                    String ownerId = unescapeCsvField(fields[5]);
+                    transaction.owner = userManager.getUserById(ownerId);
+                    transaction.isIncome = Boolean.parseBoolean(unescapeCsvField(fields[6]));
+                    transaction.location = unescapeCsvField(fields[7]);
+                    loadedTransactions.add(transaction);
                 }
-
-                // 根据owner字段查找用户，先尝试按用户名查找，再尝试按用户ID查找
-                String ownerValue = unescapeCsvField(fields[5]);
-                User owner = null;
-                
-                // 先尝试通过ID查找
-                owner = userManager.getUserById(ownerValue);
-                
-                if (owner == null) {
-                    // 如果通过ID找不到，尝试通过名称查找
-                    String userId = userManager.getUserIdByName(ownerValue);
-                    if (userId != null) {
-                        owner = userManager.getUserById(userId);
-                    }
-                }
-                
-                if (owner == null) {
-                    // 如果仍然找不到，创建一个临时用户
-                    owner = new User();
-                    owner.userId = "temp_" + ownerValue;
-                    owner.name = ownerValue;
-                    System.err.println("Creating temporary user for owner: " + ownerValue);
-                }
-                
-                transaction.owner = owner;
-                transaction.isIncome = Boolean.parseBoolean(unescapeCsvField(fields[6]));
-                transaction.location = unescapeCsvField(fields[7]);
-                loadedTransactions.add(transaction);
             }
+
+            transactionManager.loadData(loadedTransactions);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-
-        transactionManager.loadData(loadedTransactions);
-        return true;
-    } catch (IOException e) {
-        e.printStackTrace();
-        return false;
     }
-}
-    
-    // 辅助方法：检查字符串是否为数字
+
+    /**
+     * Checks if a string is numeric.
+     * @param str The string to check
+     * @return true if the string is numeric, false otherwise
+     */
     private boolean isNumeric(String str) {
-        return str != null && str.matches("-?\\d+(\\.\\d+)?");
+        return str.matches("-?\\d+(\\.\\d+)?");
     }
 
-    // CSV字段转义处理（处理包含逗号或引号的情况）
+    /**
+     * Escapes a field for CSV format.
+     * @param field The field to escape
+     * @return The escaped field
+     */
     private String escapeCsvField(String field) {
         if (field == null) {
             return "";
         }
-        if (field.contains(",") || field.contains("\"")) {
+        if (field.contains(",") || field.contains("\"") || field.contains("\n")) {
             return "\"" + field.replace("\"", "\"\"") + "\"";
         }
         return field;
     }
 
-    // CSV字段解析
+    /**
+     * Parses a line from a CSV file.
+     * @param line The line to parse
+     * @return Array of fields from the line
+     */
     private String[] parseCsvLine(String line) {
         List<String> fields = new ArrayList<>();
         StringBuilder field = new StringBuilder();
         boolean inQuotes = false;
 
         for (char c : line.toCharArray()) {
-            if (c == ',' && !inQuotes) {
-                fields.add(field.toString());
-                field.setLength(0);
-            } else if (c == '"') {
+            if (c == '"') {
                 inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                fields.add(field.toString());
+                field = new StringBuilder();
             } else {
                 field.append(c);
             }
         }
         fields.add(field.toString());
+
         return fields.toArray(new String[0]);
     }
 
-    // CSV字段反转义
+    /**
+     * Unescapes a field from CSV format.
+     * @param field The field to unescape
+     * @return The unescaped field
+     */
     private String unescapeCsvField(String field) {
+        if (field == null || field.isEmpty()) {
+            return "";
+        }
         if (field.startsWith("\"") && field.endsWith("\"")) {
-            field = field.substring(1, field.length() - 1);
-            field = field.replace("\"\"", "\"");
+            return field.substring(1, field.length() - 1).replace("\"\"", "\"");
         }
         return field;
     }

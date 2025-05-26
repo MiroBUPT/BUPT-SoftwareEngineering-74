@@ -9,20 +9,41 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Panel for managing user profile information.
+ * Provides interface for viewing and editing user details including username, ID, and password.
+ */
 public class ProfilePanel extends JPanel {
+    /** Text field for entering username */
     private JTextField usernameField;
+    /** Text field for entering user ID */
     private JTextField userIdField;
+    /** Password field for entering old password */
     private JPasswordField oldpasswordField;
+    /** Password field for entering new password */
     private JPasswordField newpasswordField;
+    /** Password field for confirming new password */
     private JPasswordField confirmpasswordField;
+    /** Button for resetting form fields */
     private JButton resetButton;
+    /** Button for logging out */
     private JButton saveButton;
+    /** Button for editing username */
     private JButton editUsernameButton;
+    /** Button for editing user ID */
     private JButton editUserIdButton;
+    /** Button for editing password */
     private JButton editPasswordButton;
-    private UserManager userManager; // 添加 UserManager 引用
-    private String currentUserId;    // 添加 currentUserId 变量
+    /** Manager for user-related operations */
+    private UserManager userManager;
+    /** ID of the currently logged-in user */
+    private String currentUserId;
 
+    /**
+     * Constructs a new ProfilePanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public ProfilePanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         // 设置边框颜色和填充颜色
         this.setBorder(BorderFactory.createLineBorder(borderColor));
@@ -269,7 +290,8 @@ public class ProfilePanel extends JPanel {
     }
 
     /**
-     * 刷新当前用户信息
+     * Refreshes the user information displayed in the panel.
+     * Updates all fields with current user data.
      */
     private void refreshUserInformation() {
         User currentUser = userManager.getUserById(currentUserId);

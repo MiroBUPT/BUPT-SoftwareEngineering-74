@@ -5,14 +5,18 @@ import entity.TransactionType;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Manager class for handling budget-related operations.
+ * Implements the Singleton pattern and manages budget data including creation, modification, and queries.
+ */
 public class BudgetManager extends control.Manager {
-    private static BudgetManager instance; // Singleton instance
-    private List<Budget> budgetList = new ArrayList<>(); // List of budgets
+    /** Singleton instance of BudgetManager */
+    private static BudgetManager instance;
+    /** List of all budgets in the system */
+    private List<Budget> budgetList = new ArrayList<>();
 
     /**
      * Get the singleton instance of BudgetManager.
-     * 
      * @return The singleton instance of BudgetManager
      */
     public static BudgetManager getInstance() {
@@ -29,13 +33,16 @@ public class BudgetManager extends control.Manager {
         System.out.println("BudgetManager initialized.");
     }
 
+    /**
+     * Gets the list of all budgets.
+     * @return List of all budgets in the system
+     */
     public List<Budget> getBudgetList() {
         return budgetList;
     }
 
     /**
      * Query budgets by the budget's owner.
-     * 
      * @param owner The owner of the budget
      * @return A list of budgets owned by the specified owner
      */
@@ -51,7 +58,6 @@ public class BudgetManager extends control.Manager {
 
     /**
      * Query budgets by the budget's type.
-     * 
      * @param type The type of the budget
      * @return A list of budgets of the specified type
      */
@@ -67,7 +73,6 @@ public class BudgetManager extends control.Manager {
 
     /**
      * Query budgets by the budget's time.
-     * 
      * @param date The date of the budget
      * @return A list of budgets for the specified date
      */
@@ -83,7 +88,6 @@ public class BudgetManager extends control.Manager {
 
     /**
      * Add a new budget to the list.
-     * 
      * @param budget The budget to be added
      */
     public void addBudget(Budget budget) {
@@ -92,8 +96,7 @@ public class BudgetManager extends control.Manager {
 
     /**
      * Edit a budget by its ID.
-     * 
-     * @param budget   The new budget to be set
+     * @param budget The new budget to be set
      * @param budgetId The ID of the budget to be edited
      */
     public void editBudget(Budget budget, String budgetId) {
@@ -107,12 +110,10 @@ public class BudgetManager extends control.Manager {
 
     /**
      * Clear all the budgets and load all the budgets from the given list.
-     * 
      * @param budgets The list of budgets to be loaded
      */
     public void loadData(List<Budget> budgets) {
         budgetList.clear();
         budgetList.addAll(budgets);
     }
-
 }

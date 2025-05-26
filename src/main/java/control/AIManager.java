@@ -12,22 +12,36 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+
+/**
+ * Manager class for handling AI-related operations.
+ * Implements the Singleton pattern and manages AI-powered financial analysis and advice generation.
+ */
 public class AIManager extends Manager {
+    /** URL for the DeepSeek API endpoint */
     private static final String DEEPSEEK_API_URL = "https://chat.zju.edu.cn/api/ai/v1/chat/completions";
+    /** API key for authentication */
     private static final String API_KEY = "sk-tuY5xrIzl2kJoruU98505161Cf084e348d041c5dA951F9Ca";
+    /** Media type for JSON content */
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
+    /** HTTP client for making API requests */
     private final OkHttpClient httpClient = new OkHttpClient.Builder()
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
             .build();
 
+    /** Gson instance for JSON processing */
     private final Gson gson = new GsonBuilder().create();
 
-    // 单例模式代码
+    /** Singleton instance of AIManager */
     private static AIManager instance;
 
+    /**
+     * Gets the singleton instance of AIManager.
+     * @return The singleton instance
+     */
     public static AIManager getInstance() {
         if (instance == null) {
             System.out.println("Creating new AIManager instance");
@@ -36,8 +50,11 @@ public class AIManager extends Manager {
         return instance;
     }
 
+    /** Manager for budget-related operations */
     private BudgetManager budgetManager;
+    /** Manager for transaction-related operations */
     private TransactionManager transactionManager;
+    /** Manager for user-related operations */
     private UserManager userManager;
 
     @Override
@@ -120,6 +137,11 @@ public class AIManager extends Manager {
 
     /**
      * Builds the prompt for general financial advice.
+     * @param userName The username to generate advice for
+     * @param monthlyIncome The user's monthly income
+     * @param spend Map of spending by category
+     * @param budgets Map of budgets by category
+     * @return The constructed prompt string
      */
     private String buildGeneralAdvicePrompt(String userName, double monthlyIncome, Map<String, Double> spend,
             Map<String, Double> budgets) {
@@ -171,6 +193,11 @@ public class AIManager extends Manager {
 
     /**
      * Builds the prompt for budget analysis advice.
+     * @param userName The username to generate advice for
+     * @param monthlyIncome The user's monthly income
+     * @param spend Map of spending by category
+     * @param budgets Map of budgets by category
+     * @return The constructed prompt string
      */
     private String buildBudgetAnalysisPrompt(String userName, double monthlyIncome, Map<String, Double> spend,
             Map<String, Double> budgets) {
@@ -222,6 +249,8 @@ public class AIManager extends Manager {
 
     /**
      * Builds the prompt for holiday spending advice.
+     * @param userName The username to generate advice for
+     * @return The constructed prompt string
      */
     private String buildHolidayAdvicePrompt(String userName) {
         // Note: AIManager doesn't have knowledge of future holidays or typical holiday
@@ -272,10 +301,9 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Get the monthly spending of the user for the previous month.
-     * 
-     * @param userName
-     * @return
+     * Calculate monthly spending by category for a user.
+     * @param userName The username to calculate spending for
+     * @return Map of spending amounts by category
      */
     private Map<String, Double> calculateMonthlySpend(String userName) {
         List<Transaction> transactions = transactionManager.queryByOwner(userName);
@@ -316,10 +344,9 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Get the monthly budget of the user for the previous month.
-     * 
-     * @param userName
-     * @return
+     * Get monthly budget allocations by category for a user.
+     * @param userName The username to get budgets for
+     * @return Map of budget amounts by category
      */
     private Map<String, Double> getMonthlyBudget(String userName) {
         List<Budget> budgets = budgetManager.queryByOwner(userName);
@@ -357,7 +384,9 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Get the monthly spending of the user for the last 12 months.
+     * Calculate yearly spending by category for a user.
+     * @param userName The username to calculate spending for
+     * @return Map of monthly spending lists by category
      */
     private Map<String, List<Double>> calculateYearlySpend(String userName) {
         List<Transaction> transactions = transactionManager.queryByOwner(userName);
@@ -410,7 +439,9 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Get the monthly income of the user for the last 12 months.
+     * Calculate yearly income for a user.
+     * @param userName The username to calculate income for
+     * @return Map of monthly income amounts
      */
     private Map<String, Double> calculateYearlyIncome(String userName) {
         List<Transaction> incomes = transactionManager.getIncomeTransactionsByUser(userName);
@@ -449,7 +480,10 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Builds the prompt for consumption habit analysis.
+     * Builds the prompt for consumption analysis.
+     * @param userName The username to generate analysis for
+     * @param yearlySpend Map of yearly spending data
+     * @return The constructed prompt string
      */
     private String buildConsumptionAnalysisPrompt(String userName, Map<String, List<Double>> yearlySpend) {
         StringBuilder prompt = new StringBuilder();
@@ -482,7 +516,11 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Builds the prompt for savings potential analysis.
+     * Builds the prompt for savings analysis.
+     * @param userName The username to generate analysis for
+     * @param yearlyIncome Map of yearly income data
+     * @param yearlySpend Map of yearly spending data
+     * @return The constructed prompt string
      */
     private String buildSavingsAnalysisPrompt(String userName, Map<String, Double> yearlyIncome,
             Map<String, List<Double>> yearlySpend) {
@@ -526,7 +564,10 @@ public class AIManager extends Manager {
     }
 
     /**
-     * Builds the prompt for long-term trend analysis.
+     * Builds the prompt for long-term financial analysis.
+     * @param userName The username to generate analysis for
+     * @param yearlySpend Map of yearly spending data
+     * @return The constructed prompt string
      */
     private String buildLongTermAnalysisPrompt(String userName, Map<String, List<Double>> yearlySpend) {
         StringBuilder prompt = new StringBuilder();
@@ -558,6 +599,11 @@ public class AIManager extends Manager {
         return prompt.toString();
     }
 
+    /**
+     * Calls the DeepSeek API with the given prompt.
+     * @param prompt The prompt to send to the API
+     * @return The response from the API
+     */
     private String callDeepSeekAPI(String prompt) {
         try {
             System.out.println("Preparing API request...");
@@ -629,7 +675,12 @@ public class AIManager extends Manager {
             return "An unexpected error occurred: " + e.getMessage();
         }
     }
-
+    
+    /**
+     * Gets inferred transaction types and descriptions using AI.
+     * @param infos List of transaction information strings
+     * @return Comma-separated string of type-description pairs
+     */
     public String getInferredTypeAndDesc(List<String> infos) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("下面是一系列用户的消费报告行为，每个逗号分隔了一个条目，每个条目中用-分隔依次是交易类型，交易对方和商品。")

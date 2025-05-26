@@ -17,10 +17,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Main dashboard panel displaying user's financial overview.
+ * Shows welcome message, consumption trends, expense distribution, and recent transactions.
+ */
 public class HomePanel extends JPanel {
+    /** Username of the current user */
     private String username;
+    /** Manager for transaction-related operations */
     private TransactionManager transactionManager;
 
+    /**
+     * Constructs a new HomePanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public HomePanel(Color borderColor, Color fillColor) {
         UserManager userManager = UserManager.getInstance();
         transactionManager = TransactionManager.getInstance();
@@ -33,6 +44,10 @@ public class HomePanel extends JPanel {
         init();
     }
 
+    /**
+     * Initializes the panel components and layout.
+     * Creates welcome message, charts, and transaction table.
+     */
     private void init() {
         System.out.println("主页面板初始化");
 
@@ -70,6 +85,10 @@ public class HomePanel extends JPanel {
         add(mainSplitPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates a line chart showing consumption trends.
+     * @return A JFreeChart object containing the line chart
+     */
     private JFreeChart createLineChart() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         List<Transaction> transactions = transactionManager.getTransactionsByUserName(username);
@@ -90,6 +109,10 @@ public class HomePanel extends JPanel {
                 PlotOrientation.VERTICAL, true, true, false);
     }
 
+    /**
+     * Creates a pie chart showing expense distribution by type.
+     * @return A JFreeChart object containing the pie chart
+     */
     private JFreeChart createPieChart() {
         DefaultPieDataset dataset = new DefaultPieDataset();
         List<Transaction> transactions = transactionManager.getTransactionsByUserName(username);
@@ -111,6 +134,10 @@ public class HomePanel extends JPanel {
                 "Consumer Structure (Last 7 days)", dataset, true, true, false);
     }
 
+    /**
+     * Creates a table panel showing recent transactions.
+     * @return A JScrollPane containing the transaction table
+     */
     private JScrollPane createTablePanel() {
         String[] columnNames = {"Date", "Description", "Amount", "Owner"};
         List<Transaction> transactions = transactionManager.getTransactionsByUserName(username);

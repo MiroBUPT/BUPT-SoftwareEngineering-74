@@ -1,5 +1,5 @@
 transactionId,date,amount,description,type,owner,isIncome,location
-0001,2024-01-01,200.00,supermarket shopping,5,zhangsan,false,Beijing
+0001,2024-01-01,200.00,supermarket shopping,6,zhangsan,false,Beijing
 0002,2024-01-02,50.00,purchase medicine,1,lisi,false,Shanghai
 0003,2024-01-03,150.00,going out to eat,2,wangwu,false,Guangzhou
 0004,2024-01-04,3000.00,salary income,5,zhaoliu,true,Shenzhen

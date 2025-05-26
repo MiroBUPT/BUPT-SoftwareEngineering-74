@@ -17,17 +17,32 @@ import entity.Transaction;
 import entity.TransactionType;
 import entity.User;
 
+/**
+ * Test class for SavingManager functionality.
+ * Tests the persistence and loading of user, budget, and transaction data using CSV files.
+ */
 public class SavingManagerTest {
 
+    /** Instance of SavingManager to be tested */
     private SavingManager savingManager;
+    /** Instance of UserManager for user data operations */
     private UserManager userManager;
+    /** Instance of BudgetManager for budget data operations */
     private BudgetManager budgetManager;
+    /** Instance of TransactionManager for transaction data operations */
     private TransactionManager transactionManager;
 
+    /** Path to the test user data CSV file */
     private final String testUserCsv = "src/test/resources/user_test.csv";
+    /** Path to the test budget data CSV file */
     private final String testBudgetCsv = "src/test/resources/budget_test.csv";
+    /** Path to the test transaction data CSV file */
     private final String testTransactionCsv = "src/test/resources/transaction_test.csv";
 
+    /**
+     * Set up test environment before each test.
+     * Initializes all managers and test data, and configures test file paths.
+     */
     @BeforeEach
     public void setUp() {
         // 初始化管理器
@@ -70,6 +85,10 @@ public class SavingManagerTest {
         setPrivateStaticField(SavingManager.class, "transactionFilePath", testTransactionCsv);
     }
 
+    /**
+     * Test saving and loading all data types.
+     * Verifies that data can be saved to CSV files and correctly reloaded.
+     */
     @Test
     public void testSaveAndLoadData() {
         savingManager.saveData(); // 写入 CSV
@@ -79,6 +98,10 @@ public class SavingManagerTest {
         assertEquals(1, transactionManager.getTransactionList().size());
     }
 
+    /**
+     * Test user data persistence and reloading.
+     * Verifies that user data is correctly saved and loaded from CSV files.
+     */
     @Test
     public void testUserDataAfterReload() {
         savingManager.saveData();
@@ -90,6 +113,10 @@ public class SavingManagerTest {
         assertEquals("123456", user.password);
     }
 
+    /**
+     * Test budget data persistence and reloading.
+     * Verifies that budget data is correctly saved and loaded from CSV files.
+     */
     @Test
     public void testBudgetDataAfterReload() {
         savingManager.saveData();
@@ -103,6 +130,10 @@ public class SavingManagerTest {
         assertEquals("2024-01", budget.date);
     }
 
+    /**
+     * Test transaction data persistence and reloading.
+     * Verifies that transaction data is correctly saved and loaded from CSV files.
+     */
     @Test
     public void testTransactionDataAfterReload() {
         savingManager.saveData();
@@ -118,7 +149,12 @@ public class SavingManagerTest {
         assertEquals("Beijing", tx.location);
     }
 
-    // 用于设置私有静态字段
+    /**
+     * Helper method to set private static fields using reflection.
+     * @param clazz The class containing the field
+     * @param fieldName The name of the field to set
+     * @param value The value to set
+     */
     private static void setPrivateStaticField(Class<?> clazz, String fieldName, String value) {
         try {
             var field = clazz.getDeclaredField(fieldName);
@@ -129,6 +165,10 @@ public class SavingManagerTest {
         }
     }
 
+    /**
+     * Clean up test environment after each test.
+     * Deletes test CSV files created during testing.
+     */
     @AfterEach
     public void cleanup() {
         try {

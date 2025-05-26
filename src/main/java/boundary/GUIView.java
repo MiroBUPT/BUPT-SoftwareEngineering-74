@@ -12,12 +12,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Main GUI view for the Smart Personal Finance Manager application.
+ * Provides the main window layout with navigation menu and content area.
+ */
 public class GUIView extends JFrame {
-    private static CardLayout cardLayout; // 定义为类的成员变量
-    private static JPanel contentPanel;  // 定义为类的成员变量
-    private UserManager userManager; // 添加 UserManager 引用
-    private String currentUserId;    // 添加 currentUserId 变量
+    /** Card layout manager for switching between different content panels */
+    private static CardLayout cardLayout;
+    /** Panel containing all content views */
+    private static JPanel contentPanel;
+    /** Manager for user-related operations */
+    private UserManager userManager;
+    /** ID of the currently logged-in user */
+    private String currentUserId;
     
+    /**
+     * Constructs the main GUI view.
+     * Initializes the window layout, navigation menu, and content panels.
+     */
     public GUIView() {
         // 初始化 UserManager 和获取当前用户信息
         userManager = UserManager.getInstance();
@@ -113,6 +125,10 @@ public class GUIView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Main method for launching the application.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new GUIView();

@@ -22,10 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 
+/**
+ * Panel for analyzing financial data with visualizations.
+ * Displays spending rankings and monthly income/expense comparisons.
+ */
 public class DataAnalysisPanel extends JPanel {
+    /** Username of the current user */
     private String currentUsername;
+    /** Manager for transaction-related operations */
     private TransactionManager transactionManager;
 
+    /**
+     * Constructs a new DataAnalysisPanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public DataAnalysisPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
@@ -40,6 +51,10 @@ public class DataAnalysisPanel extends JPanel {
         init();
     }
 
+    /**
+     * Initializes the panel components and layout.
+     * Creates spending ranking table and income/expense comparison charts.
+     */
     private void init() {
         System.out.println("数据统计分析面板初始化");
 
@@ -92,6 +107,11 @@ public class DataAnalysisPanel extends JPanel {
         add(chartsPanel);
     }
 
+    /**
+     * Gets the top spending transactions sorted by amount.
+     * @param transactions List of all transactions
+     * @return 2D array containing rank, description, and amount for top expenses
+     */
     private Object[][] getTopSpending(List<Transaction> transactions) {
         // 只统计支出
         List<Transaction> expenses = new ArrayList<>();
@@ -115,6 +135,11 @@ public class DataAnalysisPanel extends JPanel {
         return data;
     }
 
+    /**
+     * Creates a dataset for monthly income visualization.
+     * @param transactions List of all transactions
+     * @return CategoryDataset containing monthly income data
+     */
     private DefaultCategoryDataset createMonthlyIncomeDataset(List<Transaction> transactions) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Transaction t : transactions) {
@@ -126,6 +151,11 @@ public class DataAnalysisPanel extends JPanel {
         return dataset;
     }
 
+    /**
+     * Creates a dataset for monthly expense visualization.
+     * @param transactions List of all transactions
+     * @return CategoryDataset containing monthly expense data
+     */
     private DefaultCategoryDataset createMonthlyExpenseDataset(List<Transaction> transactions) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Transaction t : transactions) {
@@ -137,6 +167,10 @@ public class DataAnalysisPanel extends JPanel {
         return dataset;
     }
 
+    /**
+     * Main method for testing the DataAnalysisPanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("数据统计分析面板");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -7,13 +7,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Login interface for user authentication.
+ * Provides fields for username and password input, with options to login or register.
+ */
 public class LoginView extends JFrame {
+    /** Text field for entering username */
     private JTextField userNameField;
+    /** Password field for entering password */
     private JPasswordField passwordField;
+    /** Button for submitting login credentials */
     private JButton loginButton;
+    /** Label for displaying login status messages */
     private JLabel messageLabel;
+    /** Button for navigating to registration page */
     private JButton registerButton;
 
+    /**
+     * Constructs a new LoginView.
+     * Initializes the login interface and sets up event handlers.
+     */
     public LoginView() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,6 +125,10 @@ public class LoginView extends JFrame {
         });
     }
 
+    /**
+     * Main method for launching the login interface.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             LoginView loginView = new LoginView();

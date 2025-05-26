@@ -9,10 +9,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import control.TransactionManager;
 import control.SavingManager; // Import SavingManager if needed for saving after import
 
+/**
+ * Panel for automated import of transaction data from CSV files.
+ * Provides file selection and import functionality with progress feedback.
+ */
 public class AutomatedDataEntryPanel extends JPanel {
+    /** Button for initiating file upload */
     private JButton uploadButton;
+    /** Label for displaying import status */
     private JLabel statusLabel;
 
+    /**
+     * Constructs a new AutomatedDataEntryPanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public AutomatedDataEntryPanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
@@ -59,6 +70,10 @@ public class AutomatedDataEntryPanel extends JPanel {
         });
     }
 
+    /**
+     * Handles the file upload process.
+     * Opens a file chooser and processes the selected CSV file.
+     */
     private void uploadFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select CSV File");
@@ -107,6 +122,10 @@ public class AutomatedDataEntryPanel extends JPanel {
         }
     }
 
+    /**
+     * Main method for testing the AutomatedDataEntryPanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Automated Data Entry");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

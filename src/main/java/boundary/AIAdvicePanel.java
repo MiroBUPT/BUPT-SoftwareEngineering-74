@@ -23,17 +23,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import control.AIManager;
 
+/**
+ * Panel for generating and displaying AI-powered financial advice.
+ * Provides different types of financial analysis and recommendations.
+ */
 public class AIAdvicePanel extends JPanel {
-
+    /** Button for generating general financial advice */
     private JButton generateButtonGeneral;
+    /** Button for generating budget analysis */
     private JButton generateButtonBudget;
+    /** Button for generating consumption analysis */
     private JButton generateButtonConsumption;
+    /** Button for generating savings analysis */
     private JButton generateButtonSavings;
+    /** Button for generating long-term analysis */
     private JButton generateButtonLongTerm;
+    /** Button for generating holiday advice */
     private JButton generateButtonHoliday;
+    /** Label for displaying generation status */
     private JLabel statusLabel;
+    /** Text area for displaying generated advice */
     private JTextArea adviceArea;
 
+    /**
+     * Constructs a new AIAdvicePanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public AIAdvicePanel(Color borderColor, Color fillColor) {
         System.out.println("Initializing AIAdvicePanel...");
         this.setBorder(BorderFactory.createLineBorder(borderColor));
@@ -51,6 +67,12 @@ public class AIAdvicePanel extends JPanel {
         System.out.println("AIAdvicePanel initialization completed.");
     }
 
+    /**
+     * Creates a block for a specific type of advice.
+     * @param title The title of the advice block
+     * @param description The description of the advice type
+     * @param type The type identifier for the advice
+     */
     private void createBlock(String title, String description, String type) {
         System.out.println("Creating block for: " + title);
         JPanel block = new JPanel();
@@ -105,6 +127,10 @@ public class AIAdvicePanel extends JPanel {
         System.out.println("Block created and added for: " + title);
     }
 
+    /**
+     * Generates advice for the specified type and displays it in a dialog.
+     * @param type The type of advice to generate
+     */
     private void generateAdvice(String type) {
         System.out.println("Generate advice button clicked for type: " + type);
         setButtonsEnabled(false);
@@ -213,6 +239,10 @@ public class AIAdvicePanel extends JPanel {
         dialog.setVisible(true);
     }
 
+    /**
+     * Enables or disables all advice generation buttons.
+     * @param enabled Whether the buttons should be enabled
+     */
     private void setButtonsEnabled(boolean enabled) {
         generateButtonGeneral.setEnabled(enabled);
         generateButtonBudget.setEnabled(enabled);
@@ -222,6 +252,10 @@ public class AIAdvicePanel extends JPanel {
         generateButtonHoliday.setEnabled(enabled);
     }
 
+    /**
+     * Main method for testing the AIAdvicePanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("AI Advice Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

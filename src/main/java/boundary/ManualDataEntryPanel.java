@@ -13,16 +13,33 @@ import entity.TransactionType;
 import entity.User;
 import java.util.UUID;
 
+/**
+ * Panel for manual entry of transaction data.
+ * Provides a form interface for users to input transaction details.
+ */
 public class ManualDataEntryPanel extends JPanel {
+    /** Text field for entering transaction amount */
     private JTextField amountField;
+    /** Combo box for selecting transaction type */
     private JComboBox<String> typeComboBox;
+    /** Text field for entering transaction time */
     private JTextField timeField;
+    /** Text field for entering product name */
     private JTextField productNameField;
+    /** Text area for entering transaction description */
     private JTextArea descriptionArea;
+    /** Button for saving the transaction */
     private JButton saveButton;
+    /** Text field for entering transaction location */
     private JTextField locationField;
+    /** Flag indicating if the panel has been initialized */
     private static boolean isInitialized = false;
 
+    /**
+     * Constructs a new ManualDataEntryPanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public ManualDataEntryPanel(java.awt.Color borderColor, java.awt.Color fillColor) {
         setBorder(new CompoundBorder(new TitledBorder("Manual Data Entry"), new EmptyBorder(10, 10, 10, 10)));
         setBackground(fillColor);
@@ -123,6 +140,10 @@ public class ManualDataEntryPanel extends JPanel {
         }
     }
 
+    /**
+     * Saves the entered transaction data.
+     * Validates input and stores the transaction in the system.
+     */
     private void saveData() {
         String amount = amountField.getText();
         String type = (String) typeComboBox.getSelectedItem();
@@ -198,7 +219,10 @@ public class ManualDataEntryPanel extends JPanel {
         System.out.println("Data saved successfully.");
     }
 
-    // 获取当前登录用户的方法
+    /**
+     * Gets the currently logged-in user.
+     * @return The current user object, or null if no user is logged in
+     */
     private User getCurrentUser() {
         UserManager userManager = UserManager.getInstance();
         String currentUserId = userManager.getCurrentUserId();
@@ -214,6 +238,10 @@ public class ManualDataEntryPanel extends JPanel {
         return user;
     }
 
+    /**
+     * Main method for testing the ManualDataEntryPanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Manual Data Entry");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

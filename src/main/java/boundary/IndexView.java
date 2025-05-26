@@ -4,13 +4,26 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages the navigation structure of the application.
+ * This class creates and maintains the directory structure for the application's navigation menu.
+ */
 class IndexView {
+    /** List of directories in the navigation structure */
     private List<Directory> directories = new ArrayList<>();
 
+    /**
+     * Constructs a new IndexView instance.
+     * Initializes the directory structure with predefined navigation items.
+     */
     public IndexView() {
         initDirectoryStructure();
     }
 
+    /**
+     * Creates the directory structure for the application navigation.
+     * This method initializes all directories and their entries with appropriate panels.
+     */
     private void initDirectoryStructure() {
         // 1. Dashboard目录（Entry: Home）
         Directory dashboardDir = new Directory("Dashboard", null);
@@ -47,6 +60,10 @@ class IndexView {
         directories.add(userProfileDir);
     }
 
+    /**
+     * Gets the list of directories in the navigation structure.
+     * @return List of Directory objects representing the navigation structure
+     */
     public List<Directory> getDirectories() {
         return directories;
     }

@@ -53,20 +53,41 @@ import entity.Transaction;
 import entity.TransactionType;
 import control.SavingManager;
 
+/**
+ * Panel for querying and managing transactions.
+ * Provides functionality to search, view, and modify transaction records.
+ */
 public class TransactionQueryPanel extends JPanel {
-    private JTextField dateField; // 日期查询字段
-    private JTextField ownerField; // 所有者查询字段
-    private JTextField locationField; // 地点查询字段
-    private JComboBox<String> typeComboBox; // 类型下拉菜单 (查询用)
+    /** Text field for date-based filtering */
+    private JTextField dateField;
+    /** Text field for owner-based filtering */
+    private JTextField ownerField;
+    /** Text field for location-based filtering */
+    private JTextField locationField;
+    /** Combo box for transaction type filtering */
+    private JComboBox<String> typeComboBox;
+    /** Button to execute the search query */
     private JButton queryButton;
-    private JButton resetButton; // 添加 Reset 按钮
+    /** Button to reset all search fields */
+    private JButton resetButton;
+    /** Table displaying search results */
     private JTable resultsTable;
+    /** Model for the results table */
     private DefaultTableModel tableModel;
+    /** Manager for transaction-related operations */
     private TransactionManager transactionManager;
+    /** Manager for user-related operations */
     private UserManager userManager;
-    private JComboBox<TransactionType> modifyTypeComboBox; // 修改类型下拉菜单
-    private JButton modifyTypeButton; // 修改类型按钮
+    /** Combo box for modifying transaction type */
+    private JComboBox<TransactionType> modifyTypeComboBox;
+    /** Button to apply type modifications */
+    private JButton modifyTypeButton;
 
+    /**
+     * Constructs a new TransactionQueryPanel with specified colors.
+     * @param borderColor The color for the panel's border
+     * @param fillColor The background color for the panel
+     */
     public TransactionQueryPanel(Color borderColor, Color fillColor) {
         setBorder(BorderFactory.createLineBorder(borderColor));
         setBackground(fillColor);
@@ -79,6 +100,9 @@ public class TransactionQueryPanel extends JPanel {
         init();
     }
 
+    /**
+     * Initializes the panel components and sets up event listeners.
+     */
     private void init() {
         System.out.println("交易查询面板初始化");
 
@@ -216,6 +240,10 @@ public class TransactionQueryPanel extends JPanel {
         });
     }
 
+    /**
+     * Executes the search query based on current filter values.
+     * Updates the results table with matching transactions.
+     */
     private void queryData() {
         String date = dateField.getText();
         String owner = ownerField.getText().toLowerCase();
@@ -262,6 +290,9 @@ public class TransactionQueryPanel extends JPanel {
         }
     }
 
+    /**
+     * Resets all search fields to their default values.
+     */
     private void resetFields() {
         // 清空所有查询输入字段
         dateField.setText("");
@@ -271,6 +302,10 @@ public class TransactionQueryPanel extends JPanel {
         tableModel.setRowCount(0); // 清空表格数据
     }
 
+    /**
+     * Main method for testing the TransactionQueryPanel.
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Transaction Query Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
